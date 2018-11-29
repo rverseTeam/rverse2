@@ -13,7 +13,7 @@ return [
         'username'          => 'root',
         'password'          => '',
         'prefix'            => '',
-        'database'          => 'foxverse_dev',
+        'database'          => 'rverse2_dev',
         'charset'           => 'utf8',
         'collation'         => 'utf8_unicode_ci',
     ],
@@ -37,9 +37,6 @@ return [
 
         // Hashids salt (prevents stuff from getting scraped easily)
         'link_salt'         => 'changethis',
-
-        // Allowed domains
-        'domains'     => ['rverse.club'],
     ],
 
     // Cloudinary settings
