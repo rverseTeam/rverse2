@@ -12,94 +12,94 @@ Router::filter('auth', 'checkConsoleAuth');
 
 Router::group(['before' => 'maintenance'], function () {
     // Index page
-    Router::get('/', 'Index@index', 'index.index');
+    Router::get('/', 'CTR.Index@index', 'index.index');
 
     // Welcome guest AKA "you need a NNID to use this"
     // Needs to be outside the group so it doesn't get caught by auth
-    Router::get('/welcome_guest', 'Gate@guest', 'welcome.guest');
+    Router::get('/welcome_guest', 'CTR.Gate@guest', 'welcome.guest');
 
     // 3DS required to load these pages
     Router::group(['before' => 'auth'], function () {
-        Router::get('/local_list.json', 'Dummy@dummy', 'local.list');
-        Router::get('/check_update.json', 'Dummy@dummy', 'news.checkupdate');
+        Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
+        Router::get('/check_update.json', 'CTR.Dummy@dummy', 'news.checkupdate');
 
         // Communities
         Router::group(['prefix' => 'communities'], function () {
-            Router::get('/', 'Community@index', 'community.index');
+            Router::get('/', 'CTR.Community@index', 'community.index');
 
             Router::group(['prefix' => 'categories'], function () {
-                Router::get('/{console:a}', 'Community@consoleIndex', 'console.index');
-                Router::get('/{console:a}_all', 'Community@consoleEverything', 'console.all');
-                Router::get('/{console:a}_game', 'Community@consoleGames', 'console.games');
-                Router::get('/{console:a}_virtualconsole', 'Community@consoleVirtualConsole', 'console.vc');
-                Router::get('/{console:a}_other', 'Community@consoleOther', 'console.other');
+                Router::get('/{console:a}', 'CTR.Community@consoleIndex', 'console.index');
+                Router::get('/{console:a}_all', 'CTR.Community@consoleEverything', 'console.all');
+                Router::get('/{console:a}_game', 'CTR.Community@consoleGames', 'console.games');
+                Router::get('/{console:a}_virtualconsole', 'CTR.Community@consoleVirtualConsole', 'console.vc');
+                Router::get('/{console:a}_other', 'CTR.Community@consoleOther', 'console.other');
             });
         });
 
         // Users
         Router::group(['prefix' => 'users'], function () {
-            Router::get('/{id}', 'User@profile', 'user.profile');
-            Router::get('/{id}/violators.create', 'Dummy@dummy', 'user.report');
-            Router::get('/{id}/blacklist.confirm', 'Dummy@dummy', 'user.block');
-            Router::post('/{id}/follow.json', 'User@follow', 'user.follow');
-            Router::post('/{id}/unfollow.json', 'User@unfollow', 'user.unfollow');
-            Router::get('/{id}/favorites', 'Dummy@dummy', 'user.favorites');
-            Router::get('/{id}/posts', 'Dummy@dummy', 'user.posts');
-            Router::get('/{id}/following', 'Dummy@dummy', 'user.following');
-            Router::get('/{id}/followers', 'Dummy@dummy', 'user.followers');
-            Router::get('/{id}/diary', 'Dummy@dummy', 'user.diary');
-            Router::get('/{id}/diary/post', 'Dummy@dummy', 'user.diarypost');
+            Router::get('/{id}', 'CTR.User@profile', 'user.profile');
+            Router::get('/{id}/violators.create', 'CTR.Dummy@dummy', 'user.report');
+            Router::get('/{id}/blacklist.confirm', 'CTR.Dummy@dummy', 'user.block');
+            Router::post('/{id}/follow.json', 'CTR.User@follow', 'user.follow');
+            Router::post('/{id}/unfollow.json', 'CTR.User@unfollow', 'user.unfollow');
+            Router::get('/{id}/favorites', 'CTR.Dummy@dummy', 'user.favorites');
+            Router::get('/{id}/posts', 'CTR.Dummy@dummy', 'user.posts');
+            Router::get('/{id}/following', 'CTR.Dummy@dummy', 'user.following');
+            Router::get('/{id}/followers', 'CTR.Dummy@dummy', 'user.followers');
+            Router::get('/{id}/diary', 'CTR.Dummy@dummy', 'user.diary');
+            Router::get('/{id}/diary/post', 'CTR.Dummy@dummy', 'user.diarypost');
         });
 
         // Titles
         Router::group(['prefix' => 'titles'], function () {
-            Router::get('/show', 'Title.Show@init', 'title.init'); // This is the first page that the applet loads at all after discovery
-            Router::get('/{tid:a}/{id:a}', 'Title.Community@show', 'title.community');
-            Router::get('/{tid:a}/{id:a}/post', 'Title.Community@post', 'title.post');
-            Router::get('/{tid:a}/{id:a}/artwork/post', 'Title.Community@artworkPost', 'title.artworkpost');
-            Router::get('/{tid:a}/{id:a}/topic/post', 'Title.Community@topicPost', 'title.topicpost');
-            Router::get('/{tid:a}/{id:a}/post_memo', 'Title.Community@post_memo', 'title.postmemo');
-            Router::get('/{tid:a}/{id:a}/post_memo.check.json', 'Title.Community@check_memo', 'title.checkmemo');
+            Router::get('/show', 'CTR.Title.Show@init', 'title.init'); // This is the first page that the applet loads at all after discovery
+            Router::get('/{tid:a}/{id:a}', 'CTR.Title.Community@show', 'title.community');
+            Router::get('/{tid:a}/{id:a}/post', 'CTR.Title.Community@post', 'title.post');
+            Router::get('/{tid:a}/{id:a}/artwork/post', 'CTR.Title.Community@artworkPost', 'title.artworkpost');
+            Router::get('/{tid:a}/{id:a}/topic/post', 'CTR.Title.Community@topicPost', 'title.topicpost');
+            Router::get('/{tid:a}/{id:a}/post_memo', 'CTR.Title.Community@post_memo', 'title.postmemo');
+            Router::get('/{tid:a}/{id:a}/post_memo.check.json', 'CTR.Title.Community@check_memo', 'title.checkmemo');
         });
 
         // My
         Router::group(['prefix' => 'my'], function () {
-            Router::get('/latest_following_related_profile_posts', 'Dummy@dummy', 'activity.latestfollowingrelatedprofileposts');
+            Router::get('/latest_following_related_profile_posts', 'CTR.Dummy@dummy', 'activity.latestfollowingrelatedprofileposts');
         });
 
         // News
         Router::group(['prefix' => 'news'], function () {
-            Router::get('/my_news', 'News@my_news', 'news.mynews');
+            Router::get('/my_news', 'CTR.News@my_news', 'news.mynews');
         });
 
         // Posts
         Router::group(['prefix' => 'posts'], function () {
-            Router::get('/{id:a}', 'Post@show', 'post.show');
-            Router::post('/', 'Post@submit', 'post.submit');
-            Router::get('/{id:a}/reply', 'Post@reply', 'post.reply');
-            Router::post('/{id:a}/empathies', 'Post@yeahs', 'post.empathies');
-            Router::post('/{id:a}/empathies.delete', 'Post@removeYeahs', 'post.empathiesdelete');
+            Router::get('/{id:a}', 'CTR.Post@show', 'post.show');
+            Router::post('/', 'CTR.Post@submit', 'post.submit');
+            Router::get('/{id:a}/reply', 'CTR.Post@reply', 'post.reply');
+            Router::post('/{id:a}/empathies', 'CTR.Post@yeahs', 'post.empathies');
+            Router::post('/{id:a}/empathies.delete', 'CTR.Post@removeYeahs', 'post.empathiesdelete');
         });
 
         // Comments
         Router::group(['prefix' => 'replies'], function () {
-            Router::post('/{id:a}/empathies', 'Post@replyYeahs', 'comment.empathies');
-            Router::post('/{id:a}/empathies.delete', 'Post@replyRemoveYeahs', 'comment.empathiesdelete');
+            Router::post('/{id:a}/empathies', 'CTR.Post@replyYeahs', 'comment.empathies');
+            Router::post('/{id:a}/empathies.delete', 'CTR.Post@replyRemoveYeahs', 'comment.empathiesdelete');
         });
 
         // Settings
         Router::group(['prefix' => 'settings'], function () {
-            Router::post('/struct_post', 'Dummy@dummy', 'struct.post');
-            Router::get('/profile', 'Dummy@dummy', 'settings.profile');
-            Router::post('/tutorial_post', 'Settings@tutorial_post', 'settings.tutorialpost');
-            Router::post('/played_title_ids', 'Dummy@dummy', 'settings.playedtitles');
+            Router::post('/struct_post', 'CTR.Dummy@dummy', 'struct.post');
+            Router::get('/profile', 'CTR.Dummy@dummy', 'settings.profile');
+            Router::post('/tutorial_post', 'CTR.Settings@tutorial_post', 'settings.tutorialpost');
+            Router::post('/played_title_ids', 'CTR.Dummy@dummy', 'settings.playedtitles');
         });
 
         // Welcome
         Router::group(['prefix' => 'welcome'], function () {
-            Router::get('/3ds', 'Gate@welcome', 'gate.welcome');
-            Router::post('/check', 'Gate@check', 'gate.check');
-            Router::post('/activate', 'Gate@activate', 'gate.activate');
+            Router::get('/3ds', 'CTR.Gate@welcome', 'gate.welcome');
+            Router::post('/check', 'CTR.Gate@check', 'gate.check');
+            Router::post('/activate', 'CTR.Gate@activate', 'gate.activate');
         });
     });
 });

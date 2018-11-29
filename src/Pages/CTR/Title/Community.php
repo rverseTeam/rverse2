@@ -3,7 +3,7 @@
  * Holds the community for a specific title.
  */
 
-namespace Miiverse\Pages\Title;
+namespace Miiverse\Pages\Title\CTR;
 
 use Miiverse\CurrentSession;
 use Miiverse\DB;

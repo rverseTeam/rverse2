@@ -3,7 +3,7 @@
  * Holds the news page.
  */
 
-namespace Miiverse\Pages;
+namespace Miiverse\Pages\CTR;
 
 use Miiverse\CurrentSession;
 use Miiverse\DB;

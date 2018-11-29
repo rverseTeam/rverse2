@@ -3,7 +3,7 @@
  * Holds a dummy page.
  */
 
-namespace Miiverse\Pages;
+namespace Miiverse\Pages\CTR;
 
 /**
  * Dummy page.

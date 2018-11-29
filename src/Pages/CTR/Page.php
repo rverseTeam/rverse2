@@ -3,7 +3,7 @@
  * Holds the base page.
  */
 
-namespace Miiverse\Pages;
+namespace Miiverse\Pages\CTR;
 
 /**
  * Base page (which other pages should extend on).

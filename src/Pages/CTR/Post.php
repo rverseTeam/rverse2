@@ -3,7 +3,7 @@
  * Holds the post handler.
  */
 
-namespace Miiverse\Pages;
+namespace Miiverse\Pages\CTR;
 
 use Miiverse\Community\Community;
 use Miiverse\CurrentSession;

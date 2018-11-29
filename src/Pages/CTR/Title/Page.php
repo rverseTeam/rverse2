@@ -3,7 +3,7 @@
  * Holds the base page for titles.
  */
 
-namespace Miiverse\Pages\Title;
+namespace Miiverse\Pages\Title\CTR;
 
 use Miiverse\Pages\Page as BasePage;
 

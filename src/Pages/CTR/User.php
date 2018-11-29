@@ -3,7 +3,7 @@
  * Holds the profile page.
  */
 
-namespace Miiverse\Pages;
+namespace Miiverse\Pages\CTR;
 
 use Miiverse\CurrentSession;
 use Miiverse\User as Profile;

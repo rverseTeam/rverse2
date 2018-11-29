@@ -3,7 +3,7 @@
  * Holds the home page.
  */
 
-namespace Miiverse\Pages\Title;
+namespace Miiverse\Pages\Title\CTR;
 
 use Miiverse\CurrentSession;
 
