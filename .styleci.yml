@@ -1,0 +1,9 @@
+preset: recommended
+risky: false
+finder:
+  exclude:
+    - store
+    - vendor
+  not-path:
+    - resources/lang
+  name: "*.php"

@@ -1,0 +1,33 @@
+{
+    "require": {
+        "doctrine/dbal": "^2.6",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "hashids/hashids": "^2.0",
+        "illuminate/database": "5.2.*",
+        "illuminate/filesystem": "5.2.*",
+        "nesbot/carbon": "^1.21",
+        "php": ">=7.2.0",
+        "phroute/phroute": "^2.1",
+        "symfony/console": "^3.3",
+        "twig/extensions": "~1.0",
+        "twig/twig": "~2.0",
+        "cloudinary/cloudinary_php": "^1.8",
+        "illuminate/translation": "5.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "Miiverse\\": "src/"
+        },
+        "files": [
+            "utility.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}

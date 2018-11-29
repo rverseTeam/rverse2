@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{{ config('general.name') }}{% if title is defined %} - {{ title }}{% endif %}</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="194x194" href="/favicon-194x194.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#051a99">
+	<meta name="msapplication-TileColor" content="#051a99">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	<meta property="og:image:width" content="279">
+	<meta property="og:image:height" content="279">
+	<meta property="og:description" content="">
+	<meta property="og:title" content="{{ config('general.name') }}">
+	<meta property="og:url" content="{{ full_domain() }}">
+	<meta property="og:image" content="{{ full_domain() }}/android-chrome-512x512.png">
+	<link rel="stylesheet" href="/css/style.css">
+	<script src="/js/jquery-1.9.1.min.js"></script>
+	<script src="/js/olv.js"></script>
+</head>
+<body{% if id is defined %} id="{{ id }}"{% endif %}>
+	<div id="wrapper" {% if class is defined %} class="{{ class }}"{% endif %}>
+		<div id="sub-body">
+			<menu id="global-menu">
+				<li id="global-menu-logo">
+					<h1>
+						<a href="/">
+							<img src="/img/menu-logo.png" alt="{{ config('general.name') }}">
+						</a>
+					</h1>
+				</li>
+				{% if user.id == 0 %}
+				<li id="global-menu-login">
+					<a href="/account/signin" class="login">
+						<input type="image" src="/img/signin_base.png">
+					</a>
+				</li>
+				{% else %}
+				<li id="global-menu-list">
+					<ul>
+						<li id="global-menu-mymenu">
+							<a href="{{ route('user.profile', [user.username]) }}">
+								<span class="icon-container">
+									<img src="{{ user.mii.normal }}" alt="User Page">
+								</span>
+								<span>User Page</span>
+							</a>
+						</li>
+						<li id="global-menu-feed">
+							<a href="/activity" class="symbol">
+								<span>Activity Feed</span>
+							</a>
+						</li>
+						<li id="global-menu-community" class="selected">
+							<a href="/" class="symbol">
+								<span>Communities</span>
+							</a>
+						</li>
+						<li id="global-menu-news">
+							<a href="/news/my_news" class="symbol">
+								<span class="badge" style="display: none;">0</span>
+							</a>
+						</li>
+						<li id="global-menu-my-menu">
+							<button class="symbol js-open-global-my-menu open-global-my-menu"></button>
+							<menu id="global-my-menu" class="invisible none">
+								<li>
+									<a href="/settings/profile" class="symbol my-menu-profile-setting">
+										<span>Profile Settings</span>
+									</a>
+								</li>
+								<li>
+									<a href="/settings/account" class="symbol my-menu-miiverse-setting">
+										<span>{{ config('general.name') }} Settings</span>
+									</a>
+								</li>
+								<li>
+									<form action="/logout" method="post" id="my-menu-logout" class="symbol">
+										<input type="submit" value="Sign out">
+									</form>
+								</li>
+							</menu>
+						</li>
+					</ul>
+				</li>
+				{% endif %}
+			</menu>
+		</div>
+		<div id="main-body">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</div>
+</body>
+</html>

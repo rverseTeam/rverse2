@@ -1,0 +1,74 @@
+{% extends '@ctr/_master.twig' %}
+
+{% block content %}
+			<div id="welcome-3ds_start" class="start-page slide-page" data-slide-number="1" style="">
+				<div class="window-page">
+					<div class="window welcome-window">
+						<div class="window-title">
+							<h1 class="window-title-inner">{{ __('gate.welcome.intro.title', { name: config('general.name') }) }}</h1>
+						</div>
+						<div class="window-body">
+							<div class="window-body-inner message">
+								<p>{{ __('gate.welcome.intro.message', { name: config('general.name') }) }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<a href="#" class="fixed-bottom-button left exit-button welcome-exit-button" data-sound="SE_CTR_COMMON_SYSAPPLET_END">{{ __('gate.welcome.controls.close') }}</a>
+				<a href="#" class="fixed-bottom-button right next-button slide-button" data-slide="#welcome-feature">{{ __('gate.welcome.controls.next') }}</a>
+			</div>
+			<div id="welcome-feature" class="slide-page" data-slide-number="11" style="display: none;">
+				<div class="window-page">
+					<div class="window welcome-window">
+						<div class="window-title">
+							<h1 class="window-title-inner">{{ __('gate.welcome.about.title', { name: config('general.name') }) }}</h1>
+						</div>
+						<div class="window-body">
+							<div class="window-body-inner message">
+								<p class="p1">{{ __('gate.welcome.about.message1', { name: config('general.name') }) }}</p>
+								<p>{{ __('gate.welcome.about.message2') }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-3ds_start" data-sound="SE_OLV_CANCEL">{{ __('gate.welcome.controls.back') }}</a>
+				<a href="#" class="fixed-bottom-button right next-button slide-button" data-slide="#welcome-luminous_user_data">{{ __('gate.welcome.controls.next') }}</a>
+			</div>
+			<div id="welcome-luminous_user_data" class="slide-page" data-slide-number="10" style="display: none;">
+				<div class="window-page">
+					<div class="window welcome-window with-button">
+						<div class="window-title">
+							<h1 class="window-title-inner">{{ __('gate.welcome.config.title', { name: config('general.name') }) }}</h1>
+						</div>
+						<div class="window-body-user_data">
+							<div class="window-body-inner message">
+								<p>{{ __('gate.welcome.config.message', { name: config('general.name') }) }}</p>
+							</div>
+						</div>
+						<div class="window-bottom-input">
+							<form action="{{ route('gate.check') }}" method="post" accept-charset="utf-8" id="user_data" data-check-url="{{ route('gate.check') }}">
+								<input type="text" id="welcome_username" name="welcome_username" placeholder="{{ __('gate.welcome.config.display_name') }}"><br>
+								<input type="text" id="welcome_nnid" name="welcome_nnid" placeholder="{{ __('gate.welcome.config.nnid') }}"><br>
+								<label for="welcome_nnid">{{ __('gate.welcome.config.nnid_label') }}</label>
+							</form>
+						</div>
+					</div>
+				</div>
+				<a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-feature" data-sound="SE_OLV_CANCEL">{{ __('gate.welcome.controls.back') }}</a>
+				<a href="#" class="fixed-bottom-button right next-button welcome-luminous_user_data-button" data-slide="#welcome-finish">{{ __('gate.welcome.controls.next') }}</a>
+			</div>
+			<div id="welcome-finish" class="slide-page" data-bgm="BGM_CAVE_SYOKAI2" data-slide-number="9" style="display: none;">
+				<div class="window-page">
+					<div class="window welcome-window">
+						<div class="window-title">
+							<h1 class="window-title-inner">{{ __('gate.welcome.finish.title', { name: config('general.name') }) }}</h1>
+						</div>
+						<div class="window-body">
+							<div class="window-body-inner message">
+								<a href="{{ route('title.init') }}" class="fixed-bottom-button right next-button welcome-finish-button" data-activate-url="/welcome/activate?update_with_default=0" data-replace="1">{{ __('gate.welcome.finish.start') }}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}

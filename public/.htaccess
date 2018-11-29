@@ -1,0 +1,12 @@
+Options -MultiViews
+Options -Indexes
+Options +FollowSymlinks
+Options +SymLinksIfOwnerMatch
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+
+<Files .htaccess>
+Order Allow,Deny
+Deny from all
+</Files>

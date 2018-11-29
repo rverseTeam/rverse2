@@ -1,0 +1,94 @@
+{% set class = 'community-top platform-' ~ console.id %}
+{% extends '@ctr/_master.twig' %}
+
+{% block content %}
+			<div class="category-header">
+				<div class="header-banner-container">
+					<div class="header-banner">
+						<h1 id="page-title"><span>{{ console.filter }}</span></h1>
+					</div>
+				</div>
+				<div class="info-content">
+					<span class="number">{{ console.count }}</span>
+				</div>
+			</div>
+			<div class="body-content" data-region="USA">
+				<div class="community-list">
+					<div class="headline with-filter headline-{{ console.id }}">
+						<h2>{{ console.filter }}</h2>
+						<div class="with-filter-right">
+							<div class="select-button">
+								<label id="community-filter" class="">
+									<span class="select-button-content">{{ __('community.listing.filter.name') }}</span>
+									<select name="filter">
+										<option value="" selected="">{{ __('community.listing.filter.select') }}</option>
+										<option value="{{ route('console.all', [ console.id ]) }}">{{ __('community.listing.filter.options.all') }}</option>
+										<option value="{{ route('console.games', [ console.id ]) }}">{{ __('community.listing.filter.options.games', { console: console.name }) }}</option>
+										<option value="{{ route('console.vc', [ console.id ]) }}">{{ __('community.listing.filter.options.vc') }}</option>
+										<option value="{{ route('console.other', [ console.id ]) }}">{{ __('community.listing.filter.options.other') }}</option>
+									</select>
+								</label>
+							</div>
+						</div>
+					</div>
+					{% if communities is not empty %}
+						<ul class="list-content-with-icon-and-text arrow-list" id="community-top-content">
+							{% for community in communities %}
+								{% set id,title_id = hashid(community.id), hashid(community.title_id) %}
+								<li id="community-{{ id }}" class="">
+									<span class="icon-container">
+										<img src="/img/icons/{{ community.icon }}" class="icon" width="48" height="48">
+									</span>
+									<a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
+									<div class="body">
+										<span class="community-name title">{{ community.name }}</span>
+									{% if community.platform == 1 %}
+										<span class="platform-tag platform-tag-3ds"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.3ds') }}</span>
+									{% elseif community.platform == 2 %}
+										<span class="platform-tag platform-tag-wiiu"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.wiiu') }}</span>
+									{% elseif community.platform == 3 %}
+										<span class="platform-tag platform-tag-wiiu-3ds"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.wiiu-3ds') }}</span>
+									{% elseif community.platform == 4 %}
+										<span class="platform-tag platform-tag-switch"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.switch') }}</span>
+									{% elseif community.platform == 5 %}
+										<span class="platform-tag platform-tag-switch-wiiu"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.switch-wiiu') }}</span>
+									{% elseif community.platform == 6 %}
+										<span class="platform-tag platform-tag-wii"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.wii') }}</span>
+									{% elseif community.platform == 7 %}
+										<span class="platform-tag platform-tag-ds"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.ds') }}</span>
+									{% elseif community.platform == 8 %}
+										<span class="platform-tag platform-tag-wii-ds"></span>
+										<span class="text">{{ __('community.listing.communities.platforms.wii-ds') }}</span>
+									{% endif %}
+									</div>
+								</li>
+							{% endfor %}
+							</ul>
+					{% else %}
+						<div class="no-content-window">
+							<div class="window">
+								<p>{{ __('community.listing.communities.empty') }}</p>
+							</div>
+						</div>
+					{% endif %}
+					<h2 class="headline headline-{{ console.id }}">{{ __('community.listing.filter.name') }}</h2>
+					<div class="filter-button">
+						<div class="filter-button-Inner">
+							<a href="{{ route('console.all', [ console.id ]) }}" data-pjax="1">{{ __('community.listing.filter.options.all') }}</a>
+							<a href="{{ route('console.games', [ console.id ]) }}" data-pjax="1">{{ __('community.listing.filter.options.games', { console: console.name }) }}</a>
+						</div>
+						<div class="filter-button-Inner">
+							<a href="{{ route('console.vc', [ console.id ]) }}" data-pjax="1">{{ __('community.listing.filter.options.vc') }}</a>
+							<a href="{{ route('console.other', [ console.id ]) }}" data-pjax="1">{{ __('community.listing.filter.options.other') }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}
