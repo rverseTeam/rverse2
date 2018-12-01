@@ -1,0 +1,33 @@
+{% set class = 'activity' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+	<div class="title-header text-header">
+		<div class="header-banner-container">
+			<div class="header-banner">
+				<p>Here you can view posts and more from the users you follow.</p>
+			</div>
+		</div>
+		<h1 class="info-content">
+			<span class="icon-container"></span>
+			<span class="title-container">
+			<span class="title"><span>Activity Feed</span>
+			</span>
+		</h1>
+	</div>
+	<div class="body-content post-list" id="activity-feed" style="height:220px;">
+		<div class="no-content-window content-loading-window">
+			<div class="window">
+				<p>Loading activity feed...</p>
+			</div>
+		</div>
+		<div class="no-content-window content-load-error-window none">
+			<div class="window">
+				<p>The activity feed could not be loaded. Check your Internet connection, wait a moment, and then try reloading.</p>
+				<div class="window-bottom-buttons">
+					<a href="/" class="button">Reload</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

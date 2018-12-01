@@ -26,14 +26,7 @@ ConsoleAuth::check();
 
 Translation::init();
 
-// Set base variables
-$templateBases = [
-    'ctr',
-    'portal',
-    'offdevice',
-];
-
-Template::set($templateBases[ConsoleAuth::$paramPack['platform_id']]);
+Template::set($template);
 Template::vars([
     'get'     => $_GET,
     'user'    => CurrentSession::$user,

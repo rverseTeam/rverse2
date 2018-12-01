@@ -1,0 +1,20 @@
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+			<div id="header">
+				<div id="header-body">
+					<h1 id="page-title">
+						<span>OLV_DEBUG</span>
+					</h1>
+				</div>
+			</div>
+
+			<div class="body-content">
+				<div class="no-content-window">
+					<div class="window">
+						<p>OLV_DEBUG_DATA:</p>
+						<pre>{{ dump(data) }}</pre>
+					</div>
+				</div>
+			</div>
+{% endblock %}

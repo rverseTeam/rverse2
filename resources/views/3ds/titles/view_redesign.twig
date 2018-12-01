@@ -1,0 +1,176 @@
+{% set class = 'community-post-list' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+{% set id,title_id = hashid(meta.id), hashid(meta.title_id) %}
+			<div class="title-header{% if meta.banner is not empty %} with-header-banner{% endif %}">
+				{% if meta.banner is not empty %}
+					<div class="header-banner-container post-subtype-default-container">
+						<img src="/img/banners/{{ meta.banner }}" height="168" width="400">
+					</div>
+				{% endif %}
+				<h1 class="info-content">
+					<span class="icon-container"><img src="/img/icons/{{ meta.icon }}" class="icon" width="48" height="48"></span>
+					<span class="title-container">
+						<span class="title">{{ meta.name }}</span>
+					</span>
+				</h1>
+				{% if meta.platform == 1 %}
+					<span class="platform-tag platform-tag-3ds"></span>
+				{% elseif meta.platform == 2 %}
+					<span class="platform-tag platform-tag-wiiu"></span>
+				{% elseif meta.platform == 3 %}
+					<span class="platform-tag platform-tag-wiiu-3ds"></span>
+				{% elseif meta.platform == 4 %}
+					<span class="platform-tag platform-tag-switch"></span>
+				{% elseif meta.platform == 5 %}
+					<span class="platform-tag platform-tag-switch-wiiu"></span>
+				{% elseif meta.platform == 6 %}
+					<span class="platform-tag platform-tag-wii"></span>
+				{% elseif meta.platform == 7 %}
+					<span class="platform-tag platform-tag-ds"></span>
+				{% elseif meta.platform == 8 %}
+					<span class="platform-tag platform-tag-wii-ds"></span>
+				{% endif %}
+			</div>
+			<div id="header-meta" class="header-meta-with-description">
+				<a href="#" class="favorite-button symbol button top-right-button" data-action-favorite="#" data-action-unfavorite="#"></a>
+				<a href="#" class="button symbol setting-button" data-sound="SE_OLV_OK_SUB" data-pjax="1"></a>
+			</div>
+			{% if meta.description is not empty %}
+				<div class="community-info">
+					<p class="text">{{ meta.description }}</p>
+				</div>
+			{% endif %}
+			<div class="body-content multi-timeline-body-content">
+				<div id="artwork_post-post-list">
+					<div class="headline with-filter">
+						<h2 class="symbol">
+							Recent Popular Drawings
+						</h2>
+						<a class="test-artwork_post-post-link multitimeline-post-button js-post-button symbol" href="{{ route('title.artworkpost', [ title_id, id ]) }}">Post
+						</a>
+					</div>
+					<div class="body">
+						<div class="{% if drawings is not empty %}multi-{% endif %}post-list{% if drawings is empty %} empty{% endif %}">
+							{% for drawing in drawings %}
+								{% set mii = _context.drawing.user.mii[_context.feeling[drawing.feeling]] %}
+								<div id="post-{{ drawing.id }}"{% if drawing.spoiler %} data-href-hidden="{{ route('post.show', [ drawing.id ]) }}"{% else %} data-href="{{ route('post.show', [ drawing.id ]) }}"{% endif %} class="multi-timeline-post scroll post-subtype-artwork test-post{% if drawing.spoiler %} hidden test-hidden{% endif %}">
+									<div class="body">
+										<div class="post-content">
+											<div class="tag-container"></div>
+											<p class="post-content-memo">
+												<a href="{{ route('post.show', [ drawing.id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">
+													<img src="/img/drawings/{{ drawing.image }}" class="post-memo" width="320" height="120">
+												</a>
+											</p>
+										</div>
+										{% if drawing.spoiler %}
+											<div class="hidden-content">
+												<p>Spoiler</p>
+												<button class="button hidden-content-button">View Post</button>
+											</div>
+										{% endif %}
+										<div class="user-container">
+											<a href="{{ route('user.profile', [ drawing.user.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus">
+												<img src="{{ mii }}" class="user-icon" width="32" height="32">
+											</a>
+											<div class="post-info"></div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+							{% if drawings is empty %}
+								The popular drawings for this software haven't been calculated yet.
+							{% endif %}
+						</div>
+						<div class="more-button-container">
+							<a href="" data-pjax="1" class="more-button newest-more-button symbol test-newest-artwork-button">
+							Recent Posts
+							</a>
+						</div>
+					</div>
+				</div>
+				<div id="topic_post-post-list">
+					<div class="headline with-filter">
+						<h2 class="symbol">
+							New Discussions
+						</h2>
+						<a class="test-topic_post-post-link multitimeline-post-button js-topic-post-button symbol" href="#">Post
+						</a>
+					</div>
+					<div class="body">
+						<div class="tutorial-window multi_timeline-topic-filter tutorial-balloon test-topic-filter js-topic-filter">
+							Before starting a new discussion, please check to see if there's already a discussion about your topic.
+							<div class="select-button js-select-button">
+								<span class="select-button-content">Filter Discussions</span>
+								<select class="scroll-focus">
+									<option value="" selected="">Please make a selection.</option>
+									<option class="new-posts" value="">
+										All
+									</option>
+									<option class="open-topic-posts" value="">
+										Open Discussion
+									</option>
+									{% for topicCategory in topicCategories %}
+										{% set topicId = hashid(topicCategory.id) %}
+										<option class="topic-category-posts-{{ topicId }}" value="">
+											{{ topicCategory.name }}
+										</option>
+									{% endfor %}
+								</select>
+							</div>
+							<a href="{{ route('title.topicpost', [ title_id, id ]) }}" class="post-button js-post-button" data-pjax="1"><span class="symbol">Post</span></a>
+						</div>
+						<div class="{% if discussions is not empty %}multi-{% endif %}post-list{% if discussions is empty %} empty{% endif %}">
+							{% for discussion in discussions %}
+								{% set mii = _context.discussion.user.mii[_context.feeling[discussion.feeling]] %}
+								<div id="post-{{ discussion.id }}" data-href="{{ route('post.show', [ discussion.id ]) }}" class="multi-timeline-post scroll post-subtype-topic test-post">
+									<div class="body">
+										<div class="post-content">
+											<div class="tag-container">
+												<a href="" data-pjax="1" class="test-post-topic-category post-tag post-topic-category symbol">{{ discussion.categoryName }}</a>
+											</div>
+											<p class="post-content-text">
+												<a href="{{ route('post.show', [ discussion.id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">
+													<span>
+														<span class="topic-title test-topic-title">{{ discussion.title }}</span>
+													</span>
+												</a>
+											</p>
+										</div>
+										<div class="post-meta">
+											<div class="js-topic-answer-accepting-status test-topic-answer-accepting-status{% if discussion.open == 0 %} not-accepting{% else %} accepting{% endif %}" data-test-accepting-status="{{ discussion.open }}">
+												<span class="accepting">Open</span>
+												<span class="not-accepting">Closed</span>
+											</div>
+											<span class="empathy symbol">
+												<span class="symbol-label">Yeahs</span>
+												<span class="empathy-count">{{ discussion.likes }}</span>
+											</span>
+											<span class="reply symbol">
+												<span class="symbol-label">Comment</span>
+												<span class="reply-count">{{ discussion.comments }}</span>
+											</span>
+										</div>
+										<div class="user-container">
+											<a href="{{ route('user.profile', [ discussion.user.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus">
+												<img src="{{ mii }}" class="user-icon" width="32" height="32">
+											</a>
+											<div class="post-info">
+												<a href="{{ route('user.profile', [ discussion.user.username ]) }}" data-pjax="1" class="user-name">{{ discussion.user.displayName }}</a>
+												·
+												<span class="timestamp">{{ discussion.created }}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+							{% if discussions is empty %}
+								No discussions have been started for this title yet. Why not start one of your own?
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}

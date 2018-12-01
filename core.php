@@ -22,12 +22,15 @@ Router::init();
 
 switch ($_SERVER['SERVER_NAME']) {
     case config('sites.3ds'):
+        $template = '3ds';
         require_once path('routes/3ds.php');
         break;
     case config('sites.wiiu'):
+        $template = 'wiiu';
         require_once path('routes/wiiu.php');
         break;
     case config('sites.web'):
+        $template = 'web';
         require_once path('routes/web.php');
         break;
     default:
