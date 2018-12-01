@@ -25,13 +25,13 @@ Router::init();
 switch ($_SERVER['SERVER_NAME']) {
     case config('sites.3ds'):
         $template = '3ds';
-        ConsoleAuth::check3DS();
         require_once path('routes/3ds.php');
+        ConsoleAuth::check3DS();
         break;
     case config('sites.wiiu'):
         $template = 'wiiu';
-        ConsoleAuth::checkWiiU();
         require_once path('routes/wiiu.php');
+        ConsoleAuth::checkWiiU();
         break;
     case config('sites.web'):
         $template = 'web';
