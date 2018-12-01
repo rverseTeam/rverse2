@@ -21,7 +21,7 @@ Router::group(['before' => 'maintenance'], function () {
     // 3DS required to load these pages
     Router::group(['before' => 'auth'], function () {
         Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
-        Router::get('/check_update.json', 'CTR.Dummy@dummy', 'news.checkupdate');
+        Router::get('/check_update.json', 'CTR.Updates@news', 'news.checkupdate');
 
         // Communities
         Router::group(['prefix' => 'communities'], function () {
