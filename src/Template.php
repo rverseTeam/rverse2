@@ -62,6 +62,7 @@ class Template
         'hashid',
         'dehashid',
         '__',
+        'full_domain',
     ];
 
     /**
