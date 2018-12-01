@@ -1,7 +1,9 @@
 {% if get._pjax is not defined %}
 <!DOCTYPE html><html lang="en"><head>
 		<meta charset="utf-8">
+{% endif %}
 		<title>{{ config('general.name') }}</title>
+{% if get._pjax is not defined %}
 		<link rel="stylesheet" type="text/css" href="/css/n3ds/style.css">
 		<script src="/js/src/cave-emulation.js"></script>
 		<script src="/js/n3ds/libs.js"></script>
