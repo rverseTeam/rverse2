@@ -35,11 +35,6 @@ class CurrentSession
      */
     public static function start(int $user, string $session, string $ip) : void
     {
-        // Check if a PHP session was already started and if not start one
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
         // Create a session object
         self::$session = new Session($session);
 
