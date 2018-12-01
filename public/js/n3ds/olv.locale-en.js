@@ -24,7 +24,7 @@ Olv.Locale.Data = {
         "value": "Save Screenshot"
     },
     "olv.portal.album.save_album_image.confirm": {
-        "value": "The screenshot has been saved. Continue using foxverse?"
+        "value": "The screenshot has been saved. Continue using rverse?"
     },
     "olv.portal.back": {
         "value": "Back"
@@ -103,15 +103,15 @@ Olv.Locale.Data = {
     },
     "olv.portal.confirm_app_jump": {
         "args": [],
-        "value": "This will close foxverse.\nAre you sure you want to proceed?"
+        "value": "This will close rverse.\nAre you sure you want to proceed?"
     },
     "olv.portal.confirm_app_jump %1": {
         "args": [],
-        "value": "This will close foxverse.\nAre you sure you want to proceed?"
+        "value": "This will close rverse.\nAre you sure you want to proceed?"
     },
     "olv.portal.confirm_app_jump [_1]": {
         "args": [],
-        "value": "This will close foxverse.\nAre you sure you want to proceed?"
+        "value": "This will close rverse.\nAre you sure you want to proceed?"
     },
     "olv.portal.confirm_display_played_mark": {
         "value": "If you have played the game you're posting about, your posts and comments will have a mark indicating this."
@@ -120,7 +120,7 @@ Olv.Locale.Data = {
         "value": "Added to favorite communities."
     },
     "olv.portal.confirm_open_eshop": {
-        "value": "This will close foxverse.\nAre you sure you want to proceed?"
+        "value": "This will close rverse.\nAre you sure you want to proceed?"
     },
     "olv.portal.confirm_syste_update.body": {
         "value": "You must connect to the Internet and perform a system update before you can use this feature.\nPerform a system update now?"
@@ -129,10 +129,10 @@ Olv.Locale.Data = {
         "value": "Please Perform a System Update"
     },
     "olv.portal.confirm_url_form.body": {
-        "value": "This web page will be displayed in the Internet browser.\n\nDo you want to close foxverse and view this web page?"
+        "value": "This web page will be displayed in the Internet browser.\n\nDo you want to close rverse and view this web page?"
     },
     "olv.portal.confirm_url_form.body.for_n3ds": {
-        "value": "This web page will be displayed in the Internet browser.\n\nDo you want to close foxverse and view this web page?"
+        "value": "This web page will be displayed in the Internet browser.\n\nDo you want to close rverse and view this web page?"
     },
     "olv.portal.confirm_url_form.title": {
         "value": "Open Link"
@@ -141,7 +141,7 @@ Olv.Locale.Data = {
         "value": "You do not have this software."
     },
     "olv.portal.continue_miiverse": {
-        "value": "Continue Using foxverse"
+        "value": "Continue Using rverse"
     },
     "olv.portal.dialog.apply_settings_done": {
         "value": "Settings saved."
@@ -312,7 +312,7 @@ Olv.Locale.Data = {
         "value": "Please download the latest version of the YouTube application."
     },
     "olv.portal.n3ds.youtube.jump": {
-        "value": "Do you want to close foxverse and launch YouTube?"
+        "value": "Do you want to close rverse and launch YouTube?"
     },
     "olv.portal.offline.post.delete": {
         "value": "Do you want to delete this post?"
@@ -423,7 +423,7 @@ Olv.Locale.Data = {
         "value": "Yes"
     },
     "olv.potal.n3ds.youtube.jump": {
-        "value": "Do you want to close foxverse and launch YouTube?"
+        "value": "Do you want to close rverse and launch YouTube?"
     },
     "olv.welcome.check.username": {
         "value": "This display name is already in use, please select another."
@@ -434,7 +434,7 @@ Olv.Locale.Data = {
     "olv.welcome.check.nonnid": {
         "value": "This Nintendo Network ID does not exist, please select another."
     },
-    "foxverse.debug": {
+    "rverse.debug": {
         "args": [1],
         "value": "DEBUG:\n%s"
     },
