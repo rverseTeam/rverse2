@@ -3,7 +3,7 @@
  * Holds the community for a specific title.
  */
 
-namespace Miiverse\Pages\Title\CTR;
+namespace Miiverse\Pages\CTR\Title;
 
 use Miiverse\CurrentSession;
 use Miiverse\DB;
@@ -12,7 +12,7 @@ use Miiverse\User;
 /**
  * Community page for titles.
  *
- * @author Repflez
+ * @author RverseTeam
  */
 class Community extends Page
 {

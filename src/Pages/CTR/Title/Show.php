@@ -3,14 +3,14 @@
  * Holds the home page.
  */
 
-namespace Miiverse\Pages\Title\CTR;
+namespace Miiverse\Pages\CTR\Title;
 
 use Miiverse\CurrentSession;
 
 /**
  * Home page.
  *
- * @author Repflez
+ * @author RverseTeam
  */
 class Show extends Page
 {

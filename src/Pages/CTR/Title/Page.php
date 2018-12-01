@@ -3,14 +3,14 @@
  * Holds the base page for titles.
  */
 
-namespace Miiverse\Pages\Title\CTR;
+namespace Miiverse\Pages\CTR\Title;
 
-use Miiverse\Pages\Page as BasePage;
+use Miiverse\Pages\CTR\Page as BasePage;
 
 /**
  * Base titles controller (which other controllers should extend on).
  *
- * @author Repflez
+ * @author RverseTeam
  */
 class Page extends BasePage
 {
