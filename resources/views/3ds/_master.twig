@@ -1,16 +1,7 @@
-{% if get.pjax is not defined %}
-<!DOCTYPE html>
-<html lang="en">
-	<head>
+{% if get._pjax is not defined %}
+<!DOCTYPE html><html lang="en"><head>
 		<meta charset="utf-8">
 		<title>{{ config('general.name') }}</title>
-		<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-		<link rel="manifest" href="/site.webmanifest">
-		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-		<meta name="msapplication-TileColor" content="#da532c">
-		<meta name="theme-color" content="#ffffff">
 		<link rel="stylesheet" type="text/css" href="/css/n3ds/style.css">
 		<script src="/js/src/cave-emulation.js"></script>
 		<script src="/js/n3ds/libs.js"></script>
@@ -18,12 +9,12 @@
 		<script src="/js/n3ds/olv.locale-en.js"></script>
 	</head>
 	<body data-user-id="{{ user.username }}" data-is-first-post="{% if user.posted %}0{% else %}1{% endif %}" data-is-first-favorite="{% if user.favorited %}0{% else %}1{% endif %}" data-profile-url="/users/{{ user.username }}">
-		<div id="body" {% if class is defined %}class="{{ class }}" {% endif %}data-region-id="2">
 {% endif %}
+		<div id="body" {% if class is defined %}class="{{ class }}" {% endif %}data-region-id="2">
 			{% block content %}
 			{% endblock %}
-{% if get.pjax is not defined %}
 		</div>
+{% if get._pjax is not defined %}
 	</body>
 </html>
 {% endif %}
