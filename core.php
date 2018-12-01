@@ -22,6 +22,11 @@ Upload::init();
 
 Router::init();
 
+// Check if a PHP session was already started and if not start one
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 switch ($_SERVER['SERVER_NAME']) {
     case config('sites.3ds'):
         $template = '3ds';
