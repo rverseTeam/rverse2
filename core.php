@@ -1,7 +1,7 @@
 <?php
 /*
- * foxverse
- * (c) 2018 Repflez
+ * rverse
+ * (c) 2018 RverseTeam
  */
 
 namespace Miiverse;
@@ -27,8 +27,8 @@ switch ($_SERVER['SERVER_NAME']) {
     case config('sites.wiiu'):
         require_once path('routes/wiiu.php');
         break;
-    case config('sites.others'):
-        require_once path('routes/others.php');
+    case config('sites.web'):
+        require_once path('routes/web.php');
         break;
     default:
         require_once path('routes/default.php');

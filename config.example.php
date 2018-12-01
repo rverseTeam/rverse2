@@ -161,6 +161,6 @@ return [
     'sites' => [
         '3ds'               => '',
         'wiiu'              => '',
-        'others'            => '',
+        'web'               => '',
     ],
 ];
