@@ -140,8 +140,6 @@ return [
     // Ranks ids, these ranks are used by automated procedures in the backend
     // If you're using the setup command in topia, these are already set correctly for you!
     'rank'          => [
-        'banned'            => -1,
-        'guest'             => 0,
         'regular'           => 1,
         'verified'          => 2,
         'bot'               => 3,
@@ -149,6 +147,7 @@ return [
         'alumni'            => 5,
         'mod'               => 6,
         'admin'             => 7,
+        'banned'            => 8,
     ],
 
     // Comment settings
