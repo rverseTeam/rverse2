@@ -6,10 +6,12 @@
 
 namespace Miiverse;
 
+use Miiverse\Helpers\ConsoleAuth;
+
 require_once 'vendor/autoload.php';
 
 error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
-setlocale(LC_TIME, 'Spanish');
+setlocale(LC_TIME, 'English');
 
 ExceptionHandler::register();
 Config::load();
@@ -23,10 +25,12 @@ Router::init();
 switch ($_SERVER['SERVER_NAME']) {
     case config('sites.3ds'):
         $template = '3ds';
+        ConsoleAuth::check3DS();
         require_once path('routes/3ds.php');
         break;
     case config('sites.wiiu'):
         $template = 'wiiu';
+        ConsoleAuth::checkWiiU();
         require_once path('routes/wiiu.php');
         break;
     case config('sites.web'):

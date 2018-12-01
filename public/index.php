@@ -7,8 +7,6 @@
 
 namespace Miiverse;
 
-use Miiverse\Helpers\ConsoleAuth;
-
 // Include app
 require_once __DIR__.'/../core.php';
 
@@ -22,8 +20,6 @@ CurrentSession::start(
     $_COOKIE["{$cookiePrefix}session"] ?? '',
     Net::ip()
 );
-ConsoleAuth::check();
-
 Translation::init();
 
 Template::set($template);
