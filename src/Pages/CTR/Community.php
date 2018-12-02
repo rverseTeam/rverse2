@@ -69,7 +69,7 @@ class Community extends Page
                     'id'   => $page,
                     'name' => 'Wii U',
                 ];
-                $mappings = [2, 3];
+                $mappings = [2, 3, 5];
                 break;
             case 'wii':
                 $console = [
@@ -169,7 +169,7 @@ class Community extends Page
                     'id'   => $page,
                     'name' => 'Wii U',
                 ];
-                $mappings = [2, 3];
+                $mappings = [2, 3, 5];
                 break;
             case 'wii':
                 $console = [
@@ -239,7 +239,7 @@ class Community extends Page
                     'id'   => $page,
                     'name' => 'Wii U',
                 ];
-                $mappings = [2, 3];
+                $mappings = [2, 3, 5];
                 break;
             case 'wii':
                 $console = [
@@ -309,7 +309,7 @@ class Community extends Page
                     'id'   => $page,
                     'name' => 'Wii U',
                 ];
-                $mappings = [2, 3];
+                $mappings = [2, 3, 5];
                 break;
             case 'wii':
                 $console = [
@@ -379,7 +379,7 @@ class Community extends Page
                     'id'   => $page,
                     'name' => 'Wii U',
                 ];
-                $mappings = [2, 3];
+                $mappings = [2, 3, 5];
                 break;
             case 'wii':
                 $console = [
