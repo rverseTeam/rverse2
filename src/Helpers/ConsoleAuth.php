@@ -35,7 +35,10 @@ class ConsoleAuth
 	{
 		// Send the user to the welcome guest page if there's no NNID token sent
 		if (!isset($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN'])) {
-			redirect(route('welcome.guest'));
+			if (!$_SESSION['guest']) {
+				$_SESSION['guest'] = true;
+				redirect(route('welcome.guest'));
+			}
 		}
 
 		// Check if we don't have a valid session data
@@ -43,6 +46,7 @@ class ConsoleAuth
 			$storage = [];
 
 			// Unpack the ParamPack from the headers sent by the console
+			// This only deals with Nintendo style ParamPack
 			// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
 			$data = explode('\\', base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']));
 
