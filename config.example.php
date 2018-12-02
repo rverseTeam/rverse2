@@ -101,6 +101,14 @@ return [
         'report_host'       => '',
     ],
 
+    // Discord reporting settings
+    'discord'   => [
+        'accounts'          => '',
+        'posts'             => '',
+        'reports'           => '',
+        'moderation'        => '',
+    ],
+
     // User settings
     'user'     => [
         // Minimum entropy value a password needs to have
