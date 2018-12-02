@@ -33,6 +33,9 @@ class Updates extends Page
             'news' => (object)[
                 'unread_count' => 0,
             ],
+            'message' => (object)[
+                'unread_count' => 0,
+            ],
         ];
 
         return $this->json($updates);
