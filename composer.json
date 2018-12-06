@@ -1,19 +1,20 @@
 {
     "require": {
-        "doctrine/dbal": "^2.6",
+        "php": ">=7.2.0",
         "ext-curl": "*",
         "ext-json": "*",
+        "cloudinary/cloudinary_php": "^1.8",
+        "doctrine/dbal": "^2.6",
         "hashids/hashids": "^2.0",
         "illuminate/database": "5.2.*",
         "illuminate/filesystem": "5.2.*",
+        "illuminate/translation": "5.2.*",
         "nesbot/carbon": "^1.21",
-        "php": ">=7.2.0",
         "phroute/phroute": "^2.1",
         "symfony/console": "^3.3",
         "twig/extensions": "~1.0",
         "twig/twig": "~2.0",
-        "cloudinary/cloudinary_php": "^1.8",
-        "illuminate/translation": "5.2.*"
+        "wohali/oauth2-discord-new": "^1.0"
     },
     "autoload": {
         "classmap": [
