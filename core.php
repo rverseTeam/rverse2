@@ -31,7 +31,7 @@ switch ($_SERVER['SERVER_NAME']) {
     case config('sites.3ds'):
         $template = '3ds';
         // 3DS pjax stuff
-        if (array_key_exists('_pjax', $_GET)) {
+        if (array_key_exists('_pjax', $_GET) && array_key_exists('HTTP_X_PJAX', $_SERVER)) {
             // pjax doesn't like queries on the header, for some reason
             $pjaxurl = preg_replace('/\?.+/', '', $_SERVER['REQUEST_URI']);
             header('X-PJAX-PATH: '.$pjaxurl);
