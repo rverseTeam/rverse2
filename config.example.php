@@ -170,5 +170,11 @@ return [
         '3ds'               => '',
         'wiiu'              => '',
         'web'               => '',
+        'admin'             => '',
+    ],
+
+    // Admin panel settings
+    'admin' => [
+        'discord_guild'     => '',
     ],
 ];

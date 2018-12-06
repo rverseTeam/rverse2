@@ -49,6 +49,10 @@ switch ($_SERVER['SERVER_NAME']) {
         $template = 'web';
         require_once path('routes/web.php');
         break;
+    case config('sites.admin'):
+        $template = 'admin';
+        require_once path('routes/admin.php');
+        break;
     default:
         require_once path('routes/default.php');
         break;
