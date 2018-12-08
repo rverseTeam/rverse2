@@ -7,4 +7,8 @@
 namespace Miiverse;
 
 // Homepage
-Router::get('/', 'Unknown@index', 'main.index');
+Router::get('/', 'Admin.Home@index', 'admin.home');
+
+// OAuth2
+Router::get('/login', 'Admin.OAuth2@login', 'oauth2.login');
+Router::get('/callback', 'Admin.OAuth2@callback', 'oauth2.callback');

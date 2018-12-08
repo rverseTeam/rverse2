@@ -175,6 +175,9 @@ return [
 
     // Admin panel settings
     'admin' => [
+        'discord_client'    => '',
+        'discord_secret'    => '',
+        'discord_scopes'    => ['identify', 'guilds'],
         'discord_ids'       => [],
     ],
 ];
