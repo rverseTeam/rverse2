@@ -175,6 +175,6 @@ return [
 
     // Admin panel settings
     'admin' => [
-        'discord_guild'     => '',
+        'discord_ids'       => [],
     ],
 ];
