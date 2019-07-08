@@ -23,8 +23,8 @@ return [
             'title' => 'Configurer votre compte :name',
             'message' => 'Nous avons besoin de vos données avant de pouvoir commencer à utiliser :name.',
             'display_name' => 'Nom affiché',
-            'nnid' => 'Nintendo Network ID',
-            'nnid_label' => 'Nous utilisons votre identifiant Nintendo Network pour récupérer votre image Mii.',
+            'nnid' => 'ID Nintendo Network',
+            'nnid_label' => 'Nous utilisons votre ID Nintendo Network pour récupérer votre image Mii.',
         ],
         'finish' => [
             'title' => 'Amusez-vous sur :name!',
