@@ -21,7 +21,7 @@ return [
                 'options' => [
                     'all' => 'Tous les logiciels',
                     'games' => ':console jeux',
-                    'vc' => 'Console virtuelle',
+                    'vc' => 'Virtual Console',
                     'other' => 'Autres',
                 ],
             ],
@@ -53,7 +53,7 @@ return [
             'options' => [
                 'all' => 'Tous les logiciels',
                 'games' => ':console jeux',
-                'vc' => 'Console virtuelle',
+                'vc' => 'Virtual Console',
                 'other' => 'Autres',
                 ],
         ],
