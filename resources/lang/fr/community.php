@@ -7,7 +7,7 @@ return [
     'index' => [
         'header' => [
             'desc' => 'Consultez les communautés pour connaître les jeux auxquels vous jouez ou ceux qui vous intéressent !',
-            'title' => 'Les communautés',
+            'title' => 'Communautés',
         ],
         'favorites' => 'Communautés préférées',
         'search' => [
@@ -17,7 +17,7 @@ return [
         'communities' => [
             'filter' => [
                 'name' => 'Filtre',
-                'select' => 'S\'il vous plaît faire une sélection.',
+                'select' => 'Choisissez un filtre.',
                 'options' => [
                     'all' => 'Tous les logiciels',
                     'games' => ':console jeux',
@@ -39,7 +39,7 @@ return [
                 'special' => 'Communauté spéciale',
             ],
             'empty' => 'Il n\'y a pas de communautés dans cette catégorie.',
-            'more' => 'Montre plus',
+            'more' => 'afficher plus',
         ],
         'footer' => [
             'console' => 'Communautés :console',
@@ -49,7 +49,7 @@ return [
     'listing' => [
         'filter' => [
             'name' => 'Filtre',
-            'select' => 'S\'il vous plaît faire une sélection.',
+            'select' => 'Choisissez un filtre.',
             'options' => [
                 'all' => 'Tous les logiciels',
                 'games' => ':console jeux',

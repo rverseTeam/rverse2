@@ -6,11 +6,11 @@
 return [
     '403' => [
         'title' => 'Erreur',
-        'desc' => 'L\'écran n\'a pas pu être affiché.',
+        'desc' => 'La page n\'a pas pu être affichée',
     ],
 
     '404' => [
         'title' => 'Erreur',
-        'desc' => 'L\'écran n\'a pas pu être affiché.',
+        'desc' => 'La page n\'a pas pu être affichée',
     ],
 ];
