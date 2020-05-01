@@ -79,7 +79,7 @@ class Gate extends Page
             ]);
 
         if (!empty(config('discord.accounts'))) {
-            Net::JSONRequest(config('discord.accounts'), [
+            Net::JSONRequest(config('discord.accounts'), 'post', [
                 'embeds' => [
                     (object)[
                         'title'  => 'New account created',
