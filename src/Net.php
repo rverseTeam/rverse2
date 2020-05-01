@@ -237,7 +237,7 @@ class Net
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CONNECTTIMEOUT => 2,
             CURLOPT_TIMEOUT        => 4,
-            CURLOPT_USERAGENT      => 'foxverse/1.0 (+https://foxverse.xyz)',
+            CURLOPT_USERAGENT      => 'rverse/1.0 (+https://rverse.ml)',
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSL_VERIFYPEER => false, // for CF flexible SSL
         ]);
@@ -254,6 +254,55 @@ class Net
                 curl_setopt_array($curl, [
                     CURLOPT_POST       => is_array($params) ? count($params) : 1,
                     CURLOPT_POSTFIELDS => is_array($params) ? http_build_query($params) : $params,
+                ]);
+                break;
+        }
+
+        $curl = curl_exec($curl);
+
+        return $curl;
+    }
+
+    /**
+     * Make a JSON request.
+     *
+     * @param string $url
+     * @param string $method
+     * @param array $params
+     *
+     * @return string
+     */
+    public static function JSONRequest(string $url, string $method = 'GET', array $params = []) : string
+    {
+        $curl = curl_init();
+        $params = json_encode($params);
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 2,
+            CURLOPT_TIMEOUT        => 4,
+            CURLOPT_USERAGENT      => 'rverse/1.0 (+https://rverse.ml)',
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false, // for CF flexible SSL
+            CURLOPT_POSTFIELDS     => $params,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($params)
+            ],
+        ]);
+
+        switch (strtolower($method)) {
+            case 'head':
+                curl_setopt_array($curl, [
+                    CURLOPT_HEADER => true,
+                    CURLOPT_NOBODY => true,
+                ]);
+                break;
+
+            case 'post':
+                curl_setopt_array($curl, [
+                    CURLOPT_POST => 1,
                 ]);
                 break;
         }

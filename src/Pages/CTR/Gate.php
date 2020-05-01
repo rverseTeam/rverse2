@@ -78,6 +78,27 @@ class Gate extends Page
                 'surprised'  => $miis['surprised_face'],
             ]);
 
+        if (!empty(config('discord.accounts'))) {
+            Net::JSONRequest(config('discord.accounts'), [
+                'embeds' => [
+                    (object)[
+                        'title'  => 'New account created',
+                        'color'  => 6018695,
+                        'fields' => [
+                            (object)[
+                                'name'  => 'Username',
+                                'value' => $_POST['welcome_username'],
+                            ],
+                            (object)[
+                                'name'  => 'Nintendo Network ID',
+                                'value' => $_POST['welcome_nnid'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        }
+
         return '';
     }
 
