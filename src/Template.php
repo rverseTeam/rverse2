@@ -5,12 +5,12 @@
 
 namespace Miiverse;
 
-use Twig_Environment;
-use Twig_Extension_Debug;
-use Twig_Extension_StringLoader;
-use Twig_Loader_Filesystem;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Extension\StringLoaderExtension;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * Miiverse wrapper for Twig.
@@ -39,7 +39,7 @@ class Template
     /**
      * The templating engine.
      *
-     * @var Twig_Environment
+     * @var Twig\Environment
      */
     private static $engine;
 
@@ -97,7 +97,7 @@ class Template
         $views_dir = path(self::VIEWS_DIR);
 
         // Initialise Twig Filesystem Loader
-        $loader = new Twig_Loader_Filesystem();
+        $loader = new FilesystemLoader();
 
         foreach (glob("{$views_dir}*") as $dir) {
             $key = basename($dir);
@@ -120,24 +120,24 @@ class Template
         ];
 
         // And now actually initialise the templating engine
-        self::$engine = new Twig_Environment($loader, $env);
+        self::$engine = new Environment($loader, $env);
 
         // Load String template loader
-        self::$engine->addExtension(new Twig_Extension_StringLoader());
+        self::$engine->addExtension(new StringLoaderExtension());
 
         // Add utility functions
         foreach (self::$utilityFunctions as $function) {
-            self::$engine->addFunction(new Twig_SimpleFunction($function, $function));
+            self::$engine->addFunction(new TwigFunction($function, $function));
         }
 
         // Add utility filters
         foreach (self::$utilityFilters as $filter) {
-            self::$engine->addFilter(new Twig_SimpleFilter($filter, $filter));
+            self::$engine->addFilter(new TwigFilter($filter, $filter));
         }
 
         // Add debug functions if debug is enabled
         if (config('dev.twig_debug')) {
-            self::$engine->addExtension(new Twig_Extension_Debug());
+            self::$engine->addExtension(new DebugExtension());
         }
     }
 
