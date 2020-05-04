@@ -3,6 +3,8 @@
 /node_modules
 /npm-debug.log
 
+.DS_STORE
+
 # Configuration
 /config.php
 
