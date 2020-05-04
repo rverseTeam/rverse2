@@ -8,6 +8,7 @@ namespace Miiverse\Pages\CTR;
 use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
 use Miiverse\Helpers\Mii;
+use Miiverse\Net;
 use Miiverse\Upload;
 use Miiverse\User;
 
