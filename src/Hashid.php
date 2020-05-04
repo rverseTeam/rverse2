@@ -50,7 +50,7 @@ class Hashid
      *
      * @param string $hashid
      *
-     * @return sring|array
+     * @return string|array
      */
     public static function decode(string $hashid)
     {

@@ -8,6 +8,7 @@ namespace Miiverse\Pages\CTR;
 use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
 use Miiverse\Helpers\Mii;
+use Miiverse\Net;
 use Miiverse\Upload;
 use Miiverse\User;
 
@@ -77,6 +78,27 @@ class Gate extends Page
                 'puzzled'    => $miis['puzzled_face'],
                 'surprised'  => $miis['surprised_face'],
             ]);
+
+        if (!empty(config('discord.accounts'))) {
+            Net::JSONRequest(config('discord.accounts'), 'post', [
+                'embeds' => [
+                    (object)[
+                        'title'  => 'New account created',
+                        'color'  => 6018695,
+                        'fields' => [
+                            (object)[
+                                'name'  => 'Username',
+                                'value' => $_POST['welcome_username'],
+                            ],
+                            (object)[
+                                'name'  => 'Nintendo Network ID',
+                                'value' => $_POST['welcome_nnid'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        }
 
         return '';
     }

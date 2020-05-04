@@ -12,8 +12,7 @@
         "nesbot/carbon": "^1.21",
         "phroute/phroute": "^2.1",
         "symfony/console": "^3.3",
-        "twig/extensions": "~1.0",
-        "twig/twig": "~2.0",
+        "twig/twig": "^3.0",
         "wohali/oauth2-discord-new": "^1.0"
     },
     "autoload": {
@@ -30,5 +29,8 @@
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true
+    },
+    "require-dev": {
+        "phpstan/phpstan-shim": "^0.11.0"
     }
 }

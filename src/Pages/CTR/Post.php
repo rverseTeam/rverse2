@@ -8,6 +8,7 @@ namespace Miiverse\Pages\CTR;
 use Miiverse\Community\Community;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
+use Miiverse\Net;
 use Miiverse\User;
 
 /**
@@ -34,6 +35,8 @@ class Post extends Page
             $feeling = $_POST['feeling_id'];
             $spoiler = $_POST['is_spoiler'] ?? 0;
             $type = $_POST['_post_type'];
+            $text = '[Empty Post, may be a drawing]';
+            $image = '';
 
             $meta = DB::table('communities')
                         ->where('id', $id)
@@ -45,7 +48,7 @@ class Post extends Page
 
             switch ($type) {
                 case 'body':
-                    $body = $_POST['body'];
+                    $text = $body = $_POST['body'];
 
                     if (!$meta->is_redesign) {
                         $postId = DB::table('posts')
@@ -78,6 +81,7 @@ class Post extends Page
                 case 'painting':
                     $painting = base64_decode($_POST['painting']);
                     $painting_name = CurrentSession::$user->id.'-'.time().'.png';
+                    $image = "https://images.weserv.nl/?url=ssl:$_SERVER[HTTP_HOST]/img/drawings/$painting_name&w=320&h=120&output=png";
 
                     file_put_contents(path('public/img/drawings/'.$painting_name), $painting);
 
@@ -105,19 +109,53 @@ class Post extends Page
                 ->where('user_id', '=', CurrentSession::$user->id)
                 ->increment('posts');
 
+            if (!empty(config('discord.posts'))) {
+                $embed = [
+                    'embeds' => [
+                        (object)[
+                            'title'  => "New post submitted (ID: #$postId)",
+                            'color'  => 8235610,
+                            'fields' => [
+                                (object)[
+                                    'name'   => 'Username',
+                                    'value'  => CurrentSession::$user->displayName,
+                                    'inline' => true,
+                                ],
+                                (object)[
+                                    'name'   => 'Community',
+                                    'value'  => $meta->name,
+                                    'inline' => true,
+                                ],
+                                (object)[
+                                    'name'   => 'Text',
+                                    'value'  => $text,
+                                ],
+                            ],
+                            'image' => (object)[
+                                'url' => $image,
+                            ],
+                        ],
+                    ],
+                ];
+
+                Net::JSONRequest(config('discord.posts'), 'post', $embed);
+            }
+
             redirect(route('title.community', ['tid' => hashid($title_id), 'id' => hashid($id)]));
         } elseif ($kind = 'reply') {
             $post_id = $_POST['olive_post_id'];
             $feeling = $_POST['feeling_id'];
             $spoiler = $_POST['is_spoiler'] ?? 0;
             $type = $_POST['_post_type'];
+            $text = '[Empty Post, may be a drawing]';
+            $image = '';
 
             switch ($type) {
                 case 'body':
-                    $body = $_POST['body'];
+                    $text = $body = $_POST['body'];
 
-                    DB::table('comments')
-                        ->insert([
+                    $replyID = DB::table('comments')
+                        ->insertGetId([
                             'post'    => $post_id,
                             'content' => $body,
                             'feeling' => $feeling,
@@ -127,6 +165,10 @@ class Post extends Page
 
                     $post = DB::table('posts')
                                 ->where('id', $post_id)
+                                ->first();
+
+                    $meta = DB::table('communities')
+                                ->where('id', $post->community)
                                 ->first();
 
                     $user = DB::table('users')
@@ -139,17 +181,27 @@ class Post extends Page
                 case 'painting':
                     $painting = base64_decode($_POST['painting']);
                     $painting_name = CurrentSession::$user->id.'-'.time().'.png';
+                    $image = "https://images.weserv.nl/?url=ssl:$_SERVER[HTTP_HOST]/img/drawings/$painting_name&w=320&h=120&output=png";
 
                     file_put_contents(path('public/img/drawings/'.$painting_name), $painting);
 
-                    DB::table('comments')
-                        ->insert([
+                    $replyID = DB::table('comments')
+                        ->insertGetId([
                             'post'    => $post_id,
                             'image'   => $painting_name,
                             'feeling' => $feeling,
                             'user'    => CurrentSession::$user->id,
                             'spoiler' => intval($spoiler),
                         ]);
+
+
+                    $post = DB::table('posts')
+                                ->where('id', $post_id)
+                                ->first();
+
+                    $meta = DB::table('communities')
+                                ->where('id', $post->community)
+                                ->first();
                     break;
             }
 
@@ -162,6 +214,38 @@ class Post extends Page
             DB::table('posts')
                 ->where('id', '=', $post_id)
                 ->increment('comments');
+
+            if (!empty(config('discord.posts'))) {
+                $embed = [
+                    'embeds' => [
+                        (object)[
+                            'title'  => "New reply submitted (ID: #$replyID)",
+                            'color'  => 8235610,
+                            'fields' => [
+                                (object)[
+                                    'name'   => 'Username',
+                                    'value'  => CurrentSession::$user->displayName,
+                                    'inline' => true,
+                                ],
+                                (object)[
+                                    'name'   => 'Community',
+                                    'value'  => $meta->name,
+                                    'inline' => true,
+                                ],
+                                (object)[
+                                    'name'   => 'Text',
+                                    'value'  => $text,
+                                ],
+                            ],
+                            'image' => (object)[
+                                'url' => $image,
+                            ],
+                        ],
+                    ],
+                ];
+
+                Net::JSONRequest(config('discord.posts'), 'post', $embed);
+            }
 
             redirect(route('post.show', ['id' => hashid($post_id)]));
         }
