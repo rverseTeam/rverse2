@@ -81,7 +81,7 @@ class Post extends Page
                 case 'painting':
                     $painting = base64_decode($_POST['painting']);
                     $painting_name = CurrentSession::$user->id.'-'.time().'.png';
-                    $image = full_domain() . "/img/drawings/$painting_name";
+                    $image = "https://images.weserv.nl/?url=ssl:$_SERVER[HTTP_HOST]/img/drawings/$painting_name&w=320&h=120&output=png";
 
                     file_put_contents(path('public/img/drawings/'.$painting_name), $painting);
 
@@ -181,7 +181,7 @@ class Post extends Page
                 case 'painting':
                     $painting = base64_decode($_POST['painting']);
                     $painting_name = CurrentSession::$user->id.'-'.time().'.png';
-                    $image = full_domain() . "/img/drawings/$painting_name";
+                    $image = "https://images.weserv.nl/?url=ssl:$_SERVER[HTTP_HOST]/img/drawings/$painting_name&w=320&h=120&output=png";
 
                     file_put_contents(path('public/img/drawings/'.$painting_name), $painting);
 
