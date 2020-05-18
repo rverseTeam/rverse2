@@ -54,6 +54,7 @@ Router::group(['before' => 'maintenance'], function () {
         // Titles
         Router::group(['prefix' => 'titles'], function () {
             Router::get('/show', 'CTR.Title.Show@init', 'title.init'); // This is the first page that the applet loads at all after discovery
+            Router::get('/search', 'CTR.Title.Search@search', 'title.search');
             Router::get('/{tid:a}/{id:a}', 'CTR.Title.Community@show', 'title.community');
             Router::get('/{tid:a}/{id:a}/post', 'CTR.Title.Community@post', 'title.post');
             Router::get('/{tid:a}/{id:a}/artwork/post', 'CTR.Title.Community@artworkPost', 'title.artworkpost');

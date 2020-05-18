@@ -1,0 +1,67 @@
+{% set class = 'search' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+    <div id="header" class="icon-header">
+        <div id="header-body">
+          <h1 id="page-title"><span>Search Communities</span></h1>
+        </div>
+    </div>
+    <div class="body-content" id="title-search-list-page">
+        <div class="window title-search-content">
+            <div class="window-body">
+                <div class="window-body-inner">
+                    {% if search|length > 0 %}
+                        <p class="title-found title-found-message">Communities found for "{{ get.query }}"</p>
+                        {% for community in search %}
+                            {% set id,title_id = hashid(community.id), hashid(community.title_id) %}
+                            <ul class="list-content-with-icon-and-text arrow-list community-list" id="community-top-content">
+                                <li id="community-{{ community.id }}" class="">
+                                    <span class="icon-container"><img src="/img/icons/{{ community.icon }}" class="icon" width="48" height="48"></span>
+                                    <a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
+                                    <div class="body">
+                                        <span class="community-name title">{{ community.name }}</span>
+                                        {% if community.platform == 1 %}
+                                            <span class="platform-tag platform-tag-3ds"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.3ds') }}</span>
+                                        {% elseif community.platform == 2 %}
+                                            <span class="platform-tag platform-tag-wiiu"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.wiiu') }}</span>
+                                        {% elseif community.platform == 3 %}
+                                            <span class="platform-tag platform-tag-wiiu-3ds"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.wiiu-3ds') }}</span>
+                                        {% elseif community.platform == 4 %}
+                                            <span class="platform-tag platform-tag-switch"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.switch') }}</span>
+                                        {% elseif community.platform == 5 %}
+                                            <span class="platform-tag platform-tag-switch-wiiu"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.switch-wiiu') }}</span>
+                                        {% elseif community.platform == 6 %}
+                                            <span class="platform-tag platform-tag-wii"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.wii') }}</span>
+                                        {% elseif community.platform == 7 %}
+                                            <span class="platform-tag platform-tag-ds"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.ds') }}</span>
+                                        {% elseif community.platform == 8 %}
+                                            <span class="platform-tag platform-tag-wii-ds"></span>
+                                            <span class="text">{{ __('community.index.communities.platforms.wii-ds') }}</span>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    {% else %}
+                        <p class="title-not-found title-not-found-message pre-line">
+                            No communities found for
+                            "{{ get.query }}" Please try again.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="window-bottom-buttons">
+                <input type="button" class="button cancel-button" data-sound="SE_OLV_CANCEL" value="Back">
+                <span class="button title-search-button">Search Again<input data-action="{{ route('title.search') }}" name="query" class="title-search-title-id" minlength="2" maxlength="20" type="text" monospace="on" guide="Search Communities" cave_oninput="$(document.activeElement).trigger('input')" value=""></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
