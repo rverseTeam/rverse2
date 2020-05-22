@@ -74,6 +74,10 @@ class ConsoleAuth
 
 		self::$consoleId->short = $_SESSION['authData']['short'];
 		self::$consoleId->long = $_SESSION['authData']['long'];
+
+		if (empty(self::$consoleId->short) || empty(self::$consoleId->long)) {
+			die('Invalid auth data.');
+		}
 	}
 
 	/**
