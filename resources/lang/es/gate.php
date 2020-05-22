@@ -11,7 +11,7 @@ return [
             'next' => 'Siguiente',
         ],
         'intro' => [
-            'title' => 'Bienvenido a :name!',
+            'title' => '¡Bienvenido a :name!',
             'message' => ':name te permite compartir tus experiencias en los juego con personas de todo el mundo.',
         ],
         'about' => [
@@ -27,7 +27,7 @@ return [
             'nnid_label' => 'Usamos su ID de Nintendo Network para obtener la imagen de su Mii.',
         ],
         'finish' => [
-            'title' => 'Diviértete en :name!',
+            'title' => '¡Diviértete en :name!',
             'start' => 'Empezar',
         ],
     ],
