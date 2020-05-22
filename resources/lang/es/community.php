@@ -6,7 +6,7 @@
 return [
     'index' => [
         'header' => [
-            'desc' => 'Check out the communities for games that you play or games that you\'re curious about!',
+            'desc' => '¡Echa un vistazo a las comunidades para ver los juegos a los que juegas o los juegos que te interesan!',
             'title' => 'Comunidades',
         ],
         'favorites' => 'Comunidades favoritas',
