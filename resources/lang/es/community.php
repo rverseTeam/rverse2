@@ -17,7 +17,7 @@ return [
         'communities' => [
             'filter' => [
                 'name' => 'Filtro',
-                'select' => 'Por favor haz una selección.',
+                'select' => 'Por favor, haga una selección.',
                 'options' => [
                     'all' => 'Todo el software',
                     'games' => 'Juegos de :console',
@@ -42,14 +42,14 @@ return [
             'more' => 'Mostrar más',
         ],
         'footer' => [
-            'console' => 'Comunidades  de :console',
+            'console' => 'Comunidades de :console',
         ],
     ],
 
     'listing' => [
         'filter' => [
             'name' => 'Filtro',
-            'select' => 'Por favor haz una selección.',
+            'select' => 'Por favor, haga una selección.',
             'options' => [
                     'all' => 'Todo el software',
                     'games' => 'Juegos de :console',
