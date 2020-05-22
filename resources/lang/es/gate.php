@@ -24,7 +24,7 @@ return [
             'message' => 'Necesitamos algunos datos sobre usted antes de que pueda comenzar a utilizar :name.',
             'display_name' => 'Nombre a mostrar',
             'nnid' => 'Nintendo Network ID',
-            'nnid_label' => 'Usamos su ID de Nintendo Network para obtener su imagen Mii.',
+            'nnid_label' => 'Usamos su ID de Nintendo Network para obtener la imagen de su Mii.',
         ],
         'finish' => [
             'title' => 'Diviértete en :name!',
