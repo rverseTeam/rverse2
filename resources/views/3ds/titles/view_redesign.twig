@@ -34,7 +34,7 @@
 				{% endif %}
 			</div>
 			<div id="header-meta" class="header-meta-with-description">
-				<a href="#" class="favorite-button symbol button top-right-button" data-action-favorite="#" data-action-unfavorite="#"></a>
+				<a href="#" class="favorite-button symbol button top-right-button {% if is_favorited %}checked{% endif %}" data-action-favorite="{{ route('title.favorite', [ title_id, id ]) }}" data-action-unfavorite="{{ route('title.unfavorite', [ title_id, id ]) }}"></a>
 				<a href="#" class="button symbol setting-button" data-sound="SE_OLV_OK_SUB" data-pjax="1"></a>
 			</div>
 			{% if meta.description is not empty %}
