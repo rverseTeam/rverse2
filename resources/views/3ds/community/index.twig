@@ -20,7 +20,7 @@
 					<span class="symbol">{{ __('community.index.search.name') }}</span>
 					<input data-action="{{ route('title.search') }}" name="query" class="title-search-title-id" minlength="2" maxlength="20" type="text" monospace="on" guide="{{ __('community.index.search.desc') }}" cave_oninput="$(document.activeElement).trigger('input')" value="">
 				</span>
-				<a href="/communities/favorites" class="favorites-button top-right-button" data-pjax="1">
+				<a href="{{ route('community.favorites') }}" class="favorites-button top-right-button" data-pjax="1">
 					<span class="symbol">{{ __('community.index.favorites') }}</span>
 				</a>
 			</div>

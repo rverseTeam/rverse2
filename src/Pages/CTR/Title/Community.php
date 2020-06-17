@@ -40,6 +40,14 @@ class Community extends Page
                     ->where('id', $community)
                     ->first();
 
+        $is_favorited = DB::table('favorites')
+                            ->where('community_id', $community)
+                            ->where('user_id', CurrentSession::$user->id)
+                            ->select('added_at')
+                            ->first();
+
+        $is_favorited = !is_null($is_favorited);
+
         if (!$meta) {
             return view('errors/404');
         }
@@ -123,7 +131,7 @@ class Community extends Page
 
             $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
 
-            return view('titles/view_redesign', compact('meta', 'topicCategories', 'drawings', 'discussions', 'feeling'));
+            return view('titles/view_redesign', compact('meta', 'topicCategories', 'drawings', 'discussions', 'feeling', 'is_favorited'));
         } else {
             $posts_pre = DB::table('posts')
                         ->where([
@@ -161,7 +169,7 @@ class Community extends Page
             $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
             $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
 
-            return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText'));
+            return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited'));
         }
     }
 
@@ -326,5 +334,48 @@ class Community extends Page
         ];
 
         return $this->json($data);
+    }
+
+    /**
+     * Add current community to favorites.
+     *
+     * @return string
+     */
+    public function favorite($tid, $id) : string
+    {
+        $community = dehashid($id);
+        $titleId = dehashid($tid);
+
+        DB::table('favorites')
+            ->insert([
+                'community_id' => $community[0],
+                'user_id' => CurrentSession::$user->id,
+            ]);
+
+        DB::table('users')
+            ->where('user_id', CurrentSession::$user->id)
+            ->update(['favorited' => 1]);
+
+        return 'added';
+    }
+
+    /**
+     * Remmove current community to favorites.
+     *
+     * @return string
+     */
+    public function unfavorite($tid, $id) : string
+    {
+        $community = dehashid($id);
+        $titleId = dehashid($tid);
+
+        DB::table('favorites')
+            ->where([
+                ['community_id', $community[0]],
+                ['user_id', CurrentSession::$user->id],
+            ])
+            ->delete();
+
+        return 'removed';
     }
 }

@@ -1,0 +1,58 @@
+{% set class = 'community-favorite' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+    <div id="header" class="icon-header">
+        <div id="header-body">
+            <h1 id="page-title"><span>Favorites</span></h1>
+        </div>
+    </div>
+    <div class="tab2">
+        <a id="tab-header-favorite-community" href="{{ route('community.favorites') }}" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">Favorites</span></a>
+        <a id="tab-header-played-post" href="{{ route('community.played') }}" class="symbol" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">Software Used</span></a>
+    </div>
+    <div class="body-content" id="community-top" data-region="USA">
+        <div class="community-list" id="favorite-community-list">
+            {% if favorites is not empty %}
+                <ul class="list-content-with-icon-and-text arrow-list" id="community-top-content">
+                    {% for favorite in favorites %}
+                        {% set id,title_id = hashid(favorite.id), hashid(favorite.title_id) %}
+                        <li id="community-{{ id }}" class="">
+                            <span class="icon-container">
+                                <img src="/img/icons/{{ favorite.icon }}" class="icon" width="48" height="48">
+                            </span>
+                            <a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
+                            <div class="body">
+                                <span class="community-name title">General Community</span>
+                                {% if favorite.platform == 1 %}
+                                    <span class="platform-tag platform-tag-3ds"></span>
+                                {% elseif favorite.platform == 2 %}
+                                    <span class="platform-tag platform-tag-wiiu"></span>
+                                {% elseif favorite.platform == 3 %}
+                                    <span class="platform-tag platform-tag-wiiu-3ds"></span>
+                                {% elseif favorite.platform == 4 %}
+                                    <span class="platform-tag platform-tag-switch"></span>
+                                {% elseif favorite.platform == 5 %}
+                                    <span class="platform-tag platform-tag-switch-wiiu"></span>
+                                {% elseif favorite.platform == 6 %}
+                                    <span class="platform-tag platform-tag-wii"></span>
+                                {% elseif favorite.platform == 7 %}
+                                    <span class="platform-tag platform-tag-ds"></span>
+                                {% elseif favorite.platform == 8 %}
+                                    <span class="platform-tag platform-tag-wii-ds"></span>
+                                {% endif %}
+                                <span class="text">{{ favorite.name }}</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="no-content-window">
+                    <div class="window">
+                        <p>Tap the ☆ button on a community's page to have it show up as a favorite community here.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

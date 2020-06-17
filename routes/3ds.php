@@ -27,6 +27,10 @@ Router::group(['before' => 'maintenance'], function () {
         Router::group(['prefix' => 'communities'], function () {
             Router::get('/', 'CTR.Community@index', 'community.index');
 
+            // Favorite communities routes
+            Router::get('/favorites', 'CTR.Community@favorites', 'community.favorites');
+            Router::get('/played', 'CTR.Community@favorites', 'community.played'); // Currently the same as /favorites because no software used impl.
+
             Router::group(['prefix' => 'categories'], function () {
                 Router::get('/{console:a}', 'CTR.Community@consoleIndex', 'console.index');
                 Router::get('/{console:a}_all', 'CTR.Community@consoleEverything', 'console.all');
@@ -61,6 +65,10 @@ Router::group(['before' => 'maintenance'], function () {
             Router::get('/{tid:a}/{id:a}/topic/post', 'CTR.Title.Community@topicPost', 'title.topicpost');
             Router::get('/{tid:a}/{id:a}/post_memo', 'CTR.Title.Community@post_memo', 'title.postmemo');
             Router::get('/{tid:a}/{id:a}/post_memo.check.json', 'CTR.Title.Community@check_memo', 'title.checkmemo');
+
+            // Favorites stuff
+            Router::post('/{tid:a}/{id:a}/favorite.json', 'CTR.Title.Community@favorite', 'title.favorite');
+            Router::post('/{tid:a}/{id:a}/unfavorite.json', 'CTR.Title.Community@unfavorite', 'title.unfavorite');
         });
 
         // My

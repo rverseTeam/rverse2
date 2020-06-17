@@ -99,11 +99,9 @@ class Post extends Page
                     break;
             }
 
-            if (!$user->posted) {
-                DB::table('users')
-                    ->where('user_id', '=', CurrentSession::$user->id)
-                    ->update(['posted' => 1]);
-            }
+            DB::table('users')
+                ->where('user_id', '=', CurrentSession::$user->id)
+                ->update(['posted' => 1]);
 
             DB::table('users')
                 ->where('user_id', '=', CurrentSession::$user->id)

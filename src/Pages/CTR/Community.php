@@ -5,6 +5,7 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
 
@@ -414,5 +415,28 @@ class Community extends Page
                                 ->count();
 
         return view('community/listing', compact('console', 'communities'));
+    }
+
+    /**
+     * Favorites page.
+     *
+     * @var string
+     *
+     * @return string
+     */
+
+    public function favorites() : string
+    {
+        $favorites = DB::table('favorites')
+                        ->leftJoin('communities', 'favorites.community_id', '=', 'communities.id')
+                        ->where('favorites.user_id', CurrentSession::$user->id)
+                        ->orderBy('favorites.added_at', 'desc')
+                        ->select(
+                            'communities.id', 'communities.title_id', 'communities.platform',
+                            'communities.icon', 'communities.name'
+                        )
+                        ->get();
+
+        return view('community/favorites', compact('favorites'));
     }
 }
