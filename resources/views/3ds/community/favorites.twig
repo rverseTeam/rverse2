@@ -23,7 +23,7 @@
                             </span>
                             <a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
                             <div class="body">
-                                <span class="community-name title">General Community</span>
+                                <span class="community-name title">{{ favorite.name }}</span>
                                 {% if favorite.platform == 1 %}
                                     <span class="platform-tag platform-tag-3ds"></span>
                                 {% elseif favorite.platform == 2 %}
@@ -41,7 +41,7 @@
                                 {% elseif favorite.platform == 8 %}
                                     <span class="platform-tag platform-tag-wii-ds"></span>
                                 {% endif %}
-                                <span class="text">{{ favorite.name }}</span>
+                                <span class="text"></span>
                             </div>
                         </li>
                     {% endfor %}
