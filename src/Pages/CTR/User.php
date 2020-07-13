@@ -6,6 +6,7 @@
 namespace Miiverse\Pages\CTR;
 
 use Miiverse\CurrentSession;
+use Miiverse\DB;
 use Miiverse\User as Profile;
 
 /**
@@ -30,7 +31,14 @@ class User extends Page
 
         $follower = $profile->isFollower(CurrentSession::$user->id);
 
-        return view('user/profile', compact('profile', 'follower'));
+        $favorites = DB::table('favorites')
+                            ->leftJoin('communities', 'communities.id', '=', 'favorites.community_id')
+                            ->where('favorites.user_id', $profile->id)
+                            ->limit(6)
+                            ->orderBy('favorites.added_at', 'desc')
+                            ->get(['communities.id', 'communities.title_id', 'communities.icon', 'communities.platform']);
+
+        return view('user/profile', compact('profile', 'follower', 'favorites'));
     }
 
     /**
