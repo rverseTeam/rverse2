@@ -52,7 +52,7 @@
 						<div class="post-list list" data-olv-community-id="{{ id }}">
 							{% for post in posts %}
 								{% set mii = _context.post.user.mii[_context.feeling[post.feeling]] %}
-								<div id="post-{{ post.id }}" {% if post.spoiler %}data-href-hidden="{{ route('post.show', [ id ]) }}"{% endif %} class="post scroll post-subtype-default {% if post.spoiler %}hidden{% endif %} {% if post.verified %}official-user{% endif %}" data-href="{{ route('post.show', [ post.id ]) }}">
+								<div id="post-{{ post.id }}" {% if post.spoiler %}data-href-hidden="{{ route('post.show', [ post.id ]) }}"{% endif %} class="post scroll post-subtype-default {% if post.spoiler %}hidden{% endif %} {% if post.verified %}official-user{% endif %}" data-href="{{ route('post.show', [ post.id ]) }}">
 									<div class="body">
 										<a href="{{ route('user.profile', [ post.user.username ]) }}" data-pjax="1" class="user-icon-container {% if post.verified %}official-user{% endif %}">
 											<img src="{{ mii }}" class="user-icon" width="32" height="32">
@@ -102,6 +102,9 @@
 							{% endfor %}
 						</div>
 					</div>
+					<p>
+						<a href="{{ route('title.community', [ title_id, id ]) }}?page_param={{ page_params|e('url') }}" data-pjax="1" class="more-button scroll">Next</a>
+					</p>
 				</div>
 			</div>
 {% endblock %}

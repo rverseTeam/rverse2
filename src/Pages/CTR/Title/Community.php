@@ -32,6 +32,10 @@ class Community extends Page
             config('rank.admin'),
         ];
 
+        $page_params = json_decode($_GET['page_param']);
+        $since = !empty($page_params->since) ? @strval($page_params->since) : date('Y-m-d H:i:s');
+        $page = !empty($page_params->page) ? intval($page_params->page) : 1;
+
         if (!is_array($community) || !is_array($titleId)) {
             return view('errors/404');
         }
@@ -137,9 +141,11 @@ class Community extends Page
                         ->where([
                             ['community', $community],
                             ['is_redesign', 0],
+                            ['created', '<', $since]
                         ])
                         ->orderBy('created', 'desc')
-                        ->limit(10)
+                        ->limit(20)
+                        ->offset($page * 20)
                         ->get();
 
             foreach ($posts_pre as $post) {
@@ -169,7 +175,13 @@ class Community extends Page
             $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
             $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
 
-            return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited'));
+            // Pagination data
+            $page_params = json_encode([
+                'since' => $since,
+                'page' => ++$page
+            ]);
+
+            return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited', 'page_params'));
         }
     }
 
