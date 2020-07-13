@@ -1,0 +1,110 @@
+{% set class = 'user-page' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+            <div id="user-content-container">
+                <div id="user-content" class="user-page">
+                    <div id="header">
+                        <div id="header-body">
+                            <h1 id="page-title"><span>{{ profile.displayName }}'s Profile</span></h1>
+                        </div>
+                    </div>
+                    <div class="icon-name-container">
+                        <div class="user-icon-container">
+                            <img src="{{ profile.mii.normal }}" class="user-icon" width="32" height="32">
+                        </div>
+                        <p class="title">
+                            <span class="nick-name">{{ profile.displayName }}</span>
+                            <span class="id-name">{{ profile.username }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div id="header-meta">
+                    <a href="{{ route('user.profile', [ profile.username ]) }}" class="profile-page-button" data-pjax="1">
+                        To Top
+                    </a>
+                </div>
+            </div>
+            <div id="nav-menu" class="nav-3">
+                <a href="{{ route('user.posts', [ profile.username ]) }}" data-pjax="1" class="user-posts-count selected">
+                    <span class="number">{{ profile.posts }}</span>
+                    <span class="name">Posts</span>
+                </a>
+                <a href="{{ route('user.following', [ profile.username ]) }}" data-pjax="1" class="user-followings-count ">
+                    <span class="number">{{ profile.follows }}</span>
+                    <span class="name">Following</span>
+                </a>
+                <a href="{{ route('user.followers', [ profile.username ]) }}" data-pjax="1" class="user-followers-count ">
+                    <span class="number">{{ profile.followers }}</span>
+                    <span class="name">Followers</span>
+                </a>
+            </div>
+            <div class="tab2 user-menu-activity">
+                <a href="{{ route('user.posts', [ profile.username ]) }}" id="tab-header-user-posts" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">Posts</span><span class="number">{{ profile.posts }}</span></a>
+                <a href="{{ route('user.empathies', [ profile.username ]) }}" id="tab-header-user-empathies" class="symbol" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">Yeahs</span><span class="number">0</span></a>
+            </div>
+            <div class="body-content">
+                <div class="list post-list" data-next-page-url="">
+                    {% for post in posts %}
+                        {% set id, title_id = hashid(post.community_id), hashid(post.title_id) %}
+                        {% set mii = profile.mii[_context.feeling[post.feeling]] %}
+                        <div id="post-{{ post.post_id }}" {% if post.spoiler %}data-href-hidden="{{ route('post.show', [ post.post_id ]) }}"{% endif %} class="post scroll post-subtype-default {% if post.spoiler %}hidden{% endif %}">
+                            <p class="community-container">
+                                <a href="{{ route('title.community', [ title_id, id ]) }}" class="test-post-target-href" data-pjax="1"><span class="community-container-inner"><img src="/img/icons/{{ post.icon }}" src="" class="community-icon" width="14" height="14">{{ post.name }}</span>
+                            </p>
+                            <div class="body">
+                                <a href="{{ route('user.profile', [ profile.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus">
+                                    <img src="{{ mii }}" class="user-icon" width="32" height="32">
+                                </a>
+                                <div class="post-container">
+                                    <div class="user-container">
+                                        <p class="user-name"><a href="{{ route('user.profile', [ profile.username ]) }}" data-pjax="1">{{ profile.displayName }}</a></p>
+                                        <p class="timestamp-container">
+                                            <span class="timestamp">{{ post.created }}</span>
+                                            {% if post.spoiler %}
+                                                ·
+                                                <span class="spoiler">Spoilers</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="post-content">
+                                        {% if post.content != '' %}
+                                            <p class="post-content-text"><a href="{{ route('post.show', [ post.post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">{{ post.content }}</a></p>
+                                        {% endif %}
+                                        {% if post.image %}
+                                            <p class="post-content-memo"><a href="{{ route('post.show', [ post.post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0"><img src="/img/drawings/{{ post.image }}"></a></p>
+                                        {% endif %}
+                                        {% if post.spoiler %}
+                                            <div class="hidden-content"><p>This post contains spoilers.</p>
+                                                <button type="button" class="hidden-content-button">View Post</button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="post-meta">
+                                        <button type="button" disabled class="symbol submit empathy-button disabled" data-feeling="{{ _context.feeling[post.feeling] }}" data-action="{{ route('post.empathies', [ post.post_id ]) }}">
+                                            <span class="empathy-button-text">{{ _context.feelingText[post.feeling] }}</span>
+                                        </button>
+                                        <span class="empathy symbol">
+                                            <span class="symbol-label">Yeahs</span>
+                                            <span class="empathy-count">{{ post.empathies }}</span>
+                                        </span>
+                                        <a href="{{ route('post.show', [ post.post_id ]) }}" data-pjax="1" tabindex="0">
+                                            <span class="reply symbol">
+                                                <span class="symbol-label">Comment</span>
+                                                <span class="reply-count">{{ post.comments }}</span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div id="user-page-no-content" class="no-content">
+                            <div>
+                                <p>This user has not posted yet.</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+{% endblock %}

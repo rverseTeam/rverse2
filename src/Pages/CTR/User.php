@@ -78,4 +78,34 @@ class User extends Page
 
         return '{"success":0}';
     }
+
+    /**
+     * Shows a user's post listing
+     */
+    public function postListing(string $name) : string
+    {
+        $profile = Profile::construct(urldecode($name));
+
+        // This is needed because of style
+        $post_fields = [
+            // Community
+            'communities.id as community_id', 'communities.title_id', 'communities.icon', 'communities.name',
+            // Post
+            'posts.id as post_id', 'posts.created', 'posts.content', 'posts.image',
+            'posts.feeling', 'posts.spoiler', 'posts.comments', 'posts.empathies'
+
+        ];
+
+        $posts = DB::table('posts')
+                    ->leftJoin('communities', 'posts.community', '=', 'communities.id')
+                    ->where('posts.user_id', $profile->id)
+                    ->limit(15)
+                    ->orderBy('posts.created', 'desc')
+                    ->get($post_fields);
+
+        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
+        $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
+
+        return view('user/posts', compact('profile', 'posts', 'feeling', 'feelingText'));
+    }
 }
