@@ -34,7 +34,7 @@ class Community extends Page
 
         $page_params = json_decode($_GET['page_param']);
         $since = !empty($page_params->since) ? @strval($page_params->since) : date('Y-m-d H:i:s');
-        $page = !empty($page_params->page) ? intval($page_params->page) : 1;
+        $page = !empty($page_params->page) ? intval($page_params->page) : 0;
 
         if (!is_array($community) || !is_array($titleId)) {
             return view('errors/404');
