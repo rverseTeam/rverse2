@@ -52,7 +52,6 @@
 						<div class="post-buttons-content with-memo-button">
 							<a href="{{ route('title.post', [ title_id, id ]) }}" class="post-button js-post-button" data-pjax="1"><span class="symbol">Post</span></a>
 							<a href="{{ route('title.postmemo', [ title_id, id ]) }}" class="memo-button" data-pjax="1"><span class="symbol">Saved Posts</span></a>
-							<a href="#" class="memo-button" data-pjax="1"><span class="symbol">Chatroom</span></a>
 						</div>
 						<div class="post-list list" data-olv-community-id="{{ id }}">
 							{% for post in posts %}
