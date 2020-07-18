@@ -186,6 +186,91 @@ class Community extends Page
     }
 
     /**
+     * Title hot posts.
+     *
+     * @return string
+     */
+    public function hot($tid, $id) : string
+    {
+        $community = dehashid($id);
+        $titleId = dehashid($tid);
+        $posts = [];
+        $verified_ranks = [
+            config('rank.verified'),
+            config('rank.mod'),
+            config('rank.admin'),
+        ];
+
+        $page_params = json_decode($_GET['page_param']);
+        $page = !empty($page_params->page) ? intval($page_params->page) : 0;
+
+        if (!is_array($community) || !is_array($titleId)) {
+            return view('errors/404');
+        }
+
+        $meta = DB::table('communities')
+                    ->where('id', $community)
+                    ->first();
+
+        $is_favorited = DB::table('favorites')
+                            ->where('community_id', $community)
+                            ->where('user_id', CurrentSession::$user->id)
+                            ->select('added_at')
+                            ->first();
+
+        $is_favorited = !is_null($is_favorited);
+
+        if (!$meta) {
+            return view('errors/404');
+        }
+
+        $posts_pre = DB::table('posts')
+                        ->where([
+                            ['community', $community],
+                            ['is_redesign', 0]
+                        ])
+                        ->whereRaw('created > CURDATE() - INTERVAL 1 WEEK')
+                        ->orderBy('empathies', 'desc')
+                        ->limit(20)
+                        ->offset($page * 20)
+                        ->get();
+
+        foreach ($posts_pre as $post) {
+            $user = User::construct($post->user_id);
+
+            $posts[] = [
+                'id'       => hashid($post->id),
+                'user'     => $user,
+                'created'  => $post->created,
+                'content'  => $post->content,
+                'image'    => $post->image,
+                'feeling'  => intval($post->feeling),
+                'spoiler'  => $post->spoiler,
+                'comments' => intval($post->comments),
+                'likes'    => intval($post->empathies),
+                'liked'    => (bool) DB::table('empathies')
+                                    ->where([
+                                        ['type', 0], // Posts are type 0
+                                        ['id', $post->id],
+                                        ['user', CurrentSession::$user->id],
+                                    ])
+                                    ->count(),
+                'verified' => $user->hasRanks($verified_ranks),
+            ];
+        }
+
+        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
+        $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
+
+        // Pagination data
+        $page_params = json_encode([
+            'page' => ++$page
+        ]);
+
+        return view('titles/hot', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited', 'page_params'));
+    }
+
+    /**
      * Post form for communities.
      *
      * @return string

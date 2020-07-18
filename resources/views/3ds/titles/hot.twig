@@ -43,8 +43,8 @@
 				</div>
 			{% endif %}
 			<div class="tab2">
-				<a id="tab-header-post" href="{{ route('title.community', [ title_id, id ]) }}" data-pjax="1" class="selected"><span class="symbol new-posts">All</span></a>
-				<a id="tab-header-hot-post" href="{{ route('title.hotposts', [ title_id, id ]) }}" class="symbol" data-pjax="1"><span class="name">Popular</span></a>
+				<a id="tab-header-post" href="{{ route('title.community', [ title_id, id ]) }}" data-pjax="1" class="symbol"><span class="symbol new-posts">All</span></a>
+				<a id="tab-header-hot-post" href="{{ route('title.hotposts', [ title_id, id ]) }}" class="selected symbol" data-pjax="1"><span class="symbol name">Popular</span></a>
 			</div>
 			<div class="body-content tab3-content">
 				<div id="list-content" class="post-list main-content">
@@ -52,6 +52,7 @@
 						<div class="post-buttons-content with-memo-button">
 							<a href="{{ route('title.post', [ title_id, id ]) }}" class="post-button js-post-button" data-pjax="1"><span class="symbol">Post</span></a>
 							<a href="{{ route('title.postmemo', [ title_id, id ]) }}" class="memo-button" data-pjax="1"><span class="symbol">Saved Posts</span></a>
+							<a href="#" class="memo-button" data-pjax="1"><span class="symbol">Chatroom</span></a>
 						</div>
 						<div class="post-list list" data-olv-community-id="{{ id }}">
 							{% for post in posts %}
@@ -107,7 +108,7 @@
 						</div>
 					</div>
 					<p>
-						<a href="{{ route('title.community', [ title_id, id ]) }}?page_param={{ page_params|e('url') }}" data-pjax="1" class="more-button scroll">Next</a>
+						<a href="{{ route('title.hotposts', [ title_id, id ]) }}?page_param={{ page_params|e('url') }}" data-pjax="1" class="more-button scroll">Next</a>
 					</p>
 				</div>
 			</div>

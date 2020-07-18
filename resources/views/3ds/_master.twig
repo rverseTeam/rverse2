@@ -11,7 +11,7 @@
 		<script src="/js/n3ds/olv.locale-en.js"></script>
 	</head>
 {% endif %}
-	<body data-user-id="{{ user.username }}" {% if not user.posted %}data-is-first-post="1"{% endif %} {% if not user.favorited %}data-is-first-favorite="1"{% endif %} data-profile-url="/users/{{ user.username }}">
+	<body data-user-id="{{ user.username }}" {% if not user.posted %}data-is-first-post="1"{% endif %} {% if not user.favorited %}data-is-first-favorite="1"{% endif %} data-profile-url="{{ route('user.profile', [ user.username ]) }}">
 		<div id="body" {% if class is defined %}class="{{ class }}" {% endif %}data-region-id="2">
 			{% block content %}
 			{% endblock %}
