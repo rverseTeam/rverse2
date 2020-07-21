@@ -6,7 +6,7 @@
 				<div id="user-content" class="user-page">
 					<div id="header">
 						<div id="header-body">
-							<h1 id="page-title"><span>{{ profile.displayName }}'s Profile</span></h1>
+							<h1 id="page-title"><span>{{ __('user.profile.header.name', { name: profile.displayName }) }}</span></h1>
 						</div>
 					</div>
 					<div class="icon-name-container">
@@ -21,18 +21,25 @@
 				</div>
 				<div id="header-meta">
 					<div class="button-with-option">
-						<div id="user-violator-blacklist" class="symbol">
-							<select>
-								<option value="" selected="">Please make a selection.</option>
-								<option value="{{ route('user.report', [ profile.username ]) }}" class="option-violators-create">Report</option>
-								<option value="{{ route('user.block', [ profile.username ]) }}" data-screen-name="{{ profile.username }}">Block</option>
-							</select>
-						</div>
 						{% if profile.id != user.id %}
-							<div class="toggle-follow-button">
-								<button type="button" data-action="{{ route('user.follow', [ profile.username ]) }}" class="follow-button {% if follower > 0 %}none{% endif %}">Follow</button>
-								<button type="button" data-action="{{ route('user.unfollow', [ profile.username ]) }}" class="unfollow-button {% if follower == 0 %}none{% endif %}" data-screen-name="{{ profile.username }}">Follow</button>
+							<div id="user-violator-blacklist" class="symbol">
+								<select>
+									<option value="" selected="">{{ __('user.profile.meta.violation.select') }}</option>
+									<option value="{{ route('user.report', [ profile.username ]) }}" class="option-violators-create">{{ __('user.profile.meta.violation.create') }}</option>
+									<option value="{{ route('user.block', [ profile.username ]) }}" data-screen-name="{{ profile.username }}">{{ __('user.profile.meta.violation.blacklist') }}</option>
+								</select>
 							</div>
+							<div class="toggle-follow-button">
+								<button type="button" data-action="{{ route('user.follow', [ profile.username ]) }}" class="follow-button {% if follower > 0 %}none{% endif %}">{{ __('user.profile.meta.follow') }}</button>
+								<button type="button" data-action="{{ route('user.unfollow', [ profile.username ]) }}" class="unfollow-button {% if follower == 0 %}none{% endif %}" data-screen-name="{{ profile.username }}">{{ __('user.profile.meta.unfollow') }}</button>
+							</div>
+						{% else %}
+							<a class="mymenu-button button" href="{{ route('user.mymenu') }}" data-pjax="1">
+								<span class="symbol">{{ __('user.profile.meta.mymenu') }}</span>
+							</a>
+							<a class="profile-setting-button button" href="#">
+								<span class="symbol">{{ __('user.profile.meta.settings') }}</span>
+							</a>
 						{% endif %}
 					</div>
 				</div>
@@ -40,21 +47,21 @@
 			<div id="nav-menu" class="nav-3">
 				<a href="{{ route('user.posts', [ profile.username ]) }}" data-pjax="1" class="user-posts-count ">
 					<span class="number">{{ profile.posts }}</span>
-					<span class="name">Posts</span>
+					<span class="name">{{ __('user.profile.nav.posts') }}</span>
 				</a>
 				<a href="{{ route('user.following', [ profile.username ]) }}" data-pjax="1" class="user-followings-count ">
 					<span class="number">{{ profile.follows }}</span>
-					<span class="name">Following</span>
+					<span class="name">{{ __('user.profile.nav.following') }}</span>
 				</a>
 				<a href="{{ route('user.followers', [ profile.username ]) }}" data-pjax="1" class="user-followers-count ">
 					<span class="number">{{ profile.followers }}</span>
-					<span class="name">Followers</span>
+					<span class="name">{{ __('user.profile.nav.followers') }}</span>
 				</a>
 			</div>
 			<div class="body-content">
 				<div class="profile-content">
 					<div class="favorite-communities">
-						<h2 class="headline headline-special">Favorite Communities</h2>
+						<h2 class="headline headline-special">{{ __('user.profile.content.favorite') }}</h2>
 						<div class="communities-content">
 							{% for favorite in favorites %}
 								{% set id,title_id = hashid(favorite.id), hashid(favorite.title_id) %}

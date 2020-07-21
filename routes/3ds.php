@@ -23,6 +23,16 @@ Router::group(['before' => 'maintenance'], function () {
         Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'CTR.Updates@news', 'news.checkupdate');
 
+        // My Menu
+        // Outside /users based on the t1-full dump
+        Router::get('/my_menu', 'CTR.User@myMenu', 'user.mymenu');
+
+        // Rules
+        Router::get('/help_and_guide', 'CTR.Misc@helpAndGuide', 'user.help');
+
+        // Blacklist
+        Router::get('/my_blacklist', 'CTR.User@blacklistGet', 'user.blacklist');
+
         // Communities
         Router::group(['prefix' => 'communities'], function () {
             Router::get('/', 'CTR.Community@index', 'community.index');
@@ -108,6 +118,9 @@ Router::group(['before' => 'maintenance'], function () {
             Router::get('/profile', 'CTR.Dummy@dummy', 'settings.profile');
             Router::post('/tutorial_post', 'CTR.Settings@tutorial_post', 'settings.tutorialpost');
             Router::post('/played_title_ids', 'CTR.Dummy@dummy', 'settings.playedtitles');
+
+            // Account settings
+            Router::get('/aacount', 'CTR.Settings@account', 'settings.account');
         });
 
         // Welcome

@@ -1,0 +1,29 @@
+{% set class = 'my-menu-top' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+{% set name = config('general.name') %}
+            <div class="title-header text-header">
+                <div class="header-banner-container">
+                    <div class="header-banner">
+                        <p>{{ __('user.menu.header.desc') }}</p>
+                    </div>
+                </div>
+                <h1 class="info-content">
+                    <span class="icon-container">
+                        <img src="http://res.cloudinary.com/dd37cbznq/image/upload/v1588326426/avatars/1vphphbxmpbfi_normal_face.png" class="user-icon" width="38" height="38">
+                    </span>
+                    <span class="title-container">
+                        <span class="title">{{ __('user.menu.header.title') }}</span>
+                    </span>
+                </h1>
+            </div>
+            <div class="body-content" id="my-menu">
+                <div>
+                    <a href="{{ route('settings.account') }}" data-pjax="1" id="my-menu-miiverse-config" class="scroll big-button">{{ __('user.menu.buttons.settings', { service: name }) }}</a>
+                    <a href="{{ route('user.blacklist') }}" data-pjax="1" id="my-menu-blocklist" class="scroll big-button">{{ __('user.menu.buttons.blacklist') }}</a>
+                    <a href="/titles/16523808302329500689/16523808302329738191" data-pjax="1" id="my-menu-news" class="scroll big-button">{{ __('user.menu.buttons.announcements', { service: name }) }}</a>
+                    <a href="{{ route('user.help') }}" data-pjax="1" id="my-menu-help-and-guide" class="scroll big-button">{{ __('user.menu.buttons.help', { service: name }) }}</a>
+                </div>
+            </div>
+{% endblock %}

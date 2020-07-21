@@ -108,4 +108,14 @@ class User extends Page
 
         return view('user/posts', compact('profile', 'posts', 'feeling', 'feelingText'));
     }
+
+    /**
+     * Shows the user menu
+     *
+     * @return string
+     */
+    public function myMenu() : string
+    {
+        return view('user/menu');
+    }
 }

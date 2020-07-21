@@ -6,7 +6,7 @@
                 <div id="user-content" class="user-page">
                     <div id="header">
                         <div id="header-body">
-                            <h1 id="page-title"><span>{{ profile.displayName }}'s Profile</span></h1>
+                            <h1 id="page-title"><span>{{ __('user.profile.header.name', { name: profile.displayName }) }}</span></h1>
                         </div>
                     </div>
                     <div class="icon-name-container">
@@ -21,27 +21,27 @@
                 </div>
                 <div id="header-meta">
                     <a href="{{ route('user.profile', [ profile.username ]) }}" class="profile-page-button" data-pjax="1">
-                        To Top
+                        {{ __('user.profile.meta.back') }}
                     </a>
                 </div>
             </div>
             <div id="nav-menu" class="nav-3">
                 <a href="{{ route('user.posts', [ profile.username ]) }}" data-pjax="1" class="user-posts-count selected">
                     <span class="number">{{ profile.posts }}</span>
-                    <span class="name">Posts</span>
+                    <span class="name">{{ __('user.profile.nav.posts') }}</span>
                 </a>
                 <a href="{{ route('user.following', [ profile.username ]) }}" data-pjax="1" class="user-followings-count ">
                     <span class="number">{{ profile.follows }}</span>
-                    <span class="name">Following</span>
+                    <span class="name">{{ __('user.profile.nav.following') }}</span>
                 </a>
                 <a href="{{ route('user.followers', [ profile.username ]) }}" data-pjax="1" class="user-followers-count ">
                     <span class="number">{{ profile.followers }}</span>
-                    <span class="name">Followers</span>
+                    <span class="name">{{ __('user.profile.nav.followers') }}</span>
                 </a>
             </div>
             <div class="tab2 user-menu-activity">
-                <a href="{{ route('user.posts', [ profile.username ]) }}" id="tab-header-user-posts" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">Posts</span><span class="number">{{ profile.posts }}</span></a>
-                <a href="{{ route('user.empathies', [ profile.username ]) }}" id="tab-header-user-empathies" class="symbol" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">Yeahs</span><span class="number">0</span></a>
+                <a href="{{ route('user.posts', [ profile.username ]) }}" id="tab-header-user-posts" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">{{ __('user.profile.nav.posts') }}</span><span class="number">{{ profile.posts }}</span></a>
+                <a href="{{ route('user.empathies', [ profile.username ]) }}" id="tab-header-user-empathies" class="symbol" data-pjax="1" data-pjax-replace="1"><span class=" symbol-label">{{ __('user.profile.nav.empathies') }}</span><span class="number">0</span></a>
             </div>
             <div class="body-content">
                 <div class="list post-list" data-next-page-url="">
