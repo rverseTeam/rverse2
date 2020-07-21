@@ -32,7 +32,7 @@ return [
         // Navigation
         'nav' => [
             'posts' => 'Posts',
-            'posts' => 'Yeahs',
+            'empathies' => 'Yeahs',
             'following' => 'Following',
             'followers' => 'Followers',
         ],
@@ -41,7 +41,13 @@ return [
         'content' => [
             'favorite' => 'Favorite Communities',
         ],
+
+        // Errors
+        'error' => [
+            'noposts' => 'This user has not posted yet.',
+        ],
     ],
+
     // My Menu
     'menu' => [
         'header' => [

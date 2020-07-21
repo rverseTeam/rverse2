@@ -86,27 +86,50 @@ class User extends Page
     {
         $profile = Profile::construct(urldecode($name));
 
+        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
+        $posts = [];
+
+        // Precache if the user can yeah the posts here
+        $can_yeah = $profile->id !== CurrentSession::$user->id;
+
         // This is needed because of style
         $post_fields = [
             // Community
-            'communities.id as community_id', 'communities.title_id', 'communities.icon', 'communities.name',
+            'communities.id as community_id', 'communities.title_id', 'communities.icon as community_icon',
+            'communities.name as community_name',
+
             // Post
             'posts.id as post_id', 'posts.created', 'posts.content', 'posts.image',
-            'posts.feeling', 'posts.spoiler', 'posts.comments', 'posts.empathies'
-
+            'posts.feeling', 'posts.spoiler', 'posts.comments', 'posts.empathies',
         ];
 
-        $posts = DB::table('posts')
+        $posts_pre = DB::table('posts')
                     ->leftJoin('communities', 'posts.community', '=', 'communities.id')
                     ->where('posts.user_id', $profile->id)
                     ->limit(15)
                     ->orderBy('posts.created', 'desc')
                     ->get($post_fields);
 
-        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
-        $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
+        foreach ($posts_pre as $post) {
+            $post->mii = DB::table('mii_mappings')
+                            ->where([
+                                ['user_id', $profile->id]
+                            ])
+                            ->value($feeling[$post->feeling]);
 
-        return view('user/posts', compact('profile', 'posts', 'feeling', 'feelingText'));
+            // Set the variable for having an external community
+            $post->has_community = true;
+
+            // Disable Yeahs if its their own posts
+            $post->can_yeah = $can_yeah;
+
+            // Set OP data for the post
+            $post->op = $profile;
+
+            $posts[] = $post;
+        }
+
+        return view('user/posts', compact('profile', 'posts'));
     }
 
     /**
