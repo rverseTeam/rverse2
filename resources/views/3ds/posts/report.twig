@@ -1,0 +1,44 @@
+{% set class = 'post-permalink' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+{% set post_id = hashid(post) %}
+    <div id="header">
+        <div id="header-body">
+            <h1 id="page-title"><span>Report Violation to {{ config('general.name') }} Moderation</span></h1>
+            <span class="post-id">Post ID: {{ report_id }}</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="add-report-page window">
+            <form method="post" action="{{ route('post.reportsubmit', [ post_id ]) }}">
+                <div class="window-body">
+                    <div class="window-body-inner">
+                        <p class="description">You are about to report a post with content which violates the {{ config('general.name') }} Rules and Guidelines. This report will be sent to the {{ config('general.name') }} Moderators and not to the creator of the post.</p>
+                        <p class="select-button-label "><label for="violation_type">Violation Type: </label></p>
+                        <div class="select-content">
+                            <div class="select-button">
+                                <span class="select-button-content">Please make a selection.</span>
+                                <select name="type" id="violation_type">
+                                    <option value="spoiler" data-body-required="1">Spoiler</option>
+                                    <option value="1">Personal Information</option>
+                                    <option value="2">Violent Content</option>
+                                    <option value="3">Inappropriate/Harmful</option>
+                                    <option value="4">Hateful/Bullying</option>
+                                    <option value="6">Advertising</option>
+                                    <option value="5">Sexually Explicit</option>
+                                    <option value="7">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea name="body" class="textarea none" maxlength="100" placeholder="Enter a reason for the report." cave_oninput="$(document.activeElement).trigger('input')"></textarea>
+                    </div>
+                </div>
+                <div class="window-bottom-buttons">
+                    <input type="button" class="cancel-button button" data-sound="SE_OLV_CANCEL" value="Cancel">
+                    <input type="submit" class="post-button button" disabled="" value="Submit Report">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -90,6 +90,10 @@ Router::group(['before' => 'maintenance'], function () {
             Router::get('/{id:a}/reply', 'CTR.Post@reply', 'post.reply');
             Router::post('/{id:a}/empathies', 'CTR.Post@yeahs', 'post.empathies');
             Router::post('/{id:a}/empathies.delete', 'CTR.Post@removeYeahs', 'post.empathiesdelete');
+
+            // Reporting stuff
+            Router::get('/{id:a}/violations.create', 'CTR.Post@reportForm', 'post.violation');
+            Router::post('/{id:a}/violations', 'CTR.Post@sendReport', 'post.reportsubmit');
         });
 
         // Comments

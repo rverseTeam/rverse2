@@ -49,7 +49,7 @@
 					<div class="post-meta">
 						{% if post.user.id != user.id %}
 							<div class="report-buttons-content">
-								<a href="{#{ route('post.report', [ post_id ]) }#}" role="button" class="report-button" data-pjax="1">Report Violation</a>
+								<a href="{{ route('post.violation', [ post_id ]) }}" role="button" class="report-button" data-pjax="1">Report Violation</a>
 							</div>
 						{% endif %}
 						<div class="expression">

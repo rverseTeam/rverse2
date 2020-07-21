@@ -5,6 +5,7 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Miiverse\Helpers\IntObfuscator;
 use Miiverse\Community\Community;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
@@ -512,5 +513,147 @@ class Post extends Page
         }
 
         return '';
+    }
+
+    /**
+     * Show post report form
+     *
+     * @return string
+     */
+    public function reportForm(string $post_id) : string
+    {
+        $post_id = dehashid($post_id);
+        $post_id = $post_id[0];
+
+        // Save the raw post ID for later
+        $post = $post_id;
+
+        $community_id = DB::table('posts')
+                            ->where('id', $post_id)
+                            ->value('community');
+
+        // Create the obfuscated community ID
+        IntObfuscator::init(config('general.community_seed'));
+        $community_id = IntObfuscator::obfuscate($community_id);
+
+        // Add the required dashes to the community ID
+        $community_id = substr_replace($community_id, '-', 3, 0);
+        $community_id = substr_replace($community_id, '-', 8, 0);
+
+        // Create the obfuscated post ID
+        IntObfuscator::init(config('general.post_seed'));
+        $post_id = IntObfuscator::obfuscate($post_id);
+
+        // Add the required dashes to the post ID
+        $post_id = substr_replace($post_id, '-', 3, 0);
+        $post_id = substr_replace($post_id, '-', 8, 0);
+
+        // Create the final ID
+        $report_id = "$community_id-$post_id";
+
+        return view('posts/report', compact('post', 'report_id'));
+    }
+
+    /**
+     * Send report to Discord
+     *
+     * @return string
+     */
+    public function sendReport(string $post_id) : string
+    {
+        $post_id = dehashid($post_id);
+
+        // Fields to obtain from the DB
+        $fields = [
+            // Post
+            'posts.id as post_id', 'posts.content as post_content', 'posts.image as post_drawing',
+            'posts.spoiler as post_spoiler', 'posts.comments as post_comments', 'posts.empathies as post_yeahs',
+
+            // Community
+            'communities.name as community_name',
+
+            // User
+            'users.display_name as user_name', 'users.username as user_nnid'
+        ];
+
+        // Fields from report form
+        $reasons = [
+            'spoiler' => 'Spoiler',
+            1 => 'Personal Information',
+            2 => 'Violent Content',
+            3 => 'Inappropriate/Harmful',
+            4 => 'Hateful/Bullying',
+            5 => 'Sexually Explicit',
+            6 => 'Advertising',
+            7 => 'Other',
+        ];
+
+        $reason = $reasons[$_POST['type']];
+        $body = !empty($_POST['body']) ? ": $_POST[body]" : '';
+
+        $post = DB::table('posts')
+                            ->where('posts.id', $post_id)
+                            ->leftJoin('communities', 'communities.id', '=', 'posts.community')
+                            ->leftJoin('users', 'users.user_id', '=', 'posts.user_id')
+                            ->get($fields);
+        $post = $post[0];
+
+        $drawing = !is_null($post->post_drawing) ? "https://images.weserv.nl/?url=ssl:$_SERVER[HTTP_HOST]/img/drawings/$post->post_drawing&w=320&h=120&output=png" : '';
+
+        if (!empty(config('discord.reports'))) {
+            $embed = [
+                'embeds' => [
+                    (object)[
+                        'title'  => "New report sent for post #$post->post_id",
+                        'description' => "**$reason**$body",
+                        'color'  => 10822178,
+                        'fields' => [
+                            (object)[
+                                'name'   => 'Post Creator',
+                                'value'  => $post->user_name,
+                                'inline' => true,
+                            ],
+                            (object)[
+                                'name'   => 'NNID',
+                                'value'  => $post->user_nnid,
+                                'inline' => true,
+                            ],
+                            (object)[
+                                'name'   => 'Community',
+                                'value'  => $post->community_name,
+                            ],
+                            (object)[
+                                'name'   => 'Post has spoiler?',
+                                'value'  => boolval($post->post_spoiler) ? 'Yes' : 'No',
+                                'inline' => true,
+                            ],
+                            (object)[
+                                'name'   => '# comments',
+                                'value'  => $post->post_comments,
+                                'inline' => true,
+                            ],
+                            (object)[
+                                'name'   => '# yeahs',
+                                'value'  => $post->post_yeahs,
+                                'inline' => true,
+                            ],
+                            (object)[
+                                'name'   => 'Post content',
+                                'value'  => $post->post_content ?? '*[empty, may be drawing]*',
+                            ],
+                        ],
+                        'image' => (object)[
+                            'url' => $drawing,
+                        ],
+                    ],
+                ],
+            ];
+
+            // Commented due to bugfixing test
+            //Net::JSONRequest(config('discord.reports'), 'post', $embed);
+        }
+
+        header('Content-Type: application/json');
+        return '{"success":1}';
     }
 }
