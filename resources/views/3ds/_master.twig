@@ -10,13 +10,13 @@
 		<script src="/js/n3ds/olv.js"></script>
 		<script src="/js/n3ds/olv.locale-en.js"></script>
 	</head>
-{% endif %}
 	<body data-user-id="{{ user.username }}" {% if not user.posted %}data-is-first-post="1"{% endif %} {% if not user.favorited %}data-is-first-favorite="1"{% endif %} data-profile-url="{{ route('user.profile', [ user.username ]) }}">
+{% endif %}
 		<div id="body" {% if class is defined %}class="{{ class }}" {% endif %}data-region-id="2">
 			{% block content %}
 			{% endblock %}
 		</div>
-	</body>
 {% if get._pjax is not defined %}
+	</body>
 </html>
 {% endif %}
