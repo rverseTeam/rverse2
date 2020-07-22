@@ -1,7 +1,11 @@
-{% macro standard_post(post) %}
-    {% set id, title_id, post_id = hashid(post.community_id), hashid(post.title_id), hashid(post.post_id) %}
+{% macro standard_post(post, external) %}
+    {% if external|default(false) %}
+        {% set id, title_id, post_id = hashid(post.community_id), hashid(post.title_id), hashid(post.post_id) %}
+    {% else %}
+        {% set post_id = hashid(post.post_id) %}
+    {% endif %}
     {% set feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'] %}
-    <div id="post-{{ post_id }}" {% if post.spoiler %}data-href-hidden="{{ route('post.show', [ post_id ]) }}"{% endif %} class="post scroll post-subtype-default {% if post.spoiler %}hidden{% endif %}">
+    <div id="post-{{ post_id }}" {% if post.spoiler %}data-href-hidden="{{ route('post.show', [ post_id ]) }}"{% endif %} class="post scroll post-subtype-default {% if post.spoiler %}hidden{% endif %} {% if post.verified %}official-user{% endif %}" data-href="{{ route('post.show', [ post_id ]) }}">
         {% if post.has_community %}
             <p class="community-container">
                 <a href="{{ route('title.community', [ title_id, id ]) }}" class="test-post-target-href" data-pjax="1">
@@ -12,7 +16,7 @@
             </p>
         {% endif %}
         <div class="body">
-            <a href="{{ route('user.profile', [ post.op.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus">
+            <a href="{{ route('user.profile', [ post.op.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus {% if post.verified %}official-user{% endif %}">
                 <img src="{{ post.op.mii[feeling[post.feeling]] }}" class="user-icon" width="32" height="32">
             </a>
             <div class="post-container">
@@ -46,8 +50,8 @@
                     {% endif %}
                 </div>
                 <div class="post-meta">
-                    <button type="button" {% if post.can_yeah == false %}disabled{% endif %} class="symbol submit empathy-button {% if post.can_yeah == false %}disabled{% endif %}" data-feeling="{{ feeling[post.feeling] }}" data-action="{{ route('post.empathies', [ post_id ]) }}">
-                        <span class="empathy-button-text">{{ __('post.feelings.' ~ feeling[post.feeling]) }}</span>
+                    <button type="button" {% if post.can_yeah == false %}disabled{% endif %} class="symbol submit empathy-button {% if post.can_yeah == false %}disabled{% endif %} {% if post.liked %} empathy-added{% endif %}" data-feeling="{{ feeling[post.feeling] }}" data-action="{{ route('post.empathies', [ post_id ]) }}">
+                        <span class="empathy-button-text">{% if post.liked %}{{ __('post.feelings.remove') }}{% else %}{{ __('post.feelings.' ~ feeling[post.feeling]) }}{% endif %}</span>
                     </button>
                     <span class="empathy symbol">
                         <span class="symbol-label">{{ __('post.meta.empathies') }}</span>

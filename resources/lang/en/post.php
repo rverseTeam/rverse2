@@ -28,5 +28,6 @@ return [
         'surprised' => 'Yeah!?',
         'frustrated' => 'Yeah...',
         'puzzled' => 'Yeah...',
+        'remove' => 'Unyeah', // Except this one
     ],
 ];

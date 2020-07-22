@@ -47,7 +47,7 @@
             <div class="body-content">
                 <div class="list post-list" data-next-page-url="">
                     {% for post in posts %}
-                        {{ standard_post(post) }}
+                        {{ standard_post(post, true) }}
                     {% else %}
                         <div id="user-page-no-content" class="no-content">
                             <div>
