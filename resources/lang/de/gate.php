@@ -20,7 +20,7 @@ return [
             'message2' => 'Da dies eine Nachahmung ist, hat es möglicherweise nicht die gleichen Funktionen wie das verstorbene Miiverse und wir arbeiten daran, sie so schnell wie möglich verfügbar zu machen.',
         ],
         'config' => [
-            'title' => 'Deinen :name-Account konfigutieren',
+            'title' => 'Deinen :name-Account konfigurieren',
             'message' => 'Wir benötigen einige Daten von dir, bevor du :name nutzen kannst.',
             'display_name' => 'Anzeigename',
             'nnid' => 'Nintendo Network ID',
