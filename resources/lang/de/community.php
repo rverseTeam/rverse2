@@ -6,12 +6,12 @@
 return [
     'index' => [
         'header' => [
-            'desc' => 'Besuchen Sie in die Gemeinschaften für Spielen, die Sie spielen, oder für Spielen, auf die Sie neugierig sind!',
-            'title' => 'Gemeinschaften',
+            'desc' => 'Besuche die Communities für Spiele, die du spielst, oder für Spiele, auf die du neugierig bist!',
+            'title' => 'Communities',
         ],
-        'favorites' => 'Favorite Gemeinschaften',
+        'favorites' => 'Lieblings-Communities',
         'search' => [
-            'desc' => 'Suche Gemeinschaften',
+            'desc' => 'Suche Communities',
             'name' => 'Suchen',
         ],
         'communities' => [
@@ -21,11 +21,11 @@ return [
                 'options' => [
                     'all' => 'Alle Software',
                     'games' => ':console-spiele',
-                    'vc' => 'Virtuelle Konsole',
+                    'vc' => 'Virtual Console',
                     'other' => 'Andere',
                 ],
             ],
-            'new' => 'Neue Gemeinschaften',
+            'new' => 'Neue Communities',
             'special' => 'Besondere',
             'platforms' => [
                 '3ds' => '3DS-Spiele',
@@ -36,13 +36,13 @@ return [
                 'wii' => 'Wii-Spiele',
                 'ds' => 'DS-Spiele',
                 'wii-ds' => 'Wii-Spiele・DS-Spiele',
-                'special' => 'Besondere Gemeinschaft',
+                'special' => 'Besondere Communities',
             ],
-            'empty' => 'In dieser Kategorie gibt es keine Gemeinschaften.',
-            'more' => 'Zeig mehr',
+            'empty' => 'In dieser Kategorie gibt es keine Communities.',
+            'more' => 'Mehr anzeigen',
         ],
         'footer' => [
-            'console' => ':console-Gemeinschaften',
+            'console' => ':console-Communities',
         ],
     ],
 
@@ -53,7 +53,7 @@ return [
             'options' => [
                 'all' => 'Alle Software',
                 'games' => ':console-Spiele',
-                'vc' => 'Virtuelle Konsole',
+                'vc' => 'Virtual Console',
                 'other' => 'Andere',
             ],
         ],
@@ -67,9 +67,9 @@ return [
                 'wii' => 'Wii-Spiele',
                 'ds' => 'DS-Spiele',
                 'wii-ds' => 'Wii-Spiele・DS-Spiele',
-                'special' => 'Besondere Gemeinschaft',
+                'special' => 'Besondere Communities',
             ],
-            'empty' => 'In dieser Kategorie gibt es keine Gemeinschaften.',
+            'empty' => 'In dieser Kategorie gibt es keine Communities.',
         ],
     ],
 ];
