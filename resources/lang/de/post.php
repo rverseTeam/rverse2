@@ -10,8 +10,8 @@ return [
 
     'content' => [
         'spoiler' => [
-            'desc' => 'Dieser post enthält Spoiler.',
-            'button' => 'Post anzeigen',
+            'desc' => 'Dieser Beitrag enthält Spoiler.',
+            'button' => 'Beitrag anzeigen',
         ],
     ],
 
