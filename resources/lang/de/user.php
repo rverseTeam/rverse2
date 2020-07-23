@@ -31,7 +31,7 @@ return [
 
         // Navigation
         'nav' => [
-            'posts' => 'Posts',
+            'posts' => 'Beiträge',
             'empathies' => 'Yeahs',
             'following' => 'Ich folge',
             'followers' => 'Follower',
