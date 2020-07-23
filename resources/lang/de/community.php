@@ -72,4 +72,17 @@ return [
             'empty' => 'In dieser Kategorie gibt es keine Communities.',
         ],
     ],
+    
+'view' => [
+        'kind' => [
+            'new' => 'Alle',
+            'hot' => 'Beliebt',
+        ],
+
+        'actions' => [
+            'post' => 'Posten',
+            'memo' => 'Gespeicherte Beiträge',
+            'next' => 'Weiter',
+        ],
+    ],
 ];
