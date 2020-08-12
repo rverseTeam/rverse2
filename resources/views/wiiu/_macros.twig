@@ -1,0 +1,5 @@
+{% macro header(title, id, class, html) %}
+    <header id="header">
+        <h1 id="{% if id|default(false) %}{{ id }}{% else %}page-title{% endif %}" class="{{ class }}">{{ title }}</h1>
+    </header>
+{% endmacro %}

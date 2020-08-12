@@ -1,187 +1,35 @@
+{% if get._pjax is not defined %}
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>500 Internal Server Error</title>
-  <style type="text/css">
-    body {
-      position:relative;
-      font-size:28px;
-      font-family:sans-serif;
-      line-height:1.6;
-      margin:0;
-      padding:0;
-      color:#323232;
-      background:#eee url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAIAAACxN37FAAAHnUlEQVR4nO3d0VIqOxRF0aTB//9cHqiiz0OOqU3SQoNCshZzPFioWMZ9piHd3qqbT6dTUnM+n9dvKaXyFr+Xcy5vi6+vr9EretgyegHPKOMevQpnuhNWDbq+xZ+THq9q0NJDn1k8dYxeyzMkgwZ+QtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwQtCwoh00/w/ZP6c+UtWg1ec+Od3xSgbN/+L7paTHqxd0M2jRuc/JYLaSQRejF+JMd8iqQSfN/UNCHa/ihMWCpub30G1aL+gUapYb9/ya2cpNWCnodV0vl4vu8U5IHXIZ+OjlPEAp6FpzeVdr0ELihEvTY9fzEJmg495Mym8Qpy3UtEbQl8ulOWzQ9EvFi8IStErTAkGzMY+lNf/j6AXcUTbm32zPOeeXrU7P/tGt65pzrs8vO3TOeVmm3gSnDro5aeyveTPiTy67Di0O4e4k+6bLl8/c9KRBN7vy/prjP1h9/MkpF2UCzQ2i5oObmqbT92vmsixzTnW6oOPtz6bj26Nv8o1vE01/p5muG40fvP2F8fnl3dL0bIOdJeh+J24uRG5MvE+5f/Dq9UuIs4377t2s+306hVN19drV73M8n8/DFxQH3TyIT9gUa44/yGyDnkTcKUqjcdR9tfELY/Rxq55h46g/1LF56RmylPhgf8qpO10Uc74UTqJOph7t4mc3d+L42XQdfX3+8KNdzebYvwCNWk26znfn9V++Nu3FymzqxPrLldsxNFnH589Q0eAdevPn3zOUvuZlWWa+nTSnnPPhcGj+ELhng6sFp24/GhvSsf/QEA99980zBjU/rYwunkB2vmjHJ9SOx4Z0HPvtn9DXzDHj95ZlKSU82nQ1SUjCuxr3Mf6WxzzFgt7cnkcvykd9uZvhTtxzZvnDyn7NheDo5bgpZ49JDsRPUAoiX/8NhZpfpLmRr7VJizXB/eY3yOGPU3JDlgm62TDkBq2lGbLQtGWCLuJF4ei1ONO9KFQKmprfSbRppaBTOEOPXog/0VFrBN2MVW7KikRnrhF0ofgKKE1x4EpBJ7XhGpAbuEzQcpN1IjR8maCBPQgaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVggaVmSCXtd19BI+l9DwZYIuhCbrQW7gSkGX4cqNWJfiwDWCbmaqNWJRojPXCLpav41eiD/RUSsFXV8B5aasqM5Za9pKQSeafhfRmpNQ0HWyooPW0gxZaNoyQRf1YHe5XISmrKWOV/GVUCnouGGUoY9dj6tac3lXq2mloIs1oOk/F/dmrZQLsaDjRWEJmqb/UJlnrFmuabGgI+mNZEIe8zzmnEevIaVHdoJ1XXPO9fllh845L4vwL+dwZWP+zfY8SUjH+mjIgurI4ne/O8e+6fLlNP2c5qSxv+bNZsaG9H+HHvXrVb5vc0HdfHBT03T63mOWZZlkq5DQ7Mr7a45Dro8HTr7GcMw5j226pJmuG40fvP2F8fnl3dI0Wd9Wr6r7jm/X3OTbxDO2onVd/wc9toB47yLuu3ez7vfpFE7Vw3+uCfU7cXMheKPmPuX+wavX/5P6I+TT6TRqEZHroKcSZ9s8iE/YFIccd4rZNo7j/ae8RZ1IfSmMn93cieNnUzhFxecPfymcR1Pt/pRTd7oo5jzazRJ0VefVH+9uNJ26rOPzb3/h59jMd+f1X7427cX3dEEXOefD4dD8IfBu0+mH+yTxg59pc2h7fsn7mpdlmfn26KRBF2Vw8QSyp+l0/U9VO2aTTk/9raTZlWeuOU0edEppWZbyb/Bo0xUdP6evedpjRjT1b1sx23X0p9Gav0DQKaW6PcS7RaMX5Wxzex69qF1mP3JU5ezBgfhtmgvB0cvZS2ahKaXmxieb9Ivk67+hCNWctIKON/Op+aXmv9/8E6Wg0zT/KYyxZrZyE9YLWnTQWuJF4ei1PEYs6ETTr6dbc9INWnHWQnSHLBn0jXfxGwaz1Qs6yV6vqJAer2TQSXbcKnTHqxp0oTv3aamPVDtooEHQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsELQsCIZ9Lqu67qWB6PX4qYOVnS2qkEnan4Z6fEeRy/gGbr7hwrd8f4DDP7LkVEjrIMAAAAASUVORK5CYII=);
-    }
-    #header {
-      height: 68px;
-      line-height: 68px;
-      margin: 0;
-      padding-left: 40px;
-      border-bottom: 2px solid #49A10F;
-      font-size:28px;
-      font-weight:bold;
-      text-shadow: 0 -2px 0 rgba(0, 0, 0, 0.2);
-      color:#fff;
-      background: #5AC800;
-      background: -webkit-gradient(linear, left top, left bottom, from(#81E52E), to(#5AC800));
-    }
-    #body {
-      width:960px;
-      margin:0 auto;
-    }
-    .title {
-      clear:both;
-      padding:15px 20px;
-      margin-top:1.5em;
-      background: #828282;
-      color:#fff;
-      font-size:32px;
-      text-shadow: 0 -2px 2px #555;
-      border-radius:12px;
-    }
-    #content {
-      min-height:367px;
-      padding-right:280px;
-      background-repeat: no-repeat;
-      background-position: right center;
-    }
-    #exit-button {
-      position: fixed;
-      top: 620px;
-      left: 0;
-     display: block;
-      -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
-      height: 100px;
-      line-height: 100px;
-      padding: 0 50px 0 80px;
-      color: white;
-      text-decoration:none;
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAiCAYAAAA+stv/AAAEJklEQVRYhb2WzUsjZxzHP+NMFjFMUjAqFjXCSg5Kg9j4lk1D1oIKWhDfKu4hjWKhUKgvf4CIitfcelQPXqyCpZfYg/UF3IqwroJKlEVhF7sWDVJlK4I+PZgJMSY2ma39wpCZeX5PPp/nlyHzSMTPp+HPE+AqQU2yeQJYwudHsYNSzHUmUAuo4esrYBXY0wm3Ac6wBMA58CtwGhHw+/0A9Pb2ZgJfAU9qampsAFtbW+9OTk4+AIt+vz8lid7eXhvgsVgsGXa7PQ9gYWFhL7yoX/x+/2lEQIOXl5c/bWlp+S49PT0T4Pr6+sPa2tpP09PTq6lIaPD29nZnZWVlmyzLGQCXl5ens7OzP66vr7/RJORAIKACTQ6H42lHR0e/wWAwR9ojSYb8/PxSs9kc2t7elgOBwHldXd1pAi4AfX19EXh1dbVXkiSDNqYoSkZxcbEjFAoFj46OsgKBwBsZcDocjs87Ojr6NdPYREvMz8+f19fXx5WIhcerSUtLM5SUlGgSl7Ldbq/p7OwcTgTXkpeXV2oymUI7Ozvy/Pz8vU709/fbAE9bW1tCuBZJkgzFxcWO4+Pj3+Wenp7hjIyMkocmREuYzeaIRG1t7SnAwMBABF5VVfUgPFrCarUqislkUoUQycwBoLKy0iuEYGZmhoGBAe22p7W11amNJRuTyaQqkiS9EkK4k54VJTE7OwtAS0tLynAASZJeKUKIIcADlKYqESuUYl4DQ4oQ4gx4DvyWqkRFRYUXQCf8OXCmhCfrltCRCBxAubm50Qb+D4k7cAAlpn2PKXEPHk/gsSTiwuHuT/BYEgnhAGlCCBIcZ1NTUz0XFxdvH6h58Li4uHg7NTXVI4Q4S1STUGBwcNAWDAbLDg4OXuoVODg4eBkMBssGBwdtiWpkt9t97+bQ0NBnwBeNjY1Ou93+Qq9AVlZWiaqqob29PXlxcfHK7Xb/GVcgOsPDwx6gtKGhwVlWVpbUi+Wh5ObmlqqqGtrf32dpaUl1u92H0eN3BEZGRjyArbm5+Uu73f7iY+HREhaL5e/d3d2/lpeX70jILpcLIQSjo6MewNbd3e0tLCys19v2RIfFYimx2WyZGxsb75aXl1WXy3UohLgVGBsb8wC2rq4ub05OjvO/WnlsjEZjviaxsrKiulyuQ4nbrbPH5/M9Kjw6x8fHq+Pj45PAogxUe73e77Ozs506WjshhHgthChNZZ7RaMwvKirK3Nzc3JWbmpq+LSgo+FrHQiYAH/AzUEiK/5hGozE/Ozv7D8VqtT7T8T7X4Fq0829S+RKr1fpMURTlfYoCsXDdEoqivFeEEJNA00fC9UpMpgkh5oQQviQfuGTqfOHaZOrmtP3ARNhoXOfKU+2ET2NGb0gSSaQK/zeJCBxAiQM7BH4APgEmo4t1SiwBXm43JJPAXHTBPyNdakwxZ6fdAAAAAElFTkSuQmCC) no-repeat 36px 32px, -webkit-gradient(linear, left top, left bottom, from(#5A5A5A), to(#242424));
-      -webkit-border-radius: 0 80px 0 0;
-       z-index: 2;
-    }
-  </style>
-  <script src="/js/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript">
-  if(window.wiiuSystemSetting){
-    var region = wiiuSystemSetting.getRegion();
-    var lang = wiiuSystemSetting.getLanguage();
-    if(region.error){region.code = 'JPN';}
-    if(lang.error){lang.code = 'ja';}
-  }else{
-    var region = {'code' : 'JPN'};
-    var lang = {'code' : 'ja'};
-  }
-  var trans = {
-    'JPN' : {
-      'ja' : {
-        'title' : 'エラーが発生しました',
-        'code' : 'エラーコード：121-1500',
-        'text' : 'サーバーにエラーが発生しています。 <br>ご迷惑をおかけして申し訳ありませんが、しばらくお待ちください｡',
-        'exit' : 'おわる'
-      },
-    },
-    'USA' : {
-      'en' : {
-        'title' : 'Server Error',
-        'code' : 'Error Code: 121-1500',
-        'text' : 'The server is currently<br>experiencing an error.<br>We apologize for the inconvenience.<br>Please wait and try again later.',
-        'exit' : 'Close'
-      },
-      'es' : {
-        'title' : 'Error en el servidor',
-        'code' : 'Código de error: 121-1500',
-        'text' : 'Se ha producido un error<br>en el servidor. Sentimos<br>las molestias ocasionadas.<br>Inténtalo más tarde.',
-        'exit' : 'Cerrar'
-      },
-      'fr' : {
-        'title' : 'Erreur sur le serveur',
-        'code' : 'Code d\'erreur : 121-1500',
-        'text' : 'Une erreur s\'est produite<br>sur le serveur.<br>Veuillez patienter et réessayer ultérieurement.',
-        'exit' : 'Quitter'
-      },
-      'pt' : {
-        'title' : 'Erro no servidor',
-        'code' : 'Código de erro: 121-1500',
-        'text' : 'O servidor está enfrentando problemas.<br><br>Volte a tentar mais tarde.',
-        'exit' : 'Fechar'
-      },
-    },
-    'EUR' : {
-      'de' : {
-        'title' : 'Serverfehler',
-        'code' : 'Fehler-Code: 121-1500',
-        'text' : 'Im Zusammenhang mit dem Server<br>ist ein Fehler aufgetreten.<br>Wir bitten um Entschuldigung.<br>Bitte warte eine Weile und<br>versuche es erneut.',
-        'exit' : 'Schließen'
-      },
-      'en' : {
-        'title' : 'Server Error',
-        'code' : 'Error Code: 121-1500',
-        'text' : 'The server is currently<br>experiencing an error.<br>We apologise for the inconvenience.<br>Please wait and try again later.',
-        'exit' : 'Close'
-      },
-      'es' : {
-        'title' : 'Serverfehler',
-        'code' : 'Fehler-Code: 121-1500',
-        'text' : 'Im Zusammenhang mit dem Server<br>ist ein Fehler aufgetreten.<br>Wir bitten um Entschuldigung.<br>Bitte warte eine Weile und<br>versuche es erneut.',
-        'exit' : 'Schließen'
-      },
-      'fr' : {
-        'title' : 'Erreur sur le serveur',
-        'code' : 'Code d\'erreur : 121-1500',
-        'text' : 'Une erreur s\'est produite<br>sur le serveur.<br>Veuillez patienter et réessayer ultérieurement.',
-        'exit' : 'Quitter'
-      },
-      'it' : {
-        'title' : 'Errore generale sul server',
-        'code' : 'Codice di errore: 121-1500',
-        'text' : 'Si è verificato un errore<br>generale sul server.<br>Ci scusiamo per il disagio.<br>Riprova più tardi.',
-        'exit' : 'Chiudi'
-      },
-      'nl' : {
-        'title' : 'Serverfout',
-        'code' : 'Foutcode: 121-1500',
-        'text' : 'Er is een fout opgetreden<br>met de server.<br>Onze excuses voor het ongemak.<br>Probeer het later nog eens.',
-        'exit' : 'Sluiten'
-      },
-      'pt' : {
-        'title' : 'Erro do Servidor',
-        'code' : 'Código do Erro: 121-1500',
-        'text' : 'O servidor sofreu um erro.<br>Lamentamos o sucedido.<br>Aguarde e tente novamente <br>mais tarde.',
-        'exit' : 'Fechar'
-      },
-      'ru' : {
-        'title' : 'Ошибка сервера',
-        'code' : 'Код ошибки: 121-1500',
-        'text' : 'В данный момент на<br>сервере возникла ошибка.<br>Приносим извинения<br>за доставленные неудобства.<br>Пожалуйста, подождите<br>и повторите попытку.',
-        'exit' : 'Закрыть'
-      }
-    }
-  };
-  $(function(){
-    $('#error-title-500').html(trans[region.code][lang.code].title);
-    $('#error-code-500').html(trans[region.code][lang.code].code);
-    $('#error-text-500').html(trans[region.code][lang.code].text);
-    $('#exit-button').html(trans[region.code][lang.code].exit);
-    $('#content').css({'backgroundImage' : 'url(/img/error/error'+(Math.floor( Math.random() * 3 )+1)+'.png)'});
-    if (typeof wiiuBrowser !== 'undefined'
-        && typeof wiiuBrowser.endStartUp !== 'undefined') {
-        wiiuBrowser.endStartUp();
-    }
-  });
-  </script>
+    <meta charset="utf-8">
+{% endif %}
+    <title>Activity Feed</title>
+{% if get._pjax is not defined %}
+    <link rel="stylesheet" type="text/css" href="/css/portal/style.css">
+    <script src="/js/portal/wiiu-emulation.js"></script>
+    <script src="/js/portal/complete-en.js"></script>
 </head>
-<body>
-  <h1 id="header">Miiverse</h1>
-  <div id="body">
-    <h2 class="title" id="error-title-500">Miiverse System Error</h2>
-    <div id="content">
-      <p id="error-code-500">Error Code: 121-1500</p>
-      <p id="error-text-500">The Miiverse system is currently experiencing an error.<br>We apologize for the inconvenience.<br>Please try again later.</p>
-    </div>
-  </div>
-  <a href="#" id="exit-button" onclick="wiiuSound.playSoundByName('SE_WAVE_EXIT', 0x3); wiiuBrowser.jumpToHomeButtonMenu ? wiiuBrowser.jumpToHomeButtonMenu() : wiiuBrowser.closeApplication();">Close</a>
+<body
+    data-is-first-friend="1"
+    {% if not user.favorited %}data-is-first-favorite="1"{% endif %}
+    data-user-id="{{ user.username }}"
+    data-profile-url="/users/{{ user.username }}">
+    <menu id="global-menu">
+        <li id="global-menu-mymenu"><a href="{{ route('user.profile', [ user.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_MENU"><span class="mii-icon"><img src="http://game-dev-mii-images.account.nintendo.net/18t8jmdaz0nah_normal_face.png" alt="User Page"></span><span>User Page</span></a></li>
+        <li id="global-menu-feed"><a href="{{ route('index.index') }}" data-pjax="#body" data-sound="SE_WAVE_MENU">Activity Feed</a></li>
+        <li id="global-menu-community"><a href="/communities" data-pjax="#body" data-sound="SE_WAVE_MENU">Communities</a></li>
+        <li id="global-menu-message"><a href="/friend_messages" data-pjax="#body" data-sound="SE_WAVE_MENU">Messages</a></li>
+        <li id="global-menu-news"><a href="/news/my_news" data-pjax="#body" data-sound="SE_WAVE_MENU">Notifications</a></li>
+        <li id="global-menu-exit"><a href="#" role="button" data-sound="SE_WAVE_EXIT">Close</a></li>
+        <li id="global-menu-back" class="none"><a href="#" role="button" class="accesskey-B" data-sound="SE_WAVE_BACK">Back</a></li>
+    </menu>
+    <div id="body">
+{% endif %}
+{% block content %}
+    <p>No content defined.</p>
+{% endblock %}
+{% if get._pjax is not defined %}
 </body>
 </html>
+{% endif %}

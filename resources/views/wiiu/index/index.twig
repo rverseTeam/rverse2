@@ -1,0 +1,82 @@
+{% set class = 'activity' %}
+{% extends '@wiiu/_master.twig' %}
+{% from '@wiiu/_macros.twig' import header %}
+
+{% block content %}
+    {{ header('Activity Feed', false, '', '') }}
+
+    <div class="body-content post-list js-post-list" id="activity-feed">
+        <div class="no-content-window content-loading-window">
+            <div class="window">
+                <p>Loading activity feed...</p>
+            </div>
+        </div>
+        <div class="no-content-window content-load-error-window none">
+            <div class="window">
+                <p>The activity feed could not be loaded. Check your Internet connection, wait a moment, and then try reloading.</p>
+                <div class="window-bottom-buttons single-button">
+                    <a href="/" class="button" data-pjax="#body" data-pjax-replace="1">Reload</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="scroll-to-top" href="#" style="display:none"></a>
+
+<div id="message-dialog-template" class="window-page none">
+    <div class="window">
+        <h1 class="window-title">Activity Feed</h1>
+        <div class="window-body">
+            <div class="window-body-inner message">
+                <p class="pre-line"></p>
+            </div>
+        </div>
+        <div class="window-bottom-buttons single-button">
+            <a href="#" class="button ok-button">OK</a>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-dialog-template" class="window-page none">
+    <div class="window">
+        <h1 class="window-title">Activity Feed</h1>
+        <div class="window-body">
+            <div class="window-body-inner message">
+                <p></p>
+            </div>
+        </div>
+        <div class="window-bottom-buttons">
+            <a href="#" class="button cancel-button" data-sound="SE_WAVE_CANCEL">Cancel</a>
+            <a href="#" class="button ok-button">OK</a>
+        </div>
+    </div>
+</div>
+
+<div id="parental-confirm-dialog-template" class="window-page none">
+    <div class="window">
+        <h1 class="window-title">Activity Feed</h1>
+        <div class="window-body">
+            <div class="window-body-inner message">
+                <p></p>
+                <input type="password" controller="drc" minlength="4" maxlength="4" inputform="monospace" guidestring=" " class="parental_code textarea-line" name="parental_code" placeholder="Tap to enter the PIN." keyboard="pin">
+            </div>
+        </div>
+        <div class="window-bottom-buttons">
+            <a href="#" class="button cancel-button" data-sound="SE_WAVE_CANCEL">Back</a>
+            <a href="#" class="button ok-button">OK</a>
+        </div>
+    </div>
+</div>
+
+<div id="capture-page"
+     class="capture-page window-page none"
+     data-modal-types="capture"
+     data-is-template="1">
+    <div class="capture-container">
+        <div><img src="data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2FwAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D" class="capture"></div>
+        <a href="#" class="olv-modal-close-button cancel-button accesskey-B" data-sound="SE_WAVE_CANCEL"><span>Back</span></a>
+    </div>
+</div>
+
+{% endblock %}
