@@ -152,23 +152,24 @@ class Community extends Page
                 $user = User::construct($post->user_id);
 
                 $posts[] = [
-                    'id'       => hashid($post->id),
-                    'user'     => $user,
-                    'created'  => $post->created,
-                    'content'  => $post->content,
-                    'image'    => $post->image,
-                    'feeling'  => intval($post->feeling),
-                    'spoiler'  => $post->spoiler,
-                    'comments' => intval($post->comments),
-                    'likes'    => intval($post->empathies),
-                    'liked'    => (bool) DB::table('empathies')
+                    'id'         => hashid($post->id),
+                    'user'       => $user,
+                    'created'    => $post->created,
+                    'content'    => $post->content,
+                    'image'      => $post->image,
+                    'feeling'    => intval($post->feeling),
+                    'spoiler'    => $post->spoiler,
+                    'comments'   => intval($post->comments),
+                    'likes'      => intval($post->empathies),
+                    'liked'      => (bool) DB::table('empathies')
                                         ->where([
                                             ['type', 0], // Posts are type 0
                                             ['id', $post->id],
                                             ['user', CurrentSession::$user->id],
                                         ])
                                         ->count(),
-                    'verified' => $user->hasRanks($verified_ranks),
+                    'verified'   => $user->hasRanks($verified_ranks),
+                    'screenshot' => $post->screenshot,
                 ];
             }
 
