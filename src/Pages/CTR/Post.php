@@ -49,7 +49,7 @@ class Post extends Page
                 return view('errors/404');
             }
 
-            if ($_POST['screenshot_type'] != null) {
+            if ($_POST['screenshot_type'] !== "null") {
                 $screenshot = Upload::uploadImage($_FILES['screenshot']["tmp_name"]);
             }
 
