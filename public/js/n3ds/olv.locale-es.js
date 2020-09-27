@@ -162,22 +162,22 @@ Olv.Locale.Data = {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "%s personas le dieron un like.",
-        "value_1": "%s persona le dio un like."
+        "value": "%s personas le dieron un mola.",
+        "value_1": "%s persona le dio un mola."
     },
     "olv.portal.empathy.n_added %1": {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "%s personas le dieron un like.",
-        "value_1": "%s persona le dio un like."
+        "value": "%s personas le dieron un mola.",
+        "value_1": "%s persona le dio un mola."
     },
     "olv.portal.empathy.n_added [_1]": {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "%s personas le dieron un like.",
-        "value_1": "%s persona le dio un like."
+        "value": "%s personas le dieron un mola.",
+        "value_1": "%s persona le dio un mola."
     },
     "olv.portal.empathy.you_added": {
         "value": "Le diste un like."
@@ -186,22 +186,22 @@ Olv.Locale.Data = {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "Tú y %s personas le dieron un like.",
-        "value_1": "Tú y %s persona le disteis un like."
+        "value": "Tú y %s personas le dieron un mola.",
+        "value_1": "Tú y %s persona le disteis un mola."
     },
     "olv.portal.empathy.you_and_n_added %1": {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "Tú y %s personas le dieron un like.",
-        "value_1": "Tú y %s persona le disteis un like."
+        "value": "Tú y %s personas le dieron un mola.",
+        "value_1": "Tú y %s persona le disteis un mola."
     },
     "olv.portal.empathy.you_and_n_added [_1]": {
         "args": [1],
         "args_1": [1],
         "quanttype": "1_o",
-        "value": "Tú y %s personas le dieron un like.",
-        "value_1": "Tú y %s persona le disteis un like."
+        "value": "Tú y %s personas le dieron un mola.",
+        "value_1": "Tú y %s persona le disteis un mola."
     },
     "olv.portal.error.500.for_n3ds": {
         "value": "Se produjo un error.\n\nEspere e intentelo de nuevo más tarde.\n\nSi el error continúa ocurriendo, tome nota del código de error y visite support.nintendo.com."
@@ -264,40 +264,40 @@ Olv.Locale.Data = {
         "value": "Enlace"
     },
     "olv.portal.miitoo.frustrated": {
-        "value": "Like..."
+        "value": "Mola..."
     },
     "olv.portal.miitoo.frustrated.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.miitoo.happy": {
-        "value": "¡Like!"
+        "value": "¡Mola!"
     },
     "olv.portal.miitoo.happy.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.miitoo.like": {
-        "value": "Like\u2665"
+        "value": "Mola\u2665"
     },
     "olv.portal.miitoo.like.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.miitoo.normal": {
-        "value": "¡Like!"
+        "value": "¡Mola!"
     },
     "olv.portal.miitoo.normal.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.miitoo.puzzled": {
-        "value": "Like..."
+        "value": "Mola..."
     },
     "olv.portal.miitoo.puzzled.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.miitoo.surprised": {
-        "value": "¿¡Like!?"
+        "value": "¿¡Mola!?"
     },
     "olv.portal.miitoo.surprised.delete": {
-        "value": "Dislike"
+        "value": "No mola"
     },
     "olv.portal.my_page": {
         "value": "Página de usuario"
