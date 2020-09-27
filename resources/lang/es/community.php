@@ -78,7 +78,7 @@ return [
            ],
 
            'actions' => [
-               'post' => 'Post',
+               'post' => 'Publicación',
                'memo' => 'Publicaciones guardadas',
                'next' => 'Siguiente',
            ],
