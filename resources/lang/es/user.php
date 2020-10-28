@@ -59,7 +59,7 @@ return [
             'settings' => ':service Configuraciones',
             'blacklist' => 'Usuarios Bloqueados',
             'announcements' => ':service Anuncios',
-            'help' => 'Manual/:service Codigo de Conducta',
+            'help' => 'Manual/:service Código de Conducta',
         ],
     ],
 ];
