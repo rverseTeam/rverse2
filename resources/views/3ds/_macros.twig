@@ -36,6 +36,9 @@
                             <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">{{ post.content }}</a>
                         </p>
                     {% endif %}
+                    {% if post.screenshot %}
+                        <a href="{{ route('post.show', [ post.id ]) }}" class="screenshot-container still-image"><img src="{{ post.screenshot }}" height="96"></a>
+                    {% endif %}
                     {% if post.image %}
                         <p class="post-content-memo">
                             <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">
