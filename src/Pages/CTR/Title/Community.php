@@ -32,7 +32,7 @@ class Community extends Page
             config('rank.admin'),
         ];
 
-        $page_params = json_decode($_GET['page_param']);
+        $page_params = json_decode($_GET['page_param'] ?? '');
         $since = !empty($page_params->since) ? @strval($page_params->since) : date('Y-m-d H:i:s');
         $page = !empty($page_params->page) ? intval($page_params->page) : 0;
 
@@ -152,23 +152,25 @@ class Community extends Page
                 $user = User::construct($post->user_id);
 
                 $posts[] = [
-                    'id'       => hashid($post->id),
-                    'user'     => $user,
-                    'created'  => $post->created,
-                    'content'  => $post->content,
-                    'image'    => $post->image,
-                    'feeling'  => intval($post->feeling),
-                    'spoiler'  => $post->spoiler,
-                    'comments' => intval($post->comments),
-                    'likes'    => intval($post->empathies),
-                    'liked'    => (bool) DB::table('empathies')
-                                        ->where([
-                                            ['type', 0], // Posts are type 0
-                                            ['id', $post->id],
-                                            ['user', CurrentSession::$user->id],
-                                        ])
-                                        ->count(),
-                    'verified' => $user->hasRanks($verified_ranks),
+                    'post_id'       => $post->id,
+                    'has_community' => false,
+                    'op'            => $user,
+                    'can_yeah'      => $user->id !== CurrentSession::$user->id,
+                    'created'       => $post->created,
+                    'content'       => $post->content,
+                    'image'         => $post->image,
+                    'feeling'       => intval($post->feeling),
+                    'spoiler'       => $post->spoiler,
+                    'comments'      => intval($post->comments),
+                    'empathies'     => intval($post->empathies),
+                    'liked'         => DB::table('empathies')
+                                            ->where([
+                                                ['type', 0], // Posts are type 0
+                                                ['id', $post->id],
+                                                ['user', CurrentSession::$user->id],
+                                            ])
+                                            ->exists(),
+                    'verified'      => $user->hasRanks($verified_ranks),
                 ];
             }
 
@@ -201,7 +203,7 @@ class Community extends Page
             config('rank.admin'),
         ];
 
-        $page_params = json_decode($_GET['page_param']);
+        $page_params = json_decode($_GET['page_param'] ?? '');
         $page = !empty($page_params->page) ? intval($page_params->page) : 0;
 
         if (!is_array($community) || !is_array($titleId)) {
@@ -239,35 +241,34 @@ class Community extends Page
             $user = User::construct($post->user_id);
 
             $posts[] = [
-                'id'       => hashid($post->id),
-                'user'     => $user,
-                'created'  => $post->created,
-                'content'  => $post->content,
-                'image'    => $post->image,
-                'feeling'  => intval($post->feeling),
-                'spoiler'  => $post->spoiler,
-                'comments' => intval($post->comments),
-                'likes'    => intval($post->empathies),
-                'liked'    => (bool) DB::table('empathies')
-                                    ->where([
-                                        ['type', 0], // Posts are type 0
-                                        ['id', $post->id],
-                                        ['user', CurrentSession::$user->id],
-                                    ])
-                                    ->count(),
-                'verified' => $user->hasRanks($verified_ranks),
+                'post_id'       => $post->id,
+                'has_community' => false,
+                'op'            => $user,
+                'can_yeah'      => $user->id !== CurrentSession::$user->id,
+                'created'       => $post->created,
+                'content'       => $post->content,
+                'image'         => $post->image,
+                'feeling'       => intval($post->feeling),
+                'spoiler'       => $post->spoiler,
+                'comments'      => intval($post->comments),
+                'empathies'     => intval($post->empathies),
+                'liked'         => DB::table('empathies')
+                                        ->where([
+                                            ['type', 0], // Posts are type 0
+                                            ['id', $post->id],
+                                            ['user', CurrentSession::$user->id],
+                                        ])
+                                        ->exists(),
+                'verified'      => $user->hasRanks($verified_ranks),
             ];
         }
-
-        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
-        $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
 
         // Pagination data
         $page_params = json_encode([
             'page' => ++$page
         ]);
 
-        return view('titles/hot', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited', 'page_params'));
+        return view('titles/hot', compact('meta', 'posts', 'is_favorited', 'page_params'));
     }
 
     /**
