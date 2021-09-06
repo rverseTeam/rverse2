@@ -10,6 +10,7 @@ use Miiverse\Community\Community;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\Net;
+use Miiverse\Upload;
 use Miiverse\User;
 
 /**
@@ -38,6 +39,7 @@ class Post extends Page
             $type = $_POST['_post_type'];
             $text = '[Empty Post, may be a drawing]';
             $image = '';
+            $screenshot = null;
 
             $meta = DB::table('communities')
                         ->where('id', $id)
@@ -47,6 +49,10 @@ class Post extends Page
                 return view('errors/404');
             }
 
+            if ($_POST['screenshot_type'] !== "null") {
+                $screenshot = Upload::uploadImage($_FILES['screenshot']["tmp_name"]);
+            }
+
             switch ($type) {
                 case 'body':
                     $text = $body = $_POST['body'];
@@ -54,11 +60,12 @@ class Post extends Page
                     if (!$meta->is_redesign) {
                         $postId = DB::table('posts')
                             ->insertGetId([
-                                'community' => $id,
-                                'content'   => $body,
-                                'feeling'   => $feeling,
-                                'user_id'   => CurrentSession::$user->id,
-                                'spoiler'   => intval($spoiler),
+                                'community'   => $id,
+                                'content'     => $body,
+                                'feeling'     => $feeling,
+                                'user_id'     => CurrentSession::$user->id,
+                                'spoiler'     => intval($spoiler),
+                                'screenshot'  => $screenshot,
                             ]);
                     } else {
                         $category_id = $_POST['topic_category_id'];
@@ -76,6 +83,7 @@ class Post extends Page
                                 'title'       => $title,
                                 'is_open'     => $is_open,
                                 'is_redesign' => $meta->is_redesign,
+                                'screenshot'  => $screenshot,
                             ]);
                     }
                     break;
@@ -94,6 +102,7 @@ class Post extends Page
                             'user_id'     => CurrentSession::$user->id,
                             'spoiler'     => intval($spoiler),
                             'is_redesign' => $meta->is_redesign,
+                            'screenshot'  => $screenshot,
                         ]);
                     break;
                 default:

@@ -19,7 +19,7 @@
 						</a>
 					</p>
 				</div>
-				<div id="post-permalink-body" class="post scroll post-subtype-default {% if post.verified %}official-user{% endif %}">
+				<div id="post-permalink-body" class="post scroll post-subtype-default {% if post.verified %}official-user{% endif %} {% if post.screenshot %}with-image{% endif %}">
 					<a href="{{ route('user.profile', [ post.user.username ]) }}" data-pjax="1" class="user-icon-container scroll-focus {% if post.verified %}official-user{% endif %}">
 						<img src="{{ mii }}" class="user-icon" width="32" height="32">
 					</a>
@@ -41,6 +41,9 @@
 					<div class="post-content{% if post.image %}-memo{% endif %}">
 						{% if post.content != '' %}
 							<p class="post-content-text">{{ post.content }}</p>
+						{% endif %}
+						{% if post.screenshot %}
+							<a href="{{ post.screenshot }}" data-large-capture-url="{{ post.screenshot }}" role="button" class="screenshot-container js-open-image-viewer" class="screenshot-container still-image"><img src="{{ post.screenshot }}" class="title-capture" height="96"></a>
 						{% endif %}
 						{% if post.image %}
 							<p class="post-content-memo"><img src="/img/drawings/{{ post.image }}"></p>

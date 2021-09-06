@@ -171,6 +171,7 @@ class Community extends Page
                                             ])
                                             ->exists(),
                     'verified'      => $user->hasRanks($verified_ranks),
+                    'screenshot' => $post->screenshot,
                 ];
             }
 
