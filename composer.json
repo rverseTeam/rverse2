@@ -10,6 +10,7 @@
         "illuminate/translation": "^8.0",
         "nesbot/carbon": "^2.31",
         "phroute/phroute": "^2.1",
+        "symfony/console": "^5.3",
         "twig/twig": "^3.0",
         "wohali/oauth2-discord-new": "^1.0"
     },
