@@ -154,6 +154,7 @@ class Community extends Page
                 $user = User::construct($post->user_id);
 
                 $posts[] = [
+                    'id'            => 0,
                     'post_id'       => $post->id,
                     'has_community' => false,
                     'op'            => $user,
