@@ -126,7 +126,7 @@ class Community
             $this->description = $communityRow->description;
             $this->icon = '/img/icons/'.$communityRow->icon;
             $this->banner = '/img/banners/'.$communityRow->banner;
-            $this->category = intval($communityRow->category);
+            $this->category = intval($communityRow->category ?? 0);
             $this->type = intval($communityRow->type);
             $this->created = $communityRow->created;
             $this->platform = intval($communityRow->platform);
@@ -135,13 +135,13 @@ class Community
             // Set up individual permissions
             // TODO: Abstract this into a table
             $perms = new stdClass();
-            $perms->can_post = $communityRow->perms & 1;
-            $perms->can_post_drawings = $communityRow->perms & 2;
-            $perms->can_post_memos = $communityRow->perms & 4;
-            $perms->can_post_threads = $communityRow->perms & 8;
-            $perms->can_reply = $communityRow->perms & 16;
-            $perms->can_reply_drawings = $communityRow->perms & 32;
-
+            $perms->can_post = $communityRow->permissions & 1;
+            $perms->can_post_drawings = $communityRow->permissions & 2;
+            $perms->can_post_memos = $communityRow->permissions & 4;
+            $perms->can_post_threads = $communityRow->permissions & 8;
+            $perms->can_reply = $communityRow->permissions & 16;
+            $perms->can_reply_drawings = $communityRow->permissions & 32;
+            
             // Get the current topic bundle for communities
             $this->topicBundle = DB::table('topic_categories')
                                     ->where('bundle_id', $communityRow->topic_bundle)

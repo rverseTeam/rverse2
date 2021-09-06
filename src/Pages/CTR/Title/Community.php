@@ -5,6 +5,8 @@
 
 namespace Miiverse\Pages\CTR\Title;
 
+use Carbon\Carbon;
+
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\User;
@@ -156,7 +158,7 @@ class Community extends Page
                     'has_community' => false,
                     'op'            => $user,
                     'can_yeah'      => $user->id !== CurrentSession::$user->id,
-                    'created'       => $post->created,
+                    'created'       => Carbon::createFromTimeString($post->created)->diffForHumans(),
                     'content'       => $post->content,
                     'image'         => $post->image,
                     'feeling'       => intval($post->feeling),

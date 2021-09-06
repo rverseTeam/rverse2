@@ -5,6 +5,8 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Carbon\Carbon;
+
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\User as Profile;
@@ -101,6 +103,7 @@ class User extends Page
             // Post
             'posts.id as post_id', 'posts.created', 'posts.content', 'posts.image',
             'posts.feeling', 'posts.spoiler', 'posts.comments', 'posts.empathies',
+            'posts.screenshot'
         ];
 
         $posts_pre = DB::table('posts')
@@ -111,17 +114,34 @@ class User extends Page
                     ->get($post_fields);
 
         foreach ($posts_pre as $post) {
+            $post->id = 0; // TODO fix this
+
             $post->mii = DB::table('mii_mappings')
                             ->where([
                                 ['user_id', $profile->id]
                             ])
                             ->value($feeling[$post->feeling]);
 
+            // Set if the post was yeah'd before
+            $post->liked = DB::table('empathies')
+                                ->where([
+                                    ['type', 0], // Posts are type 0
+                                    ['id', $post->post_id],
+                                    ['user', CurrentSession::$user->id],
+                                ])
+                                ->exists();
+
             // Set the variable for having an external community
             $post->has_community = true;
 
             // Disable Yeahs if its their own posts
             $post->can_yeah = $can_yeah;
+
+            // Set verified data to false for now
+            $post->verified = false;
+
+            // Set created date
+            $post->created = Carbon::createFromTimeString($post->created)->diffForHumans();
 
             // Set OP data for the post
             $post->op = $profile;

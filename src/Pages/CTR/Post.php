@@ -5,6 +5,7 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Carbon\Carbon;
 use Miiverse\Helpers\IntObfuscator;
 use Miiverse\Community\Community;
 use Miiverse\CurrentSession;
@@ -12,6 +13,7 @@ use Miiverse\DB;
 use Miiverse\Net;
 use Miiverse\Upload;
 use Miiverse\User;
+
 
 /**
  * Post handler.
@@ -281,6 +283,8 @@ class Post extends Page
         $post->community = new Community($post->community);
         $post->user = User::construct($post->user_id);
 
+        $post->created = Carbon::createFromTimeString($post->created)->diffForHumans();
+
         if ($post->user->hasRanks($verified_ranks)) {
             if (empty($post->user->title)) {
                 $post->user->organization = $post->user->mainRank->name();
@@ -351,6 +355,7 @@ class Post extends Page
                                             ['user', CurrentSession::$user->id],
                                         ])
                                         ->count();
+                $comment->created = Carbon::createFromTimeString($comment->created)->diffForHumans();
                 $comments[] = $comment;
             }
         }
