@@ -67,6 +67,12 @@ return [
 
         // Client secret
         'client_secret'     => '',
+
+        // Client Certificate
+        'client_cert'       => path('file.crt.pem'),
+
+        // Client Certificate Key
+        'client_cert_key'   => path('file.key.pem'),
     ],
 
     // Cookie settings

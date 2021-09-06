@@ -5,7 +5,7 @@
         "ext-json": "*",
         "cloudinary/cloudinary_php": "^1.8",
         "doctrine/dbal": "^2.6",
-        "hashids/hashids": "^2.0",
+        "hashids/hashids": "^4.0",
         "illuminate/database": "5.2.*",
         "illuminate/filesystem": "5.2.*",
         "illuminate/translation": "5.2.*",
@@ -31,6 +31,6 @@
         "optimize-autoloader": true
     },
     "require-dev": {
-        "phpstan/phpstan-shim": "^0.11.0"
+        "phpstan/phpstan": "^0.12"
     }
 }
