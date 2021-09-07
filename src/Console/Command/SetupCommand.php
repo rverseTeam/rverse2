@@ -32,7 +32,7 @@ class SetupCommand extends Command
     /**
      * Adds data to the database required to get everything running.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('rverse2 Setup');
@@ -46,7 +46,7 @@ class SetupCommand extends Command
         if ($userCheck > 0) {
             $io->error("It appears that you've already done the setup already! If this isn't the case, make sure your tables are empty.");
 
-            return 0;
+            return Command::FAILURE;
         }
 
         // Rank data (uses column names)
@@ -180,5 +180,7 @@ class SetupCommand extends Command
         }
 
         $io->text('Success! rverse2 has been installed in this host.');
+
+        return Command::SUCCESS;
     }
 }

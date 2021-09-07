@@ -32,21 +32,20 @@ class DatabaseResetCommand extends Command
     /**
      * Does the resetting.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $repository = DB::getMigrationRepository();
         $migrator = new Migrator($repository, $repository->getConnectionResolver(), new Filesystem());
+        $migrator->setOutput($output);
 
         if (!$migrator->repositoryExists()) {
             $output->writeln("The migration repository doesn't exist!");
 
-            return;
+            return Command::FAILURE;
         }
 
         $migrator->reset();
 
-        foreach ($migrator->getNotes() as $note) {
-            $output->writeln(strip_tags($note));
-        }
+        return Command::SUCCESS;
     }
 }

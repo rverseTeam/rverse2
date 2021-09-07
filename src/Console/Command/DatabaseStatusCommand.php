@@ -38,7 +38,7 @@ class DatabaseStatusCommand extends Command
     /**
      * Fulfills the purpose of what is described above this class.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $repository = DB::getMigrationRepository();
         $migrator = new Migrator($repository, $repository->getConnectionResolver(), new Filesystem());
@@ -46,7 +46,7 @@ class DatabaseStatusCommand extends Command
         if (!$migrator->repositoryExists()) {
             $output->writeln('No migrations found!');
 
-            return 0;
+            return Command::FAILURE;
         }
 
         $ran = $repository->getRan();
@@ -63,5 +63,7 @@ class DatabaseStatusCommand extends Command
         }
 
         $migrations->render();
+
+        return Command::SUCCESS;
     }
 }

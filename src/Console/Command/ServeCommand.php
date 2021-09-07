@@ -30,7 +30,7 @@ class ServeCommand extends Command
     /**
      * Sends the php serve command via the exec command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
         $document_root = addslashes(path('public'));
@@ -42,5 +42,7 @@ class ServeCommand extends Command
         $io->caution('Do not use this command to serve a production site!');
 
         exec("{$php_dir}/php -S {$host} -t {$document_root} {$router_proxy}");
+
+        return Command::SUCCESS;
     }
 }

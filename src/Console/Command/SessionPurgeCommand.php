@@ -31,10 +31,12 @@ class SessionPurgeCommand extends Command
     /**
      * Purges sessions.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         DB::table('sessions')
             ->where('session_expire', '<', time())
             ->delete();
+
+        return Command::SUCCESS;
     }
 }

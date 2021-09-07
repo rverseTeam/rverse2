@@ -32,7 +32,7 @@ class DatabaseInstallCommand extends Command
     /**
      * Does the repository installing.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $repository = DB::getMigrationRepository();
         $migrator = new Migrator($repository, $repository->getConnectionResolver(), new Filesystem());
@@ -40,10 +40,12 @@ class DatabaseInstallCommand extends Command
         if ($migrator->repositoryExists()) {
             $output->writeln('The migration repository already exists!');
 
-            return 0;
+            return Command::FAILURE;
         }
 
         $repository->createRepository();
         $output->writeln('Created the migration repository!');
+
+        return Command::SUCCESS;
     }
 }

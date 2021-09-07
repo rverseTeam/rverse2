@@ -32,15 +32,14 @@ class DatabaseRollbackCommand extends Command
     /**
      * Does the rolling back.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $repository = DB::getMigrationRepository();
         $migrator = new Migrator($repository, $repository->getConnectionResolver(), new Filesystem());
+        $migrator->setOutput($output);
 
         $migrator->rollback();
 
-        foreach ($migrator->getNotes() as $note) {
-            $output->writeln(strip_tags($note));
-        }
+        return Command::SUCCESS;
     }
 }
