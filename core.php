@@ -27,34 +27,35 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-switch ($_SERVER['SERVER_NAME']) {
-    case config('sites.3ds'):
-        $template = '3ds';
-        // 3DS pjax stuff
-        if (array_key_exists('_pjax', $_GET) && array_key_exists('HTTP_X_PJAX', $_SERVER)) {
-            // pjax doesn't like queries on the header, for some reason
-            $pjaxurl = preg_replace('/\?.+/', '', $_SERVER['REQUEST_URI']);
-            header('X-PJAX-PATH: '.$pjaxurl);
-            header('X-PJAX-OK: 1');
-        }
-        require_once path('routes/3ds.php');
-        ConsoleAuth::check3DS();
-        break;
-    case config('sites.wiiu'):
-        $template = 'wiiu';
-        require_once path('routes/wiiu.php');
-        ConsoleAuth::checkWiiU();
-        break;
-    case config('sites.web'):
-        $template = 'web';
-        require_once path('routes/web.php');
-        break;
-    case config('sites.admin'):
-        $template = 'admin';
-        require_once path('routes/admin.php');
-        break;
-    default:
-        require_once path('routes/default.php');
-        break;
+if (php_sapi_name() !== "cli") {
+    switch ($_SERVER['SERVER_NAME']) {
+        case config('sites.3ds'):
+            $template = '3ds';
+            // 3DS pjax stuff
+            if (array_key_exists('_pjax', $_GET) && array_key_exists('HTTP_X_PJAX', $_SERVER)) {
+                // pjax doesn't like queries on the header, for some reason
+                $pjaxurl = preg_replace('/\?.+/', '', $_SERVER['REQUEST_URI']);
+                header('X-PJAX-PATH: '.$pjaxurl);
+                header('X-PJAX-OK: 1');
+            }
+            require_once path('routes/3ds.php');
+            ConsoleAuth::check3DS();
+            break;
+        case config('sites.wiiu'):
+            $template = 'wiiu';
+            require_once path('routes/wiiu.php');
+            ConsoleAuth::checkWiiU();
+            break;
+        case config('sites.web'):
+            $template = 'web';
+            require_once path('routes/web.php');
+            break;
+        case config('sites.admin'):
+            $template = 'admin';
+            require_once path('routes/admin.php');
+            break;
+        default:
+            require_once path('routes/default.php');
+            break;
+    }
 }
-
