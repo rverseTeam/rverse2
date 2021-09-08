@@ -1,6 +1,6 @@
 <?php
 /**
- * Holds the migration repository installer command controller.
+ * Holds the Display Name change command controller.
  */
 
 namespace Miiverse\Console\Command;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Installs the database migration repository.
+ * Installs the Display Name change repository.
  *
  * @author Repflez
  */
@@ -33,7 +33,7 @@ class ChangeDisplayNameCommand extends Command
     }
 
     /**
-     * Does the repository installing.
+     * Changes the Display Name.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
