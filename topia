@@ -20,6 +20,8 @@ $application->add(new Console\Command\DatabaseResetCommand);
 $application->add(new Console\Command\DatabaseRollbackCommand);
 $application->add(new Console\Command\DatabaseStatusCommand);
 
+$application->add(new Console\Command\ChangeDisplayNameCommand);
+
 $application->add(new Console\Command\ServeCommand);
 
 $application->add(new Console\Command\SetupCommand);
