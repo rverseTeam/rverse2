@@ -20,6 +20,10 @@ return [
         'comments' => 'Comments',
     ],
 
+    'extra' => [
+        'more-comments' => 'View More Comments (:count)',
+    ],
+
     // Update on JS as well if it's updated here
     'feelings' => [
         'normal' => 'Yeah!',

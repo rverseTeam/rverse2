@@ -152,29 +152,54 @@ class Community extends Page
 
             foreach ($posts_pre as $post) {
                 $user = User::construct($post->user_id);
+                $latest_comment = [];
+
+                if (intval($post->comments) > 0) {
+                    // Get latest comment if there's at least one of them
+                    $commenter = DB::table('comments')
+                                ->where('post', $post->id)
+                                ->where('spoiler', 0)
+                                ->whereNull('deleted')
+                                ->orderBy('created', 'desc')
+                                ->first();
+
+                    $commenter_user = User::construct($commenter->user);
+
+                    $latest_comment = [
+                        'user'          => $commenter_user,
+                        'feeling'       => intval($commenter->feeling),
+                        'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
+                        'content'       => $commenter->content,
+                        'spoiler'       => $commenter->spoiler,
+                        'image'         => $commenter->image,
+                        'verified'      => $commenter_user->hasRanks($verified_ranks),
+                        'screenshot'    => $commenter->screenshot,
+                    ];
+                }
 
                 $posts[] = [
-                    'id'            => 0,
-                    'post_id'       => $post->id,
-                    'has_community' => false,
-                    'op'            => $user,
-                    'can_yeah'      => $user->id !== CurrentSession::$user->id,
-                    'created'       => Carbon::createFromTimeString($post->created)->diffForHumans(),
-                    'content'       => $post->content,
-                    'image'         => $post->image,
-                    'feeling'       => intval($post->feeling),
-                    'spoiler'       => $post->spoiler,
-                    'comments'      => intval($post->comments),
-                    'empathies'     => intval($post->empathies),
-                    'liked'         => DB::table('empathies')
-                                            ->where([
-                                                ['type', 0], // Posts are type 0
-                                                ['id', $post->id],
-                                                ['user', CurrentSession::$user->id],
-                                            ])
-                                            ->exists(),
-                    'verified'      => $user->hasRanks($verified_ranks),
-                    'screenshot' => $post->screenshot,
+                    'id'                => 0,
+                    'post_id'           => $post->id,
+                    'has_community'     => false,
+                    'op'                => $user,
+                    'can_yeah'          => $user->id !== CurrentSession::$user->id,
+                    'created'           => Carbon::createFromTimeString($post->created)->diffForHumans(),
+                    'content'           => $post->content,
+                    'image'             => $post->image,
+                    'feeling'           => intval($post->feeling),
+                    'spoiler'           => $post->spoiler,
+                    'comments'          => intval($post->comments),
+                    'empathies'         => intval($post->empathies),
+                    'liked'             => DB::table('empathies')
+                                                ->where([
+                                                    ['type', 0], // Posts are type 0
+                                                    ['id', $post->id],
+                                                    ['user', CurrentSession::$user->id],
+                                                ])
+                                                ->exists(),
+                    'verified'          => $user->hasRanks($verified_ranks),
+                    'screenshot'        => $post->screenshot,
+                    'latest_comment'    => $latest_comment,
                 ];
             }
 

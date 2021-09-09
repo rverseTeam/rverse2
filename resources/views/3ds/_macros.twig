@@ -68,6 +68,43 @@
                     </a>
                 </div>
             </div>
+            {% if post.comments > 0 %}
+            {% set comment = post.latest_comment %}
+            <div id="recent-reply-{{ post_id }}" class="recent-reply">
+                <div class="body">
+                    {% if post.comments > 1 %}
+                    <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button read-more-button" data-pjax="#body">
+                        {{ __('post.extra.more-comments', { count: post.comments - 1 }) }}
+                    </a>
+                    {% endif %}
+                    <a href="{{ route('user.profile', [ comment.user.username ]) }}" data-pjax="1" class="user-icon-container {% if comment.verified %}official-user{% endif %} scroll-focus">
+                        <img src="{{ comment.user.mii[feeling[comment.feeling]] }}" class="user-icon" width="22" height="22">
+                    </a>
+                    <div class="header-inner">
+                        <p class="timestamp-container">
+                            <span class="timestamp">{{ comment.created }}</span>
+                        </p>
+                        <p class="user-name">
+                            <a href="{{ route('user.profile', [ comment.user.username ]) }}" data-pjax="1">{{ comment.user.displayName }}</a>
+                        </p>
+                    </div>
+                    <div class="recent-reply-content">
+                        {% if comment.content != '' %}
+                        <p class="recent-reply-content-{% if comment.image %}memo{% else %}text{% endif %}">
+                            <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="#body"><span>{{ comment.content }}</span></a>
+                        </p>
+                        {% endif %}
+                        {% if comment.image %}
+                        <p class="recent-reply-memo">
+                            <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">
+                                <img src="/img/drawings/{{ comment.image }}">
+                            </a>
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}
