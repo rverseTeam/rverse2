@@ -37,7 +37,7 @@
                         </p>
                     {% endif %}
                     {% if post.screenshot %}
-                        <a href="{{ route('post.show', [ post.id ]) }}" class="screenshot-container still-image"><img src="{{ post.screenshot }}" height="96"></a>
+                        <a href="{{ route('post.show', [ post_id ]) }}" class="screenshot-container still-image"><img src="{{ post.screenshot }}" height="96"></a>
                     {% endif %}
                     {% if post.image %}
                         <p class="post-content-memo">
@@ -68,7 +68,7 @@
                     </a>
                 </div>
             </div>
-            {% if post.comments > 0 %}
+            {% if post.comments > 0 and post.latest_comment is not empty %}
             {% set comment = post.latest_comment %}
             <div id="recent-reply-{{ post_id }}" class="recent-reply">
                 <div class="body">
