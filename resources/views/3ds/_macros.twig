@@ -89,18 +89,16 @@
                         </p>
                     </div>
                     <div class="recent-reply-content">
-                        {% if comment.content != '' %}
                         <p class="recent-reply-content-{% if comment.image %}memo{% else %}text{% endif %}">
-                            <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="#body"><span>{{ comment.content }}</span></a>
-                        </p>
-                        {% endif %}
-                        {% if comment.image %}
-                        <p class="recent-reply-memo">
-                            <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="1" tabindex="0">
-                                <img src="/img/drawings/{{ comment.image }}">
+                            <a href="{{ route('post.show', [ post_id ]) }}" class="to-permalink-button" data-pjax="#body">
+                                {% if comment.content != '' %}
+                                <span>{{ comment.content }}</span>
+                                {% endif %}
+                                {% if comment.image %}
+                                <img src="/img/drawings/{{ comment.image }}" class="recent-reply-memo" width="120" height="45">
+                                {% endif %}
                             </a>
                         </p>
-                        {% endif %}
                     </div>
                 </div>
             </div>
