@@ -163,18 +163,20 @@ class Community extends Page
                                 ->orderBy('created', 'desc')
                                 ->first();
 
-                    $commenter_user = User::construct($commenter->user);
+                    if ($commenter) {
+                        $commenter_user = User::construct($commenter->user);
 
-                    $latest_comment = [
-                        'user'          => $commenter_user,
-                        'feeling'       => intval($commenter->feeling),
-                        'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
-                        'content'       => $commenter->content,
-                        'spoiler'       => $commenter->spoiler,
-                        'image'         => $commenter->image,
-                        'verified'      => $commenter_user->hasRanks($verified_ranks),
-                        'screenshot'    => $commenter->screenshot,
-                    ];
+                        $latest_comment = [
+                            'user'          => $commenter_user,
+                            'feeling'       => intval($commenter->feeling),
+                            'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
+                            'content'       => $commenter->content,
+                            'spoiler'       => $commenter->spoiler,
+                            'image'         => $commenter->image,
+                            'verified'      => $commenter_user->hasRanks($verified_ranks),
+                            'screenshot'    => $commenter->screenshot,
+                        ];
+                    }
                 }
 
                 $posts[] = [
