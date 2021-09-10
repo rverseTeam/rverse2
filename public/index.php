@@ -29,7 +29,6 @@ Template::vars([
     'post'    => $_POST,
     'server'  => $_SERVER,
     'request' => $_REQUEST,
-    'session' => $_SESSION,
 ]);
 
 // Handle requests

@@ -8,6 +8,7 @@ namespace Miiverse;
 
 // Filters
 Router::filter('maintenance', 'checkMaintenance');
+Router::filter('3ds_check', 'auth3DS');
 Router::filter('auth', 'checkConsoleAuth');
 
 Router::group(['before' => 'maintenance'], function () {
@@ -19,7 +20,7 @@ Router::group(['before' => 'maintenance'], function () {
     Router::get('/welcome_guest', 'CTR.Gate@guest', 'welcome.guest');
 
     // 3DS required to load these pages
-    Router::group(['before' => 'auth'], function () {
+    Router::group(['before' => ['3ds_check', 'auth']], function () {
         Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'CTR.Updates@news', 'news.checkupdate');
 

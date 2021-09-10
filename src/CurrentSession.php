@@ -99,18 +99,6 @@ class CurrentSession
                     'short_id' => $serviceToken->short,
                 ])
                 ->first();
-
-            $session = self::create(
-                    $user->user_id,
-                    Net::ip(),
-                    get_country_code()
-                );
-
-            self::start(
-                $user->user_id,
-                $session->key,
-                Net::ip()
-            );
         } elseif ($consoles > 1) {
             $consoles = DB::table('console_auth')
                 ->where([
@@ -124,19 +112,21 @@ class CurrentSession
                         'long_id' => $serviceToken->long,
                     ])
                     ->first();
-
-                $session = self::create(
-                        $user->user_id,
-                        Net::ip(),
-                        get_country_code()
-                    );
-
-                self::start(
-                    $user->user_id,
-                    $session->key,
-                    Net::ip()
-                );
+            } else {
+                self::$user = User::construct(0);
+                return;
             }
+        }
+
+        // Populate the user data
+        $user = User::construct($user->user_id);
+
+        // Check if the user is activated
+        if ($user->activated) {
+            // Assign the user object
+            self::$user = $user;
+        } else {
+            self::$user = User::construct(0);
         }
     }
 }

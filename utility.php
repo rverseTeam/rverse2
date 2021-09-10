@@ -245,11 +245,19 @@ function checkMaintenance()
     }
 }
 
+function auth3DS()
+{
+    ConsoleAuth::check3DS();
+}
+
+function authWiiU()
+{
+    ConsoleAuth::checkWiiU();
+}
+
 function checkConsoleAuth()
 {
-    if (ConsoleAuth::$paramPack['platform_id'] != 2) {
-        CurrentSession::authByConsole(ConsoleAuth::$consoleId);
-    }
+    CurrentSession::authByConsole(ConsoleAuth::$consoleId);
 
     Template::vars([
         'console' => ConsoleAuth::$paramPack,

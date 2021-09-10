@@ -5,6 +5,7 @@
 
 namespace Miiverse\Helpers;
 
+use Miiverse\Cache;
 use stdClass;
 
 /**
@@ -28,56 +29,106 @@ class ConsoleAuth
 	 */
 	public static $consoleId;
 
+	// Console ID
+	public const AUTH_CONSOLE_3DS = 0;
+	public const AUTH_CONSOLE_WIIU = 1;
+
+	// Auth failure reasons
+	public const AUTH_FAILURE_NO_TOKEN = 0;
+	public const AUTH_FAILURE_INVALID_TOKEN = 1;
+	public const AUTH_FAILURE_WRONG_CONSOLE = 2;
+
+	// Auth success reasons
+	public const AUTH_SUCCESS = 3;
+
+	/**
+	 * Authenticate a console based on the Service Token HTTP header
+	 * 
+	 * @return int The success code
+	 */
+	private static function authServiceToken(int $expectedConsole) : int
+	{
+		// Bail out early if there is no service token to parse
+		if (!isset($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN'])) {
+			return self::AUTH_FAILURE_NO_TOKEN;
+		}
+
+		// Start parsing the service toekn
+		$serviceToken = bin2hex(base64_decode($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN']));
+
+		// Get the unique part of the token from the service token as our session ID
+		$sessionId = substr($serviceToken, 0, 64);
+		$sessionIdShort = substr($serviceToken, 0, 16);
+
+		// Check if the session id is not empty, otherwise, end it here and redisrect the user
+		// to the guest section
+		if (empty($sessionId))
+			return self::AUTH_FAILURE_INVALID_TOKEN;
+
+		// Get the session data from Redis, otherwise, create it from scratch
+		$session = Cache::get("ConsoleAuth_" . $sessionId, 600);
+
+		if (!$session) {
+			$session = [];
+			$paramPack = base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']);
+
+			// Remove the last separator if there's one trailing
+			if (substr($paramPack, -1) === '\\')
+				$paramPack = substr($paramPack, 0, -1);
+
+			// Unpack the ParamPack from the headers sent by the console
+			// This only deals with Nintendo style ParamPack
+			// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
+			$data = explode('\\', $paramPack);
+
+			$paramCount = count($data);
+
+			for ($i = 1; $i < $paramCount; $i += 2) {
+				$session[$data[$i]] = $data[$i + 1];
+			}
+
+			// At this point we can check the console from the token
+			if (intval($session['platform_id']) !== $expectedConsole)
+				return self::AUTH_FAILURE_WRONG_CONSOLE;
+
+			// Set title id and transferable id to hex, just in case we need it
+			$session['title_id'] = base_convert($session['title_id'], 10, 16);
+			$session['title_id_string'] = str_pad($session['title_id'], 16, "0", STR_PAD_LEFT);
+			$session['transferable_id'] = base_convert($session['transferable_id'], 10, 16);
+
+			// Other kinds of session, just in case
+			$session['in_activity_feed'] = false;
+
+			Cache::store("ConsoleAuth_" . $sessionId, $session);
+		}
+
+		// Set the default timezone based on the session
+		date_default_timezone_set($session['tz_name']);
+
+		// We have to check here as well
+		if (intval($session['platform_id']) !== $expectedConsole)
+			return self::AUTH_FAILURE_WRONG_CONSOLE;
+
+		// Set the session session for later use
+		self::$paramPack = $session;
+		
+		// Set the console ID variable
+		self::$consoleId = new stdClass();
+		self::$consoleId->short = $sessionIdShort;
+		self::$consoleId->long = $sessionId;
+
+		return self::AUTH_SUCCESS;
+	}
+
 	/**
 	 * Checks the Console Auth for 3DS.
 	 */
 	public static function check3DS()
 	{
-		// Send the user to the welcome guest page if there's no NNID token sent
-		if (!isset($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN'])) {
-			if (!$_SESSION['guest']) {
-				$_SESSION['guest'] = true;
-				redirect(route('welcome.guest'));
-			}
-		}
+		$session = self::authServiceToken(self::AUTH_CONSOLE_3DS);
 
-		// Check if we don't have a valid session data
-		if (!isset($_SESSION['authData'])) {
-			$storage = [];
-
-			// Unpack the ParamPack from the headers sent by the console
-			// This only deals with Nintendo style ParamPack
-			// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
-			$data = explode('\\', base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']));
-
-			$paramCount = count($data);
-
-			for ($i = 1; $i < $paramCount; $i += 2) {
-				$storage[$data[$i]] = $data[$i + 1];
-			}
-
-			// Set title id and transferable id to hex, just in case we need it
-			$storage['title_id'] = base_convert($storage['title_id'], 10, 16);
-			$storage['transferable_id'] = base_convert($storage['transferable_id'], 10, 16);
-			$serviceToken = bin2hex(base64_decode($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN']));
-
-			$_SESSION['authData'] = [
-				'paramPack' => $storage,
-				'short'     => substr($serviceToken, 0, 16),
-				'long'      => substr($serviceToken, 0, 64),
-			];
-		}
-
-		// Store the values for later use
-		self::$paramPack = $_SESSION['authData']['paramPack'];
-		self::$consoleId = new stdClass();
-
-		self::$consoleId->short = $_SESSION['authData']['short'];
-		self::$consoleId->long = $_SESSION['authData']['long'];
-
-		if (empty(self::$consoleId->short) || empty(self::$consoleId->long)) {
-			die('Invalid auth data.');
-		}
+		if ($session !== self::AUTH_SUCCESS)
+			redirect(route('welcome.guest'));
 	}
 
 	/**
@@ -85,50 +136,9 @@ class ConsoleAuth
 	 */
 	public static function checkWiiU()
 	{
-		// Send the user to the welcome guest page if there's no NNID token sent
-		if (!isset($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN'])) {
-			if (!$_SESSION['guest']) {
-				$_SESSION['guest'] = true;
-				redirect(route('welcome.guest'));
-			}
-		}
+		$session = self::authServiceToken(self::AUTH_CONSOLE_WIIU);
 
-		// Check if we don't have a valid session data
-		if (!isset($_SESSION['authData'])) {
-			$storage = [];
-
-			// Unpack the ParamPack from the headers sent by the console
-			// This only deals with Nintendo style ParamPack
-			// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
-			$data = explode('\\', base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']));
-
-			$paramCount = count($data);
-
-			for ($i = 1; $i < $paramCount; $i += 2) {
-				$storage[$data[$i]] = $data[$i + 1];
-			}
-
-			// Set title id and transferable id to hex, just in case we need it
-			$storage['title_id'] = base_convert($storage['title_id'], 10, 16);
-			$storage['transferable_id'] = base_convert($storage['transferable_id'], 10, 16);
-			$serviceToken = bin2hex(base64_decode($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN']));
-
-			$_SESSION['authData'] = [
-				'paramPack' => $storage,
-				'short'     => substr($serviceToken, 0, 16),
-				'long'      => substr($serviceToken, 0, 64),
-			];
-		}
-
-		// Store the values for later use
-		self::$paramPack = $_SESSION['authData']['paramPack'];
-		self::$consoleId = new stdClass();
-
-		self::$consoleId->short = $_SESSION['authData']['short'];
-		self::$consoleId->long = $_SESSION['authData']['long'];
-
-		if (empty(self::$consoleId->short) || empty(self::$consoleId->long)) {
-			die('Invalid auth data.');
-		}
+		if ($session !== self::AUTH_SUCCESS)
+			redirect(route('welcome.guest'));
 	}
 }

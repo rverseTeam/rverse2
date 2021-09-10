@@ -23,10 +23,6 @@ Upload::init();
 
 Router::init();
 
-// Check if a PHP session was already started and if not start one
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
 
 if (php_sapi_name() !== "cli") {
     switch ($_SERVER['SERVER_NAME']) {
@@ -40,7 +36,6 @@ if (php_sapi_name() !== "cli") {
                 header('X-PJAX-OK: 1');
             }
             require_once path('routes/3ds.php');
-            ConsoleAuth::check3DS();
             break;
         case config('sites.wiiu'):
             $template = 'wiiu';
