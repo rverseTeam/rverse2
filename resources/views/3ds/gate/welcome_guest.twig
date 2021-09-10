@@ -5,11 +5,11 @@
 				<div class="window-page">
 					<div class="window welcome-window">
 						<div class="window-title">
-							<p>{{ __('gate.welcome_guest.title', { name: config('general.name') }) }}</p>
+							<p>{{ __('gate.welcome_guest.title', { name: config('general.name') })|raw }}</p>
 						</div>
 						<div class="window-body">
 							<div class="window-body-inner message">
-								<p>{{ __('gate.welcome_guest.message') }}</p>
+								<p>{{ __('gate.welcome_guest.message', { name: config('general.name') }) }}</p>
 								<a href="#" class="black-button register">{{ __('gate.welcome_guest.link') }}</a>
 								<a href="#" class="more-button" data-sound="SE_CTR_COMMON_SYSAPPLET_END">{{ __('gate.welcome_guest.exit') }}</a>
 							</div>
