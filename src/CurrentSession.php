@@ -112,19 +112,20 @@ class CurrentSession
                         'long_id' => $serviceToken->long,
                     ])
                     ->first();
-            } else {
-                self::$user = User::construct(0);
-                return;
             }
         }
 
-        // Populate the user data
-        $user = User::construct($user->user_id);
+        if (isset($user)) {
+            // Populate the user data
+            $user = User::construct($user->user_id);
 
-        // Check if the user is activated
-        if ($user->activated) {
-            // Assign the user object
-            self::$user = $user;
+            // Check if the user is activated
+            if ($user->activated) {
+                // Assign the user object
+                self::$user = $user;
+            } else {
+                self::$user = User::construct(0);
+            }
         } else {
             self::$user = User::construct(0);
         }
