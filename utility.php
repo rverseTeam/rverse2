@@ -260,7 +260,7 @@ function checkConsoleAuth()
     CurrentSession::authByConsole(ConsoleAuth::$consoleId);
 
     Template::vars([
-        'console' => ConsoleAuth::$paramPack,
+        '_console' => ConsoleAuth::$paramPack,
         'user'    => CurrentSession::$user,
     ]);
 }

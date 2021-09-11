@@ -20,7 +20,6 @@ CurrentSession::start(
     $_COOKIE["{$cookiePrefix}session"] ?? '',
     Net::ip()
 );
-Translation::init();
 
 Template::set($template);
 Template::vars([

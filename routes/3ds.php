@@ -10,8 +10,9 @@ namespace Miiverse;
 Router::filter('maintenance', 'checkMaintenance');
 Router::filter('3ds_check', 'auth3DS');
 Router::filter('auth', 'checkConsoleAuth');
+Router::filter('translation', 'Miiverse\Translation::init');
 
-Router::group(['before' => 'maintenance'], function () {
+Router::group(['before' => ['translation', 'maintenance']], function () {
     // Welcome guest AKA "you need a NNID to use this"
     // Needs to be outside the group so it doesn't get caught by auth
     Router::get('/welcome_guest', 'CTR.Gate@guest', 'welcome.guest');
@@ -121,12 +122,14 @@ Router::group(['before' => 'maintenance'], function () {
         // Settings
         Router::group(['prefix' => 'settings'], function () {
             Router::post('/struct_post', 'CTR.Dummy@dummy', 'struct.post');
-            Router::get('/profile', 'CTR.Dummy@dummy', 'settings.profile');
+            Router::get('/profile', 'CTR.Settings@profileView', 'settings.profile');
+            Router::post('/profile', 'CTR.Settings@profileSave', 'settings.profile');
             Router::post('/tutorial_post', 'CTR.Settings@tutorial_post', 'settings.tutorialpost');
             Router::post('/played_title_ids', 'CTR.Dummy@dummy', 'settings.playedtitles');
 
             // Account settings
             Router::get('/aacount', 'CTR.Settings@account', 'settings.account');
+            Router::post('/aacount', 'CTR.Settings@account_save', 'settings.accountsave');
         });
 
         // Welcome

@@ -1,22 +1,22 @@
 {% if get._pjax is not defined %}
 <!DOCTYPE html><html lang="en"><head>
-		<meta charset="utf-8">
+  <meta charset="utf-8">
 {% endif %}
-		<title>{{ config('general.name') }}</title>
+    <title>{{ config('general.name') }}</title>
 {% if get._pjax is not defined %}
-		<link rel="stylesheet" type="text/css" href="/css/n3ds/style.css">
-		<script src="/js/src/cave-emulation.js"></script>
-		<script src="/js/n3ds/libs.js"></script>
-		<script src="/js/n3ds/olv.js"></script>
-		<script src="/js/n3ds/olv.locale-en.js"></script>
-	</head>
-	<body data-user-id="{{ user.username }}" {% if not user.posted %}data-is-first-post="1"{% endif %} {% if not user.favorited %}data-is-first-favorite="1"{% endif %} data-profile-url="{{ route('user.profile', [ user.username ]) }}">
+    <link rel="stylesheet" type="text/css" href="/css/n3ds/style.css">
+    <script src="/js/src/cave-emulation.js"></script>
+    <script src="/js/n3ds/libs.js"></script>
+    <script src="/js/n3ds/olv.js"></script>
+    <script src="/js/n3ds/olv.locale-en.js"></script>
+  </head>
+  <body data-user-id="{{ _context.user.username }}" {% if not user.posted %}data-is-first-post="1"{% endif %} {% if not user.favorited %}data-is-first-favorite="1"{% endif %} data-profile-url="{{ route('user.profile', [ user.username ]) }}">
 {% endif %}
-		<div id="body" {% if class is defined %}class="{{ class }}" {% endif %}data-region-id="2">
-			{% block content %}
-			{% endblock %}
-		</div>
+    <div id="body" {% if class is defined %}class="{{ class }}" {% endif %}{% if _console is defined %}data-region-id="{{ _console.region_id }}"{% endif %}>
+      {% block content %}
+      {% endblock %}
+    </div>
 {% if get._pjax is not defined %}
-	</body>
+  </body>
 </html>
 {% endif %}
