@@ -12,15 +12,15 @@ Router::filter('3ds_check', 'auth3DS');
 Router::filter('auth', 'checkConsoleAuth');
 
 Router::group(['before' => 'maintenance'], function () {
-    // Index page
-    Router::get('/', 'CTR.Index@index', 'index.index');
-
     // Welcome guest AKA "you need a NNID to use this"
     // Needs to be outside the group so it doesn't get caught by auth
     Router::get('/welcome_guest', 'CTR.Gate@guest', 'welcome.guest');
 
     // 3DS required to load these pages
     Router::group(['before' => ['3ds_check', 'auth']], function () {
+        // Index page
+        Router::get('/', 'CTR.Index@index', 'index.index');
+
         Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'CTR.Updates@news', 'news.checkupdate');
 
@@ -33,6 +33,11 @@ Router::group(['before' => 'maintenance'], function () {
 
         // Blacklist
         Router::get('/my_blacklist', 'CTR.User@blacklistGet', 'user.blacklist');
+
+        // Warnings
+        Router::group(['prefix' => 'warnings'], function () {
+            Router::get('/device_ban', 'CTR.Warnings@deviceBan', 'warning.deviceban');
+        });
 
         // Communities
         Router::group(['prefix' => 'communities'], function () {

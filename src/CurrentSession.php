@@ -129,5 +129,11 @@ class CurrentSession
         } else {
             self::$user = User::construct(0);
         }
+
+        // Ban Check
+        if (self::$user->restricted) {
+            if (strpos($_SERVER['REQUEST_URI'], '/device_ban') === false)
+                redirect(route('warning.deviceban'));
+        }
     }
 }

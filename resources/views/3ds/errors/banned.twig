@@ -1,0 +1,24 @@
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+	<div id="header">
+		<div id="header-body">
+			<h1 id="page-title">
+				<span>{{ __('errors.banned.title') }}</span>
+			</h1>
+		</div>
+	</div>
+
+	<div class="body-content without-toobar">
+    <div class="window message-window">
+      <div class="window-body">
+        <div class="window-body-inner">
+          <p>{{ __('errors.banned.desc', { name: config('general.name') }) }}</p>
+        </div>
+      </div>
+      <div class="window-bottom-buttons">
+        <input type="button" class="button exit-button" data-sound="SE_CTR_COMMON_SYSAPPLET_END" value="{{ __('errors.banned.button') }}">
+      </div>
+    </div>
+	</div>
+{% endblock %}
