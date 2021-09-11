@@ -5,12 +5,12 @@
 
 return [
     '403' => [
-        'title' => 'Error',
-        'desc' => 'Der Bildschirm konnte nicht angezeigt werden.',
+        'title' => 'Fehler',
+        'desc' => 'Dieser Bildschirm konnte nicht angezeigt werden.',
     ],
 
     '404' => [
-        'title' => 'Error',
-        'desc' => 'Der Bildschirm konnte nicht angezeigt werden.',
+        'title' => 'Fehler',
+        'desc' => 'Dieser Bildschirm konnte nicht angezeigt werden.',
     ],
 ];
