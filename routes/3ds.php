@@ -64,7 +64,7 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
             Router::get('/{id}/blacklist.confirm', 'CTR.Dummy@dummy', 'user.block');
             Router::post('/{id}/follow.json', 'CTR.User@follow', 'user.follow');
             Router::post('/{id}/unfollow.json', 'CTR.User@unfollow', 'user.unfollow');
-            Router::get('/{id}/favorites', 'CTR.Dummy@dummy', 'user.favorites');
+            Router::get('/{id}/favorites', 'CTR.User@favorites', 'user.favorites');
             Router::get('/{id}/posts', 'CTR.User@postListing', 'user.posts');
             Router::get('/{id}/empathies', 'CTR.Dummy@dummy', 'user.empathies');
             Router::get('/{id}/following', 'CTR.Dummy@dummy', 'user.following');

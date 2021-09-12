@@ -84,4 +84,10 @@ return [
             'next' => 'Next',
         ],
     ],
+
+    'favorites' => [
+        'favorites_label' => 'Favorites',
+        'software_used' => 'Software Used',
+        
+    ],
 ];

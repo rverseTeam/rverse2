@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Holds the profile page.
  */
@@ -23,7 +24,7 @@ class User extends Page
      *
      * @return string
      */
-    public function profile(string $name) : string
+    public function profile(string $name): string
     {
         $profile = Profile::construct(urldecode($name));
 
@@ -34,11 +35,11 @@ class User extends Page
         $follower = $profile->isFollower(CurrentSession::$user->id);
 
         $favorites = DB::table('favorites')
-                            ->leftJoin('communities', 'communities.id', '=', 'favorites.community_id')
-                            ->where('favorites.user_id', $profile->id)
-                            ->limit(6)
-                            ->orderBy('favorites.added_at', 'desc')
-                            ->get(['communities.id', 'communities.title_id', 'communities.icon', 'communities.platform']);
+            ->leftJoin('communities', 'communities.id', '=', 'favorites.community_id')
+            ->where('favorites.user_id', $profile->id)
+            ->limit(6)
+            ->orderBy('favorites.added_at', 'desc')
+            ->get(['communities.id', 'communities.title_id', 'communities.icon', 'communities.platform']);
 
         return view('user/profile', compact('profile', 'follower', 'favorites'));
     }
@@ -48,7 +49,7 @@ class User extends Page
      *
      * @return string
      */
-    public function follow(string $name) : string
+    public function follow(string $name): string
     {
         $profile = Profile::construct(urldecode($name));
 
@@ -67,7 +68,7 @@ class User extends Page
      *
      * @return string
      */
-    public function unfollow(string $name) : string
+    public function unfollow(string $name): string
     {
         $profile = Profile::construct(urldecode($name));
 
@@ -82,9 +83,30 @@ class User extends Page
     }
 
     /**
+     * Shows a user-s favorite communities
+     */
+    public function favorites(string $name): string
+    {
+        $profile = Profile::construct(urldecode($name));
+
+        if (!$profile || $profile->id === 0) {
+            return view('errors/404');
+        }
+
+        $favorites = DB::table('favorites')
+            ->leftJoin('communities', 'communities.id', '=', 'favorites.community_id')
+            ->where('favorites.user_id', $profile->id)
+            ->limit(20)
+            ->orderBy('favorites.added_at', 'desc')
+            ->get(['communities.id', 'communities.title_id', 'communities.icon', 'communities.platform', 'communities.name']);
+
+        return view('user/favorites', compact('profile', 'favorites'));
+    }
+
+    /**
      * Shows a user's post listing
      */
-    public function postListing(string $name) : string
+    public function postListing(string $name): string
     {
         $profile = Profile::construct(urldecode($name));
 
@@ -107,29 +129,29 @@ class User extends Page
         ];
 
         $posts_pre = DB::table('posts')
-                    ->leftJoin('communities', 'posts.community', '=', 'communities.id')
-                    ->where('posts.user_id', $profile->id)
-                    ->limit(15)
-                    ->orderBy('posts.created', 'desc')
-                    ->get($post_fields);
+            ->leftJoin('communities', 'posts.community', '=', 'communities.id')
+            ->where('posts.user_id', $profile->id)
+            ->limit(15)
+            ->orderBy('posts.created', 'desc')
+            ->get($post_fields);
 
         foreach ($posts_pre as $post) {
             $post->id = 0; // TODO fix this
 
             $post->mii = DB::table('mii_mappings')
-                            ->where([
-                                ['user_id', $profile->id]
-                            ])
-                            ->value($feeling[$post->feeling]);
+                ->where([
+                    ['user_id', $profile->id]
+                ])
+                ->value($feeling[$post->feeling]);
 
             // Set if the post was yeah'd before
             $post->liked = DB::table('empathies')
-                                ->where([
-                                    ['type', 0], // Posts are type 0
-                                    ['id', $post->post_id],
-                                    ['user', CurrentSession::$user->id],
-                                ])
-                                ->exists();
+                ->where([
+                    ['type', 0], // Posts are type 0
+                    ['id', $post->post_id],
+                    ['user', CurrentSession::$user->id],
+                ])
+                ->exists();
 
             // Set the variable for having an external community
             $post->has_community = true;
@@ -157,7 +179,7 @@ class User extends Page
      *
      * @return string
      */
-    public function myMenu() : string
+    public function myMenu(): string
     {
         return view('user/menu');
     }

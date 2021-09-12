@@ -8,8 +8,8 @@
         </div>
     </div>
     <div class="tab2">
-        <a id="tab-header-favorite-community" href="{{ route('community.favorites') }}" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">Favorites</span></a>
-        <a id="tab-header-played-post" href="{{ route('community.played') }}" class="symbol" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">Software Used</span></a>
+        <a id="tab-header-favorite-community" href="{{ route('community.favorites') }}" class="symbol selected" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">{{ __('community.favorites.favorites_label') }}</span></a>
+        <a id="tab-header-played-post" href="{{ route('community.played') }}" class="symbol" data-pjax="1" data-pjax-replace="1"><span class="symbol-label">{{ __('community.favorites.software_used') }}</span></a>
     </div>
     <div class="body-content" id="community-top" data-region="USA">
         <div class="community-list" id="favorite-community-list">
