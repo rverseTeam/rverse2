@@ -128,6 +128,12 @@ class User extends Page
             'posts.screenshot'
         ];
 
+        $verified_ranks = [
+            config('rank.verified'),
+            config('rank.mod'),
+            config('rank.admin'),
+        ];
+
         $posts_pre = DB::table('posts')
             ->leftJoin('communities', 'posts.community', '=', 'communities.id')
             ->where('posts.user_id', $profile->id)
@@ -167,6 +173,35 @@ class User extends Page
 
             // Set OP data for the post
             $post->op = $profile;
+
+            $latest_comment = [];
+
+            if (intval($post->comments) > 0) {
+                // Get latest comment if there's at least one of them
+                $commenter = DB::table('comments')
+                            ->where('post', $post->post_id)
+                            ->where('spoiler', 0)
+                            ->whereNull('deleted')
+                            ->orderBy('created', 'desc')
+                            ->first();
+
+                if ($commenter) {
+                    $commenter_user = Profile::construct($commenter->user);
+
+                    $latest_comment = [
+                        'user'          => $commenter_user,
+                        'feeling'       => intval($commenter->feeling),
+                        'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
+                        'content'       => $commenter->content,
+                        'spoiler'       => $commenter->spoiler,
+                        'image'         => $commenter->image,
+                        'verified'      => $commenter_user->hasRanks($verified_ranks),
+                        'screenshot'    => $commenter->screenshot,
+                    ];
+                }
+            }
+
+            $post->latest_comment = $latest_comment;
 
             $posts[] = $post;
         }
