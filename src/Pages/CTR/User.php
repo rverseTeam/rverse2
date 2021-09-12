@@ -175,6 +175,62 @@ class User extends Page
     }
 
     /**
+     * Show a user's following users
+     */
+    public function following(string $name): string
+    {
+        $profile = Profile::construct(urldecode($name));
+
+        if (!$profile || $profile->id === 0) {
+            return view('errors/404');
+        }
+        
+        $following = [];
+
+        // Get the following users
+        $following_pre = DB::table('users')
+            ->leftJoin('followers', 'users.user_id', '=', 'followers.follower_id')
+            ->where('followers.follower_id', $profile->id)
+            ->orderBy('followers.follower_timestamp', 'desc')
+            ->limit(50)
+            ->pluck('followers.user_id');
+
+        foreach ($following_pre as $follow) {
+            $following[] = Profile::construct($follow);
+        }
+
+        return view('user/following', compact('profile', 'following'));
+    }
+
+    /**
+     * Show a user's followers
+     */
+    public function followers(string $name): string
+    {
+        $profile = Profile::construct(urldecode($name));
+
+        if (!$profile || $profile->id === 0) {
+            return view('errors/404');
+        }
+        
+        $following = [];
+
+        // Get the followers
+        $following_pre = DB::table('users')
+            ->leftJoin('followers', 'users.user_id', '=', 'followers.follower_id')
+            ->where('followers.user_id', $profile->id)
+            ->orderBy('followers.follower_timestamp', 'desc')
+            ->limit(50)
+            ->pluck('followers.follower_id');
+
+        foreach ($following_pre as $follow) {
+            $following[] = Profile::construct($follow);
+        }
+
+        return view('user/followers', compact('profile', 'following'));
+    }
+
+    /**
      * Shows the user menu
      *
      * @return string
