@@ -1,0 +1,29 @@
+{% set class = 'setting-profile' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+{% set name = config('general.name') %}
+<div id="header" class="icon-header">
+  <div id="header-body">
+    <h1 id="page-title"><span>{{ __('settings.profile.title') }}</span></h1>
+  </div>
+</div>
+<div class="body-content">
+  <div class="settings-list-content">
+    <form id="profile-settings-form" class="setting-form" method="post" action="{{ route('settings.profile') }}">
+      <ul class="display-name"></ul>
+      <ul class="settings-list">
+        <li class="setting-profile-comment scroll">
+          <p class="settings-label">{{ __('settings.profile.comment.section_name') }}</p>
+          <textarea id="profile-text" class="textarea scroll-focus" name="profile_comment" maxlength="400" placeholder="{{ __('settings.profile.comment.placeholder') }}"></textarea>
+          <p class="note-attention">{{ __('settings.profile.comment.note') }}</p>
+          <p class="note">{{ __('settings.profile.comment.note_content', { name: config('general.name') })|raw }}</p>
+        </li>
+      </ul>
+      <div class="form-buttons scroll">
+        <input type="submit" class="black-button apply-button scroll-focus" value="{{ __('settings.profile.submit') }}">
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -128,8 +128,8 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
             Router::post('/played_title_ids', 'CTR.Dummy@dummy', 'settings.playedtitles');
 
             // Account settings
-            Router::get('/aacount', 'CTR.Settings@account', 'settings.account');
-            Router::post('/aacount', 'CTR.Settings@account_save', 'settings.accountsave');
+            Router::get('/account', 'CTR.Settings@account', 'settings.account');
+            Router::post('/account', 'CTR.Settings@account_save', 'settings.accountsave');
         });
 
         // Welcome
