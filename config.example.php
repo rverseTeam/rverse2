@@ -173,10 +173,10 @@ return [
 
     // Separate websites with its own routes
     'sites' => [
-        '3ds'               => '',
-        'wiiu'              => '',
-        'web'               => '',
-        'admin'             => '',
+        '3ds'               => ['3ds.example.com', '3ds.example2.com'],
+        'wiiu'              => [],
+        'web'               => [],
+        'admin'             => [],
     ],
 
     // Admin panel settings
