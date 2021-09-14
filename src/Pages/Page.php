@@ -55,7 +55,6 @@ class Page
         $json = json_encode($object, $operators);
 
         header('Content-Type: application/json; charset=utf-8');
-        header('Content-Length: ' . strlen($json));
 
         return $json;
     }

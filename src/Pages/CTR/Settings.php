@@ -130,19 +130,38 @@ class Settings extends Page
             ],
         ];
         $post_languages += $display_languages;
-        
+
         foreach ($post_languages as $id => $post_language) {
             $post_languages[$id]['selected'] = $user->post_language === $id;
         }
 
         $selected_post_language = $post_languages[$user->post_language]['title'];
-        
+
         return view('settings/account', compact(
             'display_languages',
             'selected_display_language',
             'post_languages',
             'selected_post_language'
         ));
+    }
+
+    /**
+     * Save Account settings.
+     * 
+     * @return string
+     */
+    public function account_save(): string
+    {
+        DB::table('users')
+            ->where('user_id', CurrentSession::$user->id)
+            ->update([
+                'language'      => Translation::getLanguageCode($_POST['language']),
+                'post_language' => Translation::getLanguageCode($_POST['visible_language'])
+            ]);
+
+        return $this->json([
+            'success' => 1
+        ]);
     }
 
     public function profileView(): string

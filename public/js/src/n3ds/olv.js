@@ -1120,15 +1120,10 @@ var Olv = Olv || {};
             "submit .setting-form": "onSubmit"
         },
         initialize: function() {
-            e.View.Page.Settings.prototype.initialize.call(this), this.setLuminousOptInValue()
-        },
-        setLuminousOptInValue: function() {
-            var e = cave.boss_isRegisted() ? 1 : 0,
-                t = this.$('[name="luminous_opt_in"]');
-            t.find('[value="' + e + '"]').prop("selected", !0), t.change()
+            e.View.Page.Settings.prototype.initialize.call(this)
         },
         onSubmit: function(t) {
-            t.preventDefault(), +this.$('[name="luminous_opt_in"]').val() ? cave.boss_registEx(1, 336) : cave.boss_unregist(), e.View.Page.Settings.prototype.onSubmit.call(this, t)
+            t.preventDefault(), cave.boss_unregist(), e.View.Page.Settings.prototype.onSubmit.call(this, t)
         }
     }), e.View.Page.ProfileSettings = e.View.Page.Settings.extend({
         initialize: function() {
