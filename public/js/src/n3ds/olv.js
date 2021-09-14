@@ -1325,7 +1325,7 @@ var Olv = Olv || {};
             })), this.widgets.push(new e.View.Widget.URLSelector({
                 el: $("#view-region-selector")
             })), this.widgets.push(new e.View.Widget.URLSelector({
-                el: $("#community-filter")
+                el: $("#view-language-selector")
             })), this.widgets.push(new e.View.Widget.CloseTutorial({
                 el: $(".tutorial-close-button")
             })), this.widgets.push(new e.View.Widget.TitleSearch({

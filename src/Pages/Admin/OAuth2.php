@@ -5,6 +5,8 @@
 
 namespace Miiverse\Pages\Admin;
 
+use Exception;
+
 /**
  * OAuth2 login.
  *
