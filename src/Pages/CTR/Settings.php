@@ -130,6 +130,11 @@ class Settings extends Page
             ],
         ];
         $post_languages += $display_languages;
+        
+        foreach ($post_languages as $id => $post_language) {
+            $post_languages[$id]['selected'] = $user->post_language === $id;
+        }
+
         $selected_post_language = $post_languages[$user->post_language]['title'];
         
         return view('settings/account', compact(
