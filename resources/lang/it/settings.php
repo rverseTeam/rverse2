@@ -10,12 +10,12 @@
 
         'display_language' => [
             'title' => 'In quale lingua vuoi che :name sia visualizzato?',
-            'note' => 'Nota: questa impostazione non influisce sulla lingua di visualizzazione dei post.',
+            'note' => 'Nota: questa impostazione non influisce sulla lingua dei post.',
         ],
 
         'post_language' => [
-            'title' => 'In quale lingua vuoi che :name sia visualizzato?',
-            'note' => 'Nota: questa impostazione non influisce sulla lingua di visualizzazione dei post.',
+            'title' => 'In quale lingua vuoi vedere i post in :name ?',
+            'note' => 'Nota: questa impostazione non influisce sulla lingua di :name.',
 
             'all_languages' => 'Tutte le lingue',
         ],
