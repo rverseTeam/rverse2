@@ -6,7 +6,7 @@
  return [
      // Account settings
      'account' => [
-        'title' => ':name Impostazioni',
+        'title' => 'Impostazioni di :name',
 
         'display_language' => [
             'title' => 'In quale lingua vuoi che :name sia visualizzato?',
