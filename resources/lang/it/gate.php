@@ -24,7 +24,7 @@ return [
             'message' => 'Ci servono alcuni tuoi dati prima di usare :name.',
             'display_name' => 'Mostra il nome',
             'nnid' => 'Nintendo Network ID',
-            'nnid_label' => 'Usiamo il tuo NNID per ottenere l'immagine del tuo Mii.',
+            'nnid_label' => 'Usiamo il tuo NNID per ottenere l\'immagine del tuo Mii.',
         ],
         'finish' => [
             'title' => 'Divertiti con :name!',
@@ -33,7 +33,7 @@ return [
     ],
 
     'welcome_guest' => [
-        'title' => ':name  una comunità di videogiocatori che connette persone da tutto il mondo.<br>Usa :name percondividere la tua esperienza di gioco con il resto del mondo.',
+        'title' => ':name è una comunità di videogiocatori che connette persone da tutto il mondo.<br>Usa :name percondividere la tua esperienza di gioco con il resto del mondo.',
         'message' => 'Ci serve il tuo Network ID per poter usare :name. Seleziona Connetti ID per connetterti a un nuovo ID o uno esistente.',
         'link' => 'Connetti ID',
         'exit' => 'Esci',
