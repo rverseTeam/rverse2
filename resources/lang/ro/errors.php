@@ -1,6 +1,3 @@
-
-
-@@ -1 +1,22 @@
 <?php
 /*
  * Translation file for errors
