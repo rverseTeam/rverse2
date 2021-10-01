@@ -1,4 +1,3 @@
-
 <?php
 /*
  * Translation file for gate
