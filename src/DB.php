@@ -36,9 +36,9 @@ class DB extends Manager
      */
     public static function getMigrationRepository() : DatabaseMigrationRepository
     {
-        $resolver = new ConnectionResolver(['database' => self::connection()]);
+        $resolver = new ConnectionResolver(['' => self::connection()]);
         $repository = new DatabaseMigrationRepository($resolver, 'migrations');
-        $repository->setSource('database');
+        $repository->setSource('');
 
         return $repository;
     }

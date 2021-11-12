@@ -20,6 +20,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DatabaseRollbackCommand extends Command
 {
     /**
+     * The database migrations directory.
+     */
+    private const MIGRATIONS = 'database/';
+
+    /**
      * Set up the command metadata.
      */
     protected function configure() : void
@@ -38,7 +43,7 @@ class DatabaseRollbackCommand extends Command
         $migrator = new Migrator($repository, $repository->getConnectionResolver(), new Filesystem());
         $migrator->setOutput($output);
 
-        $migrator->rollback();
+        $migrator->rollback(path(self::MIGRATIONS));
 
         return Command::SUCCESS;
     }

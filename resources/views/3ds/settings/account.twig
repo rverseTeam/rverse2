@@ -1,0 +1,57 @@
+{% set class = 'setting-account' %}
+{% extends '@3ds/_master.twig' %}
+
+{% block content %}
+{% set name = config('general.name') %}
+<div id="header" class="icon-header">
+  <div id="header-body">
+    <h1 id="page-title">
+      <span>{{ __('settings.account.title', { name: name }) }}</span>
+    </h1>
+  </div>
+</div>
+
+<div class="body-content">
+  <div class="settings-list-content">
+    <form id="account-settings-form" class="setting-form" method="post" action="{{ route('settings.accountsave') }}">
+      <ul class="settings-list">
+        <li class="scroll">
+          <p class="settings-label">
+            <label for="select_language">{{ __('settings.account.display_language.title', { name: name }) }}</label>
+          </p>
+          <p class="note">{{ __('settings.account.display_language.note', { name: name }) }}</p>
+          <div class="select-content">
+            <div class="select-button">
+              <span class="select-button-content">{{ selected_display_language }}</span>
+              <select class="scroll-focus" name="language" id="select_language">
+                {% for language in display_languages %}
+                  <option value="{{ language.code }}"{% if language.selected %} selected=""{% endif %}>{{ language.title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </li>
+        <li class="scroll">
+          <p class="settings-label">
+            <label for="select_visible_language">{{ __('settings.account.post_language.title', { name: name }) }}</label>
+          </p>
+          <p class="note">{{ __('settings.account.post_language.note', { name: name }) }}</p>
+          <div class="select-content">
+            <div class="select-button">
+              <span class="select-button-content">{{ selected_post_language }}</span>
+              <select class="scroll-focus" name="visible_language" id="select_visible_language">
+                {% for language in post_languages %}
+                  <option value="{{ language.code }}"{% if language.selected %} selected=""{% endif %}>{{ language.title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </li>
+        <div class="form-buttons scroll">
+          <input type="submit" class="black-button apply-button scroll-focus" value="{{ __('settings.account.submit') }}">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

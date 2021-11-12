@@ -1,9 +1,10 @@
 # rverse2
 
 ## Requirements
-- PHP 7.2.0 (or greater) or an equivalent environment
+- PHP 8.0.0 (or greater) or an equivalent environment
 - MySQL 5.7 is recommended, you can use any database engine compatible with [illuminate/database](https://github.com/illuminate/database/tree/5.2) in theory though.
 - [Composer](https://getcomposer.org/)
+- [Redis](https://redis.io/)
 
 ## Installing
 ### Backend

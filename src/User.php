@@ -206,9 +206,16 @@ class User
     /**
      * Current Language.
      *
-     * @var string
+     * @var int
      */
-    public $lang = 'en';
+    public $language = 1;
+
+    /**
+     * Current post Language.
+     *
+     * @var int
+     */
+    public $post_language = 90;
 
     /**
      * Mii holder for this user.
@@ -322,7 +329,8 @@ class User
             $this->follows = intval($userRow->follow_count);
             $this->followers = intval($userRow->follow_back_count);
             $this->news_dot = boolval($userRow->news_dot);
-            $this->lang = $userRow->lang;
+            $this->language = intval($userRow->language);
+            $this->post_language = intval($userRow->post_language);
             $this->registerIp = Net::ntop($userRow->register_ip);
             $this->lastIp = Net::ntop($userRow->last_ip);
 

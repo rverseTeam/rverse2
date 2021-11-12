@@ -153,7 +153,7 @@ class Router
     {
         // Check if the dispatcher is defined
         if (self::$dispatcher === null) {
-            self::$dispatcher = new Dispatcher(self::$router->getData());
+            self::$dispatcher = new RouteDispatcher(self::$router->getData());
         }
 
         // Parse url

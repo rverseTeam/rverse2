@@ -26,5 +26,7 @@ $application->add(new Console\Command\ServeCommand);
 
 $application->add(new Console\Command\SetupCommand);
 
+$application->add(new Console\Command\JavascriptBuilderCommand);
+
 // Run the application
 $application->run();

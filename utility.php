@@ -260,8 +260,9 @@ function checkConsoleAuth()
     CurrentSession::authByConsole(ConsoleAuth::$consoleId);
 
     Template::vars([
-        '_console' => ConsoleAuth::$paramPack,
-        'user'    => CurrentSession::$user,
+        '_console'  => ConsoleAuth::$paramPack,
+        'user'      => CurrentSession::$user,
+        'language'  => Translation::getIsoLanguage(CurrentSession::$user->language)
     ]);
 }
 

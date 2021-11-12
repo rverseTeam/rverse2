@@ -45,6 +45,7 @@ return [
         // Errors
         'error' => [
             'noposts' => 'This user has not posted yet.',
+            'nofavorites' => 'This user has no favorite communities yet.',
         ],
     ],
 
