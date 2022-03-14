@@ -92,7 +92,7 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
 
         // My
         Router::group(['prefix' => 'my'], function () {
-            Router::get('/latest_following_related_profile_posts', 'CTR.Dummy@dummy', 'activity.latestfollowingrelatedprofileposts');
+            Router::get('/latest_following_related_profile_posts', 'CTR.Index@activityFeed', 'activity.latestfollowingrelatedprofileposts');
         });
 
         // News
