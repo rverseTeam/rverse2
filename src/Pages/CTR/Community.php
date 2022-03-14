@@ -186,6 +186,13 @@ class Community extends Page
                 ];
                 $mappings = [7, 8];
                 break;
+            case 'special':
+                $console = [
+                    'id' => $page,
+                    'name' => 'Special'
+                ];
+                $mappings = [0];
+                break;
             default:
                 return view('errors/404');
                 break;
@@ -194,13 +201,13 @@ class Community extends Page
         $console['filter'] = 'All Software';
 
         $communities = DB::table('communities')
-                        ->whereIn('type', [0, 1, 2])
+                        ->whereIn('type', [0, 1, 2, 3])
                         ->whereIn('platform', $mappings)
                         ->latest('created')
                         ->get(['id', 'title_id', 'name', 'icon', 'platform']);
 
         $console['count'] = DB::table('communities')
-                                ->whereIn('type', [0, 1, 2])
+                                ->whereIn('type', [0, 1, 2, 3])
                                 ->whereIn('platform', $mappings)
                                 ->count();
 
