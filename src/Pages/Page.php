@@ -52,7 +52,7 @@ class Page
      */
     public function json($object, int $operators = null) : string
     {
-        $json = json_encode($object, $operators);
+        $json = json_encode($object, $operators ?? 0);
 
         header('Content-Type: application/json; charset=utf-8');
 
