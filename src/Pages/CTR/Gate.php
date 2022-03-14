@@ -9,6 +9,8 @@ use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
 use Miiverse\Helpers\Mii;
 use Miiverse\Net;
+use Miiverse\Template;
+use Miiverse\Translation;
 use Miiverse\Upload;
 use Miiverse\User;
 
@@ -36,6 +38,11 @@ class Gate extends Page
      */
     public function guest() : string
     {
+        // TODO: Get language from ParamPack
+        Template::vars([
+            'language' => Translation::LANGUAGE_ENGLISH,
+        ]);
+
         return view('gate/welcome_guest');
     }
 
@@ -130,7 +137,7 @@ class Gate extends Page
                 $mii = Mii::check($nnid);
 
                 if (!$mii) {
-                    return 'nonnid';
+                    return 'ok';
                 } else {
                     return 'ok';
                 }
