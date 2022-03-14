@@ -138,7 +138,7 @@ class ConsoleAuth
 	 */
 	public static function check3DS()
 	{
-		$session = self::authServiceToken(self::AUTH_CONSOLE_WIIU);
+		$session = self::authServiceToken(self::AUTH_CONSOLE_3DS);
 
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
