@@ -41,6 +41,8 @@ class ConsoleAuth
 	// Auth success reasons
 	public const AUTH_SUCCESS = 3;
 
+	private const SESSION_CACHE_NAME = 'ConsoleAuth';
+
 	/**
 	 * Authenticate a console based on the Service Token HTTP header
 	 * 
@@ -66,7 +68,7 @@ class ConsoleAuth
 			return self::AUTH_FAILURE_INVALID_TOKEN;
 
 		// Get the session data from Redis, otherwise, create it from scratch
-		$session = Cache::get("ConsoleAuth_" . $sessionId, 600);
+		$session = Cache::get(self::SESSION_CACHE_NAME . $sessionId, 600);
 
 		if (!$session) {
 			$session = [];
@@ -99,7 +101,7 @@ class ConsoleAuth
 			// Other kinds of session, just in case
 			$session['in_activity_feed'] = false;
 
-			Cache::store("ConsoleAuth_" . $sessionId, $session);
+			Cache::store(self::SESSION_CACHE_NAME . $sessionId, $session);
 		}
 
 		// Set the default timezone based on the session
@@ -120,12 +122,23 @@ class ConsoleAuth
 		return self::AUTH_SUCCESS;
 	}
 
+	public static function updateSession(string $name, $value)
+	{
+		$session = Cache::get(self::SESSION_CACHE_NAME . self::$consoleId->long, 600);
+
+		$session[$name] = $value;
+
+		Cache::store(self::SESSION_CACHE_NAME . self::$consoleId->long, $session);
+
+		self::$paramPack = $session;
+	}
+
 	/**
 	 * Checks the Console Auth for 3DS.
 	 */
 	public static function check3DS()
 	{
-		$session = self::authServiceToken(self::AUTH_CONSOLE_3DS);
+		$session = self::authServiceToken(self::AUTH_CONSOLE_WIIU);
 
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
