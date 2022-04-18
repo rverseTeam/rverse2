@@ -26,14 +26,14 @@ class User
      *
      * @var string
      */
-    public $displayName = 'User';
+    public $displayName = 'Deleted User';
 
     /**
      * A cleaned version of the dsiplay name.
      *
      * @var string
      */
-    public $displayNameClean = 'user';
+    public $displayNameClean = 'deleted_user';
 
     /**
      * The rank object of the user's main rank.
@@ -131,14 +131,14 @@ class User
      *
      * @var string
      */
-    public $username = 'User';
+    public $username = 'Deleted_User';
 
     /**
      * A cleaned version of the Nintendo ID (aka username).
      *
      * @var string
      */
-    public $usernameClean = 'user';
+    public $usernameClean = 'deleted_user';
 
     /**
      * Is this user active?
@@ -220,7 +220,15 @@ class User
     /**
      * Mii holder for this user.
      */
-    public $mii;
+    public $mii = [
+        'user_id'    => 0,
+        'normal'     => '/img/default_mii/normal_face.png',
+        'like'       => '/img/default_mii/like_face.png',
+        'happy'      => '/img/default_mii/happy_face.png',
+        'frustrated' => '/img/default_mii/frustrated_face.png',
+        'puzzled'    => '/img/default_mii/puzzled_face.png',
+        'surprised'  => '/img/default_mii/surprised_face.png',
+    ];
 
     /**
      * Holds the permission checker for this user.
