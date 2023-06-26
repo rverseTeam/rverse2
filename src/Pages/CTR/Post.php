@@ -664,7 +664,7 @@ class Post extends Page
             ];
 
             // Commented due to bugfixing test
-            //Net::JSONRequest(config('discord.reports'), 'post', $embed);
+            Net::JSONRequest(config('discord.reports'), 'post', $embed);
         }
 
         header('Content-Type: application/json');
