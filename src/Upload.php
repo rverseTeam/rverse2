@@ -64,15 +64,10 @@ class Upload
      */
     public static function uploadMii(string $data) : string
     {
-        // TODO: Do this in a way better way.
-
         // Get filename from Nintendo CDN
         $components = explode("/", $data);
         $filename = last($components);
-        
-        // Store avatar in server.
-        file_put_contents(path("stuff/avatars/$filename"), file_get_contents($data));
 
-        return sprintf("%s/avatars/%s", config("general.image_url"), $filename);
+        return sprintf("http://mii-images.account.nintendo.net/%s", $filename);
     }
 }
