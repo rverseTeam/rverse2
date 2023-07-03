@@ -19,7 +19,6 @@ DB::connect(config('database'));
 Cache::init();
 
 Hashid::init(config('general.link_salt'));
-Upload::init();
 
 Router::init();
 

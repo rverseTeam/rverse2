@@ -37,6 +37,9 @@ return [
 
         // Hashids salt (prevents stuff from getting scraped easily)
         'link_salt'         => 'changethis',
+
+        // Image domain for avatars and images
+        'image_url'         => 'http://images.example.com',
     ],
 
     // Cloudinary settings

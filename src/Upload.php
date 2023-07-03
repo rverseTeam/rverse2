@@ -5,8 +5,7 @@
 
 namespace Miiverse;
 
-use Cloudinary;
-use Cloudinary\Uploader;
+use \finfo;
 
 /**
  * Image uploader.
@@ -15,19 +14,6 @@ use Cloudinary\Uploader;
  */
 class Upload
 {
-    /**
-     * Initialize the uploader.
-     *
-     * @return void
-     */
-    public static function init()
-    {
-        Cloudinary::config([
-            'cloud_name' => config('cloudinary.cloud_name'),
-            'api_key'    => config('cloudinary.api_key'),
-            'api_secret' => config('cloudinary.api_secret'),
-        ]);
-    }
 
     /**
      * Upload an image.
@@ -36,13 +22,25 @@ class Upload
      *
      * @return string
      */
-    public static function uploadImage($data) : string
+    public static function uploadImage(array $data) : string
     {
-        $upload = Cloudinary\Uploader::upload($data, [
-            'upload_preset' => config('cloudinary.image_preset'),
-        ]);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
 
-        return $upload['url'];
+        $ext = array_search(
+            $finfo->file($data['tmp_name']),
+            array(
+                'jpg' => 'image/jpeg',
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+            ),
+            true
+        );
+
+        $filename = sprintf("%s.%s", sha1_file($data['tmp_name']), $ext);
+
+        move_uploaded_file($data["tmp_name"], path("stuff/images/$filename"));
+
+        return sprintf("%s/images/%s", config("general.image_url"), $filename);
     }
 
     /**
@@ -54,11 +52,7 @@ class Upload
      */
     public static function uploadDrawing(string $data) : string
     {
-        $upload = Cloudinary\Uploader::upload(base64_decode($data), [
-            'upload_preset' => config('cloudinary.drawings_preset'),
-        ]);
-
-        return $upload['url'];
+        return 'noop';
     }
 
     /**
@@ -70,10 +64,15 @@ class Upload
      */
     public static function uploadMii(string $data) : string
     {
-        $upload = Cloudinary\Uploader::upload($data, [
-            'upload_preset' => config('cloudinary.mii_preset'),
-        ]);
+        // TODO: Do this in a way better way.
 
-        return $upload['url'];
+        // Get filename from Nintendo CDN
+        $components = explode("/", $data);
+        $filename = last($components);
+        
+        // Store avatar in server.
+        file_put_contents(path("stuff/avatars/$filename"), file_get_contents($data));
+
+        return sprintf("%s/avatars/%s", config("general.image_url"), $filename);
     }
 }

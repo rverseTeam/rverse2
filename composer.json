@@ -3,7 +3,6 @@
         "php": ">=8.0.0",
         "ext-curl": "*",
         "ext-json": "*",
-        "cloudinary/cloudinary_php": "^1.8",
         "doctrine/dbal": "^2.6",
         "hashids/hashids": "^4.0",
         "illuminate/database": "^8.0",
