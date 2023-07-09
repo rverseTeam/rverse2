@@ -52,7 +52,7 @@ class Post extends Page
             }
 
             if ($_POST['screenshot_type'] !== "null") {
-                $screenshot = Upload::uploadImage($_FILES['screenshot']["tmp_name"]);
+                $screenshot = Upload::uploadImage($_FILES['screenshot']);
             }
 
             switch ($type) {
