@@ -20,13 +20,13 @@ return [
                 'select' => 'Selecione a Opção Abaixo.',
                 'options' => [
                     'all' => 'Todos os Softwares',
-                    'games' => ':Jogos de Consoles',
+                    'games' => 'Jogos de :console',
                     'vc' => 'Virtual Console',
                     'other' => 'Outros',
                 ],
             ],
             'new' => 'Novas Comunidades',
-            'special' => 'Especial',
+            'special' => 'Especiais',
             'platforms' => [
                 '3ds' => 'Jogos de 3DS',
                 'wiiu' => 'Jogos de Wii U',
@@ -35,14 +35,14 @@ return [
                 'switch-wiiu' => 'Jogos de Switch・Jogos de Wii U',
                 'wii' => 'Jogos de Wii',
                 'ds' => 'Jogos de DS',
-                'wii-ds' => 'Wii Games・Jogos de DS Games',
+                'wii-ds' => 'Jogos de Wii・Jogos de DS',
                 'special' => 'Comunidade Especial',
             ],
-            'empty' => 'Não Existe Comunidades nesta Categoria.',
+            'empty' => 'Não Existem Comunidades nesta Categoria.',
             'more' => 'Mostrar Mais.',
         ],
         'footer' => [
-            'console' => ':Comunidades de Consoles',
+            'console' => 'Comunidades de :console',
         ],
     ],
 
@@ -52,7 +52,7 @@ return [
             'select' => 'Selecione a Opção Abaixo.',
             'options' => [
                 'all' => 'Todos os Softwares',
-                'games' => ':Jogos de Consoles',
+                'games' => 'Jogos de :console',
                 'vc' => 'Virtual Console',
                 'other' => 'Outros',
             ],
@@ -83,5 +83,11 @@ return [
             'memo' => 'Postagens Salvas',
             'next' => 'Próximo',
         ],
+    ],
+
+    'favorites' => [
+        'favorites_label' => 'Favoritos',
+        'software_used' => 'Softwares Usados',
+        
     ],
 ];
