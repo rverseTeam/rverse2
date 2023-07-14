@@ -6,11 +6,11 @@
 return [
     '403' => [
         'title' => 'Erro',
-        'desc' => 'Essa Tela não pode ser Exibida.',
+        'desc' => 'Essa tela não pôde ser exibida.',
     ],
 
     '404' => [
         'title' => 'Erro',
-        'desc' => 'Essa Tela não pode ser Exibida.',
+        'desc' => 'Essa tela não pôde ser exibida.',
     ],
 ];
