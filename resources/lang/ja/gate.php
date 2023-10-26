@@ -6,36 +6,36 @@
 return [
     'welcome' => [
         'controls' => [
-            'back' => '���ǂ�',
-            'close' => '����',
-            'next' => '����',
+            'back' => 'もどる',
+            'close' => '閉じる',
+            'next' => '次へ',
         ],
         'intro' => [
-            'title' => ':name �ւ悤�����I',
-            'message' => ':name �́A�Q�[�����ł̌o���𐢊E���̐l�Ƌ��L���邱�Ƃ��ł��܂��B',
+            'title' => ':name へようこそ！',
+            'message' => ':name は、ゲーム内での経験を世界中の人と共有することができます。',
         ],
         'about' => [
-            'title' => ':name �ɂ���',
-            'message1' => ':name �̓t�@�����t�@���̂��߂ɍ����Miiverse���Č��������̂ł��B',
-            'message2' => '����̓��N���G�[�V�����Ȃ̂ŁAMiiverse�Ƃ͋@�\���قȂ�\��������܂����A�ł��邾�������񋟂ł���悤�ɓw�͂��Ă��܂��B',
+            'title' => ':name について',
+            'message1' => ':name はファンがファンのために作ったMiiverseを再現したものです。',
+            'message2' => 'これはレクリエーションなので、Miiverseとは機能が異なる可能性がありますが、できるだけ早く提供できるように努力しています。',
         ],
         'config' => [
-            'title' => ':name �̃A�J�E���g��ݒ肷��',
-            'message' => ':name ���g�p����O�ɁA���Ȃ��̏�񂪕K�v�ł��B',
-            'display_name' => '�\����',
-            'nnid' => '�j���e���h�[�l�b�g���[�NID',
-            'nnid_label' => '�j���e���h�[�l�b�g���[�NID�́A���Ȃ���Mii�摜���擾���邱�Ƃ����Ɏg�p����܂��B',
+            'title' => ':name のアカウントを設定する',
+            'message' => ':name を使用する前に、あなたの情報が必要です。',
+            'display_name' => '表示名',
+            'nnid' => 'ニンテンドーネットワークID',
+            'nnid_label' => 'ニンテンドーネットワークIDは、あなたのMii画像を取得することだけに使用されます。',
         ],
         'finish' => [
-            'title' => ':name �����y���݂��������I',
-            'start' => '�͂��߂�',
+            'title' => ':name をお楽しみください！',
+            'start' => 'はじめる',
         ],
     ],
 
     'welcome_guest' => [
-        'title' => ':name �́AMii�̃L�����N�^�[���g���Đ��E���̐l���Ȃ��Q�[���R�~���j�e�B�ł��B<br> :name ���g���āA���Ȃ��̃Q�[���̌������L���A���E���̐l�Əo��܂��傤�B',
-        'message' => '���e�̍쐬��v���t�B�[���̍쐬�ɂ̓j���e���h�[�l�b�g���[�NID���K�v�ł��BID��A�g����ƐV�K�܂��͊�����ID��A�g���邱�Ƃ��ł��܂��B',
-        'link' => 'ID��A�g����',
-        'exit' => '�I��',
+        'title' => ':name は、Miiのキャラクターを使って世界中の人をつなぐゲームコミュニティです。<br> :name を使って、あなたのゲーム体験を共有し、世界中の人と出会いましょう。',
+        'message' => '投稿の作成やプロフィールの作成にはニンテンドーネットワークIDが必要です。IDを連携すると新規または既存のIDを連携することができます。',
+        'link' => 'IDを連携する',
+        'exit' => '終了',
     ],
 ];
