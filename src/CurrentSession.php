@@ -88,7 +88,7 @@ class CurrentSession
     {
         $consoles = DB::table('console_auth')
             ->where([
-                'short_id' => $serviceToken->long,
+                'long_id' => $serviceToken->long,
             ])
             ->count();
 
@@ -96,7 +96,7 @@ class CurrentSession
         if ($consoles === 1) {
             $user = DB::table('console_auth')
                 ->where([
-                    'short_id' => $serviceToken->long,
+                    'long_id' => $serviceToken->long,
                 ])
                 ->first();
         } elseif ($consoles > 1) {
