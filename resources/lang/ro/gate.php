@@ -20,7 +20,7 @@ return [
             'message2' => 'Nu are toate caracteristicile pe care le știați, dar tot poate fi folosit.',
         ],
         'config' => [
-            'title' 'Configurarea contului dvs. :name',
+            'title' => 'Configurarea contului dvs. :name',
             'message' => 'Ne trebuie câteva date despre dvs. pentru a putea începe să folosiți :name.',
             'display_name' => 'Afisați nume',
             'nnid' => 'Nintendo Network ID',
