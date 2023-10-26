@@ -6,7 +6,7 @@
 return [
     'profile' => [
         'header' => [
-            'name' => ':name\ Perfil'',
+            'name' => ':name\ Perfil',
         ],
 
         'meta' => [

@@ -69,7 +69,7 @@ return [
                 'wii-ds' => 'Jocuri Wii・Jocuri Ds',
             ],
             'empty' => 'Nu există comunități în această categorie.',
-
+        ],
     ],
 
     'view' => [
@@ -83,5 +83,5 @@ return [
             'memo' => 'Postări salvate',
             'next' => 'Urm.',
         ],
-    ],
+    ],    
 ];
