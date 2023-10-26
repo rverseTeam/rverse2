@@ -6,32 +6,32 @@
 return [
     'profile' => [
         'header' => [
-            'name' => ':Perfil de name\'s',
+            'name' => 'Perfil de :name',
         ],
 
         'meta' => [
             // Reports
             'violation' => [
-                'select' => 'Selecione a Opção Abaixo.',
+                'select' => 'Por favor, selecione.',
                 'create' => 'Reportar',
                 'blacklist' => 'Bloquear',
             ],
 
             // Follow Button
             'follow' => 'Seguir',
-            'unfollow' => 'Deixar de Seguir',
+            'unfollow' => 'Deixar de seguir',
 
             // Own buttons
-            'mymenu' => 'Menu do Usuário',
+            'mymenu' => 'Menu de Usuário',
             'settings' => 'Ajustes de Perfil',
 
             // To top
-            'back' => 'Subir',
+            'back' => 'Para o Topo',
         ],
 
         // Navigation
         'nav' => [
-            'posts' => 'Postagens',
+            'posts' => 'Posts',
             'empathies' => 'Joinhas',
             'following' => 'Seguindo',
             'followers' => 'Seguidores',
@@ -44,22 +44,23 @@ return [
 
         // Errors
         'error' => [
-            'noposts' => 'Este Usuário não postou nada ainda',
+            'noposts' => 'Este usuário ainda não postou nada.',
+            'nofavorites' => 'Este usuário não possui comunidades favoritas.',
         ],
     ],
 
     // My Menu
     'menu' => [
         'header' => [
-            'desc' => 'Aqui você pode Mudar vários Ajustes, Pesquisar por outros Usuários, e mais.',
-            'title' => 'Menu do Usuário',
+            'desc' => 'Aqui você pode alterar vários ajustes, pesquisar outros usuários, etc.',
+            'title' => 'Menu de Usuário',
         ],
 
         'buttons' => [
-            'settings' => ':Ajustes do Serviço',
+            'settings' => 'Ajustes do :service',
             'blacklist' => 'Usuários Bloqueados',
-            'announcements' => ':Anúncios do Serviços',
-            'help' => 'Manual/:Código de Conduta do serviço',
+            'announcements' => 'Notícias do :service',
+            'help' => 'Código de conduta do :service',
         ],
     ],
 ];
