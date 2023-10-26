@@ -25,7 +25,11 @@ class Cache
      * Initialise Redis engine.
      */
     public static function init() : void {
-        self::$redis = new Redis;
+        self::$redis = new Redis([
+            'scheme' => 'tcp',
+            'host'   => config('cache.host'),
+            'port'   => config('cache.port'),
+        ]);
     }
 
     /**

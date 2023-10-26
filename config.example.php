@@ -18,6 +18,12 @@ return [
         'collation'         => 'utf8_unicode_ci',
     ],
 
+    // Cache settings
+    'cache' => [
+        'host'              => 'localhost',
+        'port'              => 6379,
+    ],
+
     // General site settings
     'general'       => [
         // Name of the site
