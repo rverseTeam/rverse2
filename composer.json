@@ -1,19 +1,18 @@
 {
     "require": {
-        "php": ">=8.0.0",
+        "php": "^8.1",
         "ext-curl": "*",
         "ext-json": "*",
-        "doctrine/dbal": "^2.6",
-        "hashids/hashids": "^4.0",
-        "illuminate/database": "^8.0",
-        "illuminate/translation": "^8.0",
+        "doctrine/dbal": "^3.7.1",
+        "hashids/hashids": "^5.0",
+        "illuminate/database": "^10.0",
+        "illuminate/translation": "^10.0",
         "matthiasmullie/minify": "^1.3",
         "nesbot/carbon": "^2.31",
         "phroute/phroute": "^2.1",
-        "predis/predis": "^1.1",
-        "symfony/console": "^5.3",
-        "twig/twig": "^3.0",
-        "wohali/oauth2-discord-new": "^1.0"
+        "predis/predis": "^2.0",
+        "symfony/console": "^6.0",
+        "twig/twig": "^3.0"
     },
     "autoload": {
         "classmap": [
@@ -31,6 +30,6 @@
         "optimize-autoloader": true
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12"
+        "phpstan/phpstan": "^1.0"
     }
 }
