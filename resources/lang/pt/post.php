@@ -10,7 +10,7 @@ return [
 
     'content' => [
         'spoiler' => [
-            'desc' => 'Esta Postagem contém spoilers.',
+            'desc' => 'Esta postagem contém spoilers.',
             'button' => 'Ver Postagem',
         ],
     ],
@@ -18,6 +18,10 @@ return [
     'meta' => [
         'empathies' => 'Joinhas',
         'comments' => 'Comentários',
+    ],
+
+    'extra' => [
+        'more-comments' => 'Ver mais comentários (:count)',
     ],
 
     // Update on JS as well if it's updated here
