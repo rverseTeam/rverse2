@@ -280,3 +280,8 @@ function __(string $key, array $replace = [])
 {
     return Translation::get($key, $replace);
 }
+
+function snake_to_camel(string $snake) : string
+{
+    return str_replace('_', '', ucwords($snake, '_'));
+}
