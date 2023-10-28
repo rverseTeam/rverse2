@@ -6,7 +6,7 @@ use Miiverse\DB;
 
 class CreateIndexEntries extends Migration
 {
-/**
+    /**
      * Run the migrations.
      *
      * @return void
