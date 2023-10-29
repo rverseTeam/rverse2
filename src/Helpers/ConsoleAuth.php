@@ -106,9 +106,6 @@ class ConsoleAuth
 			Cache::store(self::SESSION_CACHE_NAME . $sessionId, $persistentSessionData);
 		}
 
-		// Set the default timezone based on the session
-		date_default_timezone_set($session['tz_name']);
-
 		// Set the session session for later use
 		self::$paramPack = array_merge($session, $persistentSessionData);
 		
