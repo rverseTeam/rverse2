@@ -14,8 +14,8 @@ return [
         'password'          => '',
         'prefix'            => '',
         'database'          => 'rverse2_dev',
-        'charset'           => 'utf8',
-        'collation'         => 'utf8_unicode_ci',
+        'charset'           => 'utf8mb4',
+        'collation'         => 'utf8mb4_unicode_ci',
     ],
 
     // Cache settings
