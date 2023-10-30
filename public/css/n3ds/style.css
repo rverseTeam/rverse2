@@ -5568,6 +5568,9 @@ ul + .headline {
 .headline-switch {
     background: #e60012;
 }
+.headline-supporter {
+    background: #307fe2;
+}
 #body #community-top #identified-user-banner {
     margin: 0 auto 8px;
 }

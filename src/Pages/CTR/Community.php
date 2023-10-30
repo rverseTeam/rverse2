@@ -46,6 +46,52 @@ class Community extends Page
      */
     public function consoleIndex(string $page) : string
     {
+
+        // Far simplier than a massice switch/case.
+        $console = [
+            'id' => $page,
+            'name' => match ($page) {
+                '3ds' => '3DS',
+                'wiiu' => 'Wii U',
+                'switch' => 'Switch',
+                'wii' => 'Wii',
+                'ds' => 'DS',
+                default => 'Unknown',
+            }
+        ];
+
+        $categories_meta = DB::table('community_categories')
+            ->orderBy('order')
+            ->get();
+
+        $categories = [];
+
+        foreach ($categories_meta as $category) {
+            // Name handler
+            $name = match ($category->name) {
+                '#new' => __('community.index.communities.new'),
+                '#special' => __('community.index.communities.special'),
+                '#supporter' => __('community.index.communities.supporter'),
+                default => $category->name,
+            };
+
+            // CSS class handler
+            $class = match ($category->class) {
+                '#console' => "headline-$page",
+                default => "headline-$category->class",
+            };
+
+            $categories[] = [
+                'name' => $name,
+                'class' => $class,
+                'has_filter' => boolval($category->has_filter),
+                'titles' => [],
+            ];
+        }
+
+        return view('community/index', compact('console', 'categories'));
+
+        /*
         $mappings = [];
         $console = [];
         $communities = [];
@@ -134,7 +180,7 @@ class Community extends Page
             $communities['special']['more'] = true;
         }
 
-        return view('community/index', compact('console', 'communities'));
+        return view('community/index', compact('console', 'communities'));*/
     }
 
     /**

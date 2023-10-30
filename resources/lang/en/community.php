@@ -26,7 +26,8 @@ return [
                 ],
             ],
             'new' => 'New Communities',
-            'special' => 'Special',
+            'special' => 'Special Communities',
+            'supporter' => 'Supporter Communities',
             'platforms' => [
                 '3ds' => '3DS Games',
                 'wiiu' => 'Wii U Games',
