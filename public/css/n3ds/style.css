@@ -5802,6 +5802,41 @@ ul + .headline {
 #favorite-community-list {
     margin: 0px auto 38px;
 }
+.close-announce-content a {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    -webkit-box-sizing: content-box;
+    min-height: 20px;
+    padding: 5px;
+    margin: 0 auto;
+    font-size: 12.48px;
+    color: #323232;
+    line-height: 1.2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(0.5, #ffffff), color-stop(0.8, #f6f6f6), color-stop(0.96, #f5f5f5), to(#bbbbbb)) 0 0;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #b7b7b7;
+    border-bottom: 1px solid #b7b7b7;
+    cursor: pointer;
+    color: #FF9100;
+    font-weight: bold;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fffdf0), color-stop(0.5, #fffce4), color-stop(0.8, #fff9cd), color-stop(0.96, #fff9cd), to(#f3e99e)) 0 0;
+    border: 1px solid #f2db1c;
+    padding: 3px 10px;
+    text-align: center;
+    -webkit-border-radius: 6px;
+}
+.close-announce-content a a {
+    color: #323232;
+}
+.close-announce-content a.disabled,
+.close-announce-content a:disabled {
+    color: #969696;
+}
+.body-content > .close-announce-content {
+    margin: 0 auto 6px;
+}
 .identified-user-page .toggle-follow-button {
     float: right;
     margin: 5px 0 6px;
