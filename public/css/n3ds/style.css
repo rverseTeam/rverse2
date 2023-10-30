@@ -4352,7 +4352,7 @@ ul + .headline {
     top: -6px;
     z-index: 2;
     left: 58px;
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAAjUlEQVQYlV3OQQqDMBCF4X8kRVeeIdnkki1VobfKTbJReoSuYoWZboyEvt3wvoEnKSVqzAzgdZ4PEbk61yIzm2KMd4Cc8wEsFbuKVHWKMc7e+/o455zpum4REVyLQgiUUgAIIQBc2Knqs0XnTkopLTZZ1/Xrvb+1qEZEGIaBbdsOUdX3vu/jP2px3/efHwHnWT2afX3IAAAAAElFTkSuQmCC'') no-repeat 0 0;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAAjUlEQVQYlV3OQQqDMBCF4X8kRVeeIdnkki1VobfKTbJReoSuYoWZboyEvt3wvoEnKSVqzAzgdZ4PEbk61yIzm2KMd4Cc8wEsFbuKVHWKMc7e+/o455zpum4REVyLQgiUUgAIIQBc2Knqs0XnTkopLTZZ1/Xrvb+1qEZEGIaBbdsOUdX3vu/jP2px3/efHwHnWT2afX3IAAAAAElFTkSuQmCC') no-repeat 0 0;
 }
 #empathy-content .post-permalink-feeling-text {
     font-size: 12.48px;
