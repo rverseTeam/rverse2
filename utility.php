@@ -245,6 +245,15 @@ function checkMaintenance()
     }
 }
 
+function checkMaintenanceApi()
+{
+    if (config('general.maintenance')) {
+        http_response_code(503);
+
+        exit();
+    }
+}
+
 function auth3DS()
 {
     ConsoleAuth::check3DS();

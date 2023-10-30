@@ -32,6 +32,7 @@ class ConsoleAuth
 	// Console ID
 	public const AUTH_CONSOLE_3DS = 0;
 	public const AUTH_CONSOLE_WIIU = 1;
+	public const AUTH_CONSOLE_BOTH = -1;
 
 	// Auth failure reasons
 	public const AUTH_FAILURE_NO_TOKEN = 0;
@@ -86,7 +87,7 @@ class ConsoleAuth
 		}
 
 		// At this point we can check the console from the token
-		if (intval($session['platform_id']) !== $expectedConsole)
+		if ($expectedConsole != self::AUTH_CONSOLE_BOTH && intval($session['platform_id']) !== $expectedConsole)
 			return self::AUTH_FAILURE_WRONG_CONSOLE;
 
 		// Set title id and transferable id to hex, just in case we need it
@@ -148,5 +149,16 @@ class ConsoleAuth
 
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
+	}
+
+	/**
+	 * Checks the Console Auth for both 3DS and WiiU.
+	 */
+	public static function checkBothAuth()
+	{
+		$session = self::authServiceToken(self::AUTH_CONSOLE_BOTH);
+		
+		if ($session !== self::AUTH_SUCCESS)
+			die('auth failure');
 	}
 }

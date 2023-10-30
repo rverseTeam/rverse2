@@ -186,6 +186,7 @@ return [
         'wiiu'              => [],
         'web'               => [],
         'admin'             => [],
+        'api'             	=> [''],
     ],
 
     // Admin panel settings
