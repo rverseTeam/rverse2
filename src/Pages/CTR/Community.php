@@ -5,6 +5,7 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Miiverse\Community\Community as CommunityMeta;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
@@ -77,15 +78,38 @@ class Community extends Page
 
             // CSS class handler
             $class = match ($category->class) {
-                '#console' => "headline-$page",
-                default => "headline-$category->class",
+                '#console' => $page,
+                default => $category->class,
             };
+
+            $titles_temp = DB::table('communities')
+                ->whereRaw("FIND_IN_SET(?, `platforms`) > 0", $class)
+                ->latest('created')
+                ->limit(15)
+                ->get(['id']);
+
+            $titles = [];
+
+            foreach ($titles_temp as $title) {
+                $meta = new CommunityMeta(intval($title->id));
+
+                $titles[] = [
+                    'id' => $meta->id,
+                    'icon' => $meta->icon,
+                    'title_id' => '0',
+                    'name' => $meta->name,
+                    'plarform_tag' => 'wiiu-3ds',
+                    'platform_text' => 'Hatsune Miku',
+                ];
+            }
 
             $categories[] = [
                 'name' => $name,
-                'class' => $class,
+                'class' => "headline-$class",
                 'has_filter' => boolval($category->has_filter),
-                'titles' => [],
+                'has_more' => count($titles_temp) > 10,
+                'more_slug' => $class,
+                'titles' => $titles,
             ];
         }
 
