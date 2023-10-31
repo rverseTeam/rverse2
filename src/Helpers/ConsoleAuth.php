@@ -86,15 +86,20 @@ class ConsoleAuth
 			$session[$data[$i]] = $data[$i + 1];
 		}
 
+		// Set some misc data we need
+		$session['platform_id'] = intval($session['platform_id']);
+		$session['region_id'] = intval($session['region_id']);
+		$session['language_id'] = intval($session['language_id']);
+
 		// At this point we can check the console from the token
-		if ($expectedConsole != self::AUTH_CONSOLE_BOTH && intval($session['platform_id']) !== $expectedConsole)
+		if ($expectedConsole != self::AUTH_CONSOLE_BOTH && $session['platform_id'] !== $expectedConsole)
 			return self::AUTH_FAILURE_WRONG_CONSOLE;
 
 		// Set title id and transferable id to hex, just in case we need it
 		$session['title_id'] = base_convert($session['title_id'], 10, 16);
 		$session['title_id_string'] = str_pad($session['title_id'], 16, "0", STR_PAD_LEFT);
 		$session['transferable_id'] = base_convert($session['transferable_id'], 10, 16);
-		
+
 		// Get the session data from Redis, otherwise, create it from scratch
 		$persistentSessionData = Cache::get(self::SESSION_CACHE_NAME . $sessionId, 600);
 
