@@ -2371,7 +2371,7 @@ ul + .headline {
 .platform-tag-wiiu {
     background-position: -36px -86px;
 }
-.platform-tag-wiiu-3ds {
+.platform-tag-3ds-wiiu {
     background-position: -72px -86px;
     width: 67px;
 }
@@ -5330,7 +5330,7 @@ ul + .headline {
 .favorite-communities .platform-tag-wiiu {
     background-position: -296px -86px;
 }
-.favorite-communities .platform-tag-wiiu-3ds {
+.favorite-communities .platform-tag-3ds-wiiu {
     background-position: -334px -86px;
     left: -2px;
     width: 42px;
@@ -5785,7 +5785,7 @@ ul + .headline {
 .community-list .platform-tag-3ds {
     background-position: -139px -86px;
 }
-.community-list .platform-tag-wiiu-3ds {
+.community-list .platform-tag-3ds-wiiu {
     background-position: -197px -86px;
     width: 61px;
 }

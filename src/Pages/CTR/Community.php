@@ -98,8 +98,8 @@ class Community extends Page
                     'icon' => $meta->icon,
                     'title_id' => $meta->getLocalTitleId(),
                     'name' => $meta->name,
-                    'plarform_tag' => 'wiiu-3ds',
-                    'platform_text' => 'Hatsune Miku',
+                    'plarform_tag' => $meta->getPlatformTag(),
+                    'platform_text' => $meta->getPlatformText(),
                 ];
 
                 if (count($titles) > 10) break;

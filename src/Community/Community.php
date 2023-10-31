@@ -71,6 +71,8 @@ class Community
      */
     public $created = '';
 
+    private $plaform_tags = '';
+
     /**
      * Constructor.
      *
@@ -96,6 +98,7 @@ class Community
             $this->icon = '/img/icons/'.$communityRow->icon;
             $this->banner = '/img/banners/'.$communityRow->banner;
             $this->created = $communityRow->created;
+            $this->plaform_tags = $communityRow->platforms;
 
             // Fetch all title ids to filter later
             $title_ids = DB::table('community_title_ids')
@@ -159,10 +162,40 @@ class Community
      * 
      * @return string The title ID for the local user
      */
-    public function getLocalTitleId() : string {
+    public function getLocalTitleId() : string
+    {
         $current_platform = ConsoleAuth::$paramPack['platform_id'];
         $current_region = getBit(ConsoleAuth::$paramPack['region_id']);
         
         return $this->title_ids[$current_platform][$current_region];
+    }
+
+    /**
+     * Get the platform tag of the community for CSS usage
+     * 
+     * Take note that this removes the tag for special communities as we don't need that tag.
+     * 
+     * @return string
+     */
+    public function getPlatformTag() : string
+    {
+        return implode('-', array_diff(explode(',', $this->plaform_tags), ['special']));
+    }
+
+    /**
+     * Get the platforms text of the community is set to, separated by ・
+     * 
+     * @return string
+     */
+    public function getPlatformText() : string
+    {
+        $entries = explode(',', $this->plaform_tags);
+        $text_entries = [];
+
+        foreach ($entries as $entry) {
+            $text_entries[] = __("community.index.communities.platforms.$entry");
+        }
+
+        return implode(__("community.index.communities.platforms.separator"), $text_entries);
     }
 }
