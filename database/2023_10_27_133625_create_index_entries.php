@@ -34,17 +34,14 @@ class CreateIndexEntries extends Migration
         });
 
         $schema->table('empathies', function (Blueprint $table) {
-            $table->primary('user');
             $table->unique(['type', 'id', 'user']);
         });
 
         $schema->table('favorites', function (Blueprint $table) {
-            $table->primary('user_id');
             $table->unique(['user_id', 'community_id']);
         });
 
         $schema->table('followers', function (Blueprint $table) {
-            $table->primary('user_id');
             $table->unique(['user_id', 'follower_id']);
         });
 
@@ -97,17 +94,14 @@ class CreateIndexEntries extends Migration
         });
 
         $schema->table('empathies', function (Blueprint $table) {
-            $table->dropPrimary(['user']);
             $table->dropUnique(['type', 'id', 'user']);
         });
 
         $schema->table('favorites', function (Blueprint $table) {
-            $table->dropPrimary(['user_id']);
             $table->dropUnique(['user_id', 'community_id']);
         });
 
         $schema->table('followers', function (Blueprint $table) {
-            $table->dropPrimary(['user_id']);
             $table->dropUnique(['user_id', 'follower_id']);
         });
 
