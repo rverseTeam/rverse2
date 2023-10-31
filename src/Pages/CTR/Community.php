@@ -101,6 +101,8 @@ class Community extends Page
                     'plarform_tag' => 'wiiu-3ds',
                     'platform_text' => 'Hatsune Miku',
                 ];
+
+                if (count($titles) > 10) break;
             }
 
             $categories[] = [
