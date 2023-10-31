@@ -6,12 +6,12 @@
 namespace Miiverse\Community;
 
 use Miiverse\DB;
-use stdClass;
+use Miiverse\Helpers\ConsoleAuth;
 
 /**
  * Used to serve communities.
  *
- * @author Repflez
+ * @author RverseTeam
  */
 class Community
 {
@@ -23,11 +23,18 @@ class Community
     public $id = 0;
 
     /**
-     * The title ID of the community.
+     * The title IDs of the community.
      *
-     * @var int
+     * @var array[array[string]]
      */
-    public $titleID = 0;
+    public $title_ids = [];
+
+    /**
+     * The default title ID for the community.
+     * 
+     * @var string
+     */
+    public $default_title_id = '0000000000000000';
 
     /**
      * The name of the community.
@@ -58,51 +65,11 @@ class Community
     public $banner = '';
 
     /**
-     * The ID of the parent community.
-     *
-     * @var int
-     */
-    public $category = 0;
-
-    /**
-     * The type of community.
-     *
-     * @var int
-     */
-    public $type = 0;
-
-    /**
      * The creation date of the community.
      *
      * @var string
      */
     public $created = '';
-
-    /**
-     * The platform of the community.
-     *
-     * @var int
-     */
-    public $platform = 0;
-
-    /**
-     * Holds the permission handler.
-     *
-     * @var mixed
-     */
-    public $perms;
-
-    /**
-     * Is this a redesigned community?
-     *
-     * @var bool
-     */
-    public $redesigned = false;
-
-    /**
-     * The topic bundle of the community.
-     */
-    public $topicBundle;
 
     /**
      * Constructor.
@@ -116,36 +83,72 @@ class Community
         // Get the row from the database
         $communityRow = DB::table('communities')
             ->where('id', $communityId)
+            ->select()
+            ->addSelect(DB::raw('`default_region`+0 AS `default_region_bitmask`'))
+            ->addSelect(DB::raw('`default_platform`-1 AS `default_platform_ord`'))
             ->first();
 
         // Populate the variables
         if ($communityRow) {
             $this->id = intval($communityRow->id);
-            $this->titleID = intval($communityRow->title_id);
             $this->name = $communityRow->name;
             $this->description = $communityRow->description;
             $this->icon = '/img/icons/'.$communityRow->icon;
             $this->banner = '/img/banners/'.$communityRow->banner;
-            $this->category = intval($communityRow->category ?? 0);
-            $this->type = intval($communityRow->type);
             $this->created = $communityRow->created;
-            $this->platform = intval($communityRow->platform);
-            $this->redesigned = intval($communityRow->is_redesign);
 
-            // Set up individual permissions
-            // TODO: Abstract this into a table
-            $perms = new stdClass();
-            $perms->can_post = $communityRow->permissions & 1;
-            $perms->can_post_drawings = $communityRow->permissions & 2;
-            $perms->can_post_memos = $communityRow->permissions & 4;
-            $perms->can_post_threads = $communityRow->permissions & 8;
-            $perms->can_reply = $communityRow->permissions & 16;
-            $perms->can_reply_drawings = $communityRow->permissions & 32;
-            
-            // Get the current topic bundle for communities
-            $this->topicBundle = DB::table('topic_categories')
-                                    ->where('bundle_id', $communityRow->topic_bundle)
-                                    ->get();
+            // Fetch all title ids to filter later
+            $title_ids = DB::table('community_title_ids')
+                ->where('community_id', $this->id)
+                ->select('title_id', 'console', 'region')
+                // Cast the region to int for the bitmask
+                // https://dev.mysql.com/doc/refman/8.0/en/set.html
+                ->addSelect(DB::raw('`region`+0 AS `region_bitmask`'))
+                ->addSelect(DB::raw('`console`-1 AS `console_ord`'))
+                ->get()->toArray();
+
+            // Calculate default title_id
+            $default_title_id = array_pop(array_filter($title_ids, function($title) use ($communityRow) {
+                $default_console = $title->console_ord == $communityRow->default_platform_ord;
+                $default_region = ($title->region_bitmask & $communityRow->default_region_bitmask) & $communityRow->default_region_bitmask;
+                return $default_console && $default_region;
+            }));
+
+            // Set the default title id
+            if ($default_title_id) {
+                $this->default_title_id = $default_title_id->title_id;
+            } else {
+                // Invalid default title_id to ensure we do have at least a default title id
+                $this->default_title_id = '0000000000000000';
+            }
+
+            // And now populate the title ids for each region
+            for ($i=0; $i < 2; $i++) {
+                $platform_title_ids = [];
+                $current_platform_title_ids = array_filter($title_ids, function ($title) use ($i) {
+                    return $title->console_ord === $i;
+                });
+
+                // Get the appropriate title id for each region
+                for ($j=0; $j < 7; $j++) {
+                    $region = 1 << $j;
+                    $title_id = '';
+
+                    $regional_title_id = array_pop(array_filter($current_platform_title_ids, function ($title) use ($region) {
+                        return ($title->region_bitmask & $region) == $region;
+                    }));
+
+                    if ($regional_title_id) {
+                        $title_id = $regional_title_id->title_id;
+                    } else {
+                        $title_id = $this->default_title_id;
+                    }
+
+                    $platform_title_ids[] = $title_id;
+                }
+
+                $this->title_ids[$i] = $platform_title_ids;
+            }
         } elseif ($communityId !== 0) {
             $this->id = -1;
         }
