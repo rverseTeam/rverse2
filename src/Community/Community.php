@@ -153,4 +153,16 @@ class Community
             $this->id = -1;
         }
     }
+
+    /**
+     * Get the title ID for the region and platform the user is logged in currently
+     * 
+     * @return string The title ID for the local user
+     */
+    public function getLocalTitleId() : string {
+        $current_platform = ConsoleAuth::$paramPack['platform_id'];
+        $current_region = getBit(ConsoleAuth::$paramPack['region_id']);
+        
+        return $this->title_ids[$current_platform][$current_region];
+    }
 }

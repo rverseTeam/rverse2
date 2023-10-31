@@ -294,3 +294,8 @@ function snake_to_camel(string $snake) : string
 {
     return str_replace('_', '', ucwords($snake, '_'));
 }
+
+function getBit(int $num) : int
+{
+    return intval(log($num, 2) + 1);
+}

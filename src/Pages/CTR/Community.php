@@ -96,7 +96,7 @@ class Community extends Page
                 $titles[] = [
                     'id' => $meta->id,
                     'icon' => $meta->icon,
-                    'title_id' => '0',
+                    'title_id' => $meta->getLocalTitleId(),
                     'name' => $meta->name,
                     'plarform_tag' => 'wiiu-3ds',
                     'platform_text' => 'Hatsune Miku',
