@@ -160,14 +160,22 @@ class Community
     /**
      * Get the title ID for the region and platform the user is logged in currently
      * 
+     * @param int Return the title id as an int
+     * 
      * @return string The title ID for the local user
      */
-    public function getLocalTitleId() : string
+    public function getLocalTitleId(bool $returnAsInt = false) : string
     {
         $current_platform = ConsoleAuth::$paramPack['platform_id'];
         $current_region = getBit(ConsoleAuth::$paramPack['region_id']);
+
+        $local_title_id = $this->title_ids[$current_platform][$current_region];
         
-        return $this->title_ids[$current_platform][$current_region];
+        if ($returnAsInt) {
+            return base_convert($local_title_id, 16, 10);
+        } else {
+            return $local_title_id;
+        }
     }
 
     /**
