@@ -11,6 +11,7 @@
         'display_language' => [
             'title' => 'In what language you want :name to be displayed in?',
             'note' => 'Note: This setting does not affect what language posts are displayed in.',
+            'restart' => 'You need to close and open :name again for changes to apply.',
         ],
 
         'post_language' => [
