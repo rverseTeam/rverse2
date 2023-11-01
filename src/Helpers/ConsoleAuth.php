@@ -37,6 +37,7 @@ class ConsoleAuth
 	public const AUTH_FAILURE_NO_TOKEN = 0;
 	public const AUTH_FAILURE_INVALID_TOKEN = 1;
 	public const AUTH_FAILURE_WRONG_CONSOLE = 2;
+	public const AUTH_FAILURE_PRETENDO_TOKEN = 10;
 
 	// Auth success reasons
 	public const AUTH_SUCCESS = 3;
@@ -54,6 +55,12 @@ class ConsoleAuth
 		if (!isset($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN'])) {
 			return self::AUTH_FAILURE_NO_TOKEN;
 		}
+
+		// Pretendo service tokens are 48 characters, acoording to Jon.
+		// check for the length of those tokens and an extra overhead just in case.
+		// Remove once Pretendo support is finalized.
+		if (strlen($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN']) < 55)
+			return self::AUTH_FAILURE_PRETENDO_TOKEN;
 
 		// Start parsing the service toekn
 		$serviceToken = bin2hex(base64_decode($_SERVER['HTTP_X_NINTENDO_SERVICETOKEN']));
@@ -140,6 +147,9 @@ class ConsoleAuth
 	{
 		$session = self::authServiceToken(self::AUTH_CONSOLE_3DS);
 
+		if ($session === self::AUTH_FAILURE_PRETENDO_TOKEN)
+			redirect(route('warning.pretendo'));
+
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
 	}
@@ -150,6 +160,9 @@ class ConsoleAuth
 	public static function checkWiiU()
 	{
 		$session = self::authServiceToken(self::AUTH_CONSOLE_WIIU);
+
+		if ($session === self::AUTH_FAILURE_PRETENDO_TOKEN)
+			redirect(route('warning.pretendo'));
 
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
