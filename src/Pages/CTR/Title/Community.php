@@ -57,8 +57,6 @@ class Community extends Page
             return view('errors/404');
         }
 
-        //return view('errors/debug', ['data'=>$meta]);
-
         $posts_pre = DB::table('posts')
                     ->where([
                         ['community', $community],
