@@ -96,7 +96,7 @@ class Community extends Page
                 $titles[] = [
                     'id' => $meta->id,
                     'icon' => $meta->icon,
-                    'title_id' => $meta->getLocalTitleId(),
+                    'title_id' => $meta->getLocalTitleId(true),
                     'name' => $meta->name,
                     'plarform_tag' => $meta->getPlatformTag(),
                     'platform_text' => $meta->getPlatformText(),
