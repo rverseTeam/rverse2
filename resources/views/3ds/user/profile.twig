@@ -64,27 +64,13 @@
 						<h2 class="headline headline-special">{{ __('user.profile.content.favorite') }}</h2>
 						<div class="communities-content">
 							{% for favorite in favorites %}
-								{% set id,title_id = hashid(favorite.id), hashid(favorite.title_id) %}
+								{% set id,title_id = hashid(favorite.id), hashid(favorite.LocalTitleId) %}
 								<span class="favorite-community">
 									<a href="{{ route('title.community', [ title_id, id ]) }}" data-pjax="1">
-										<span class="icon-container"><img class="icon" src="/img/icons/{{ favorite.icon }}" src=""></span>
+										<span class="icon-container"><img class="icon" src="{{ favorite.icon }}"></span>
 									</a>
-									{% if favorite.platform == 1 %}
-										<span class="platform-tag platform-tag-3ds"></span>
-									{% elseif favorite.platform == 2 %}
-										<span class="platform-tag platform-tag-wiiu"></span>
-									{% elseif favorite.platform == 3 %}
-										<span class="platform-tag platform-tag-wiiu-3ds"></span>
-									{% elseif favorite.platform == 4 %}
-										<span class="platform-tag platform-tag-switch"></span>
-									{% elseif favorite.platform == 5 %}
-										<span class="platform-tag platform-tag-switch-wiiu"></span>
-									{% elseif favorite.platform == 6 %}
-										<span class="platform-tag platform-tag-wii"></span>
-									{% elseif favorite.platform == 7 %}
-										<span class="platform-tag platform-tag-ds"></span>
-									{% elseif favorite.platform == 8 %}
-										<span class="platform-tag platform-tag-wii-ds"></span>
+									{% if favorite.PlatformTag is not empty %}
+										<span class="platform-tag platform-{{ favorite.PlatformTag }}"></span>
 									{% endif %}
 								</span>
 							{% endfor %}
