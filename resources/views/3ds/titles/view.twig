@@ -3,35 +3,21 @@
 {% from '@3ds/_macros.twig' import standard_post %}
 
 {% block content %}
-{% set id,title_id = hashid(meta.id), hashid(meta.title_id) %}
+{% set id,title_id = hashid(meta.id), hashid(meta.LocalTitleId(true)) %}
 			<div class="title-header{% if meta.banner is not empty %} with-header-banner{% endif %}">
 				{% if meta.banner is not empty %}
 					<div class="header-banner-container post-subtype-default-container">
-						<img src="/img/banners/{{ meta.banner }}" height="168" width="400">
+						<img src="{{ meta.banner }}" height="168" width="400">
 					</div>
 				{% endif %}
 				<h1 class="info-content">
-					<span class="icon-container"><img src="/img/icons/{{ meta.icon }}" class="icon" width="48" height="48"></span>
+					<span class="icon-container"><img src="{{ meta.icon }}" class="icon" width="48" height="48"></span>
 					<span class="title-container">
 						<span class="title">{{ meta.name }}</span>
 					</span>
 				</h1>
-				{% if meta.platform == 1 %}
-					<span class="platform-tag platform-tag-3ds"></span>
-				{% elseif meta.platform == 2 %}
-					<span class="platform-tag platform-tag-wiiu"></span>
-				{% elseif meta.platform == 3 %}
-					<span class="platform-tag platform-tag-wiiu-3ds"></span>
-				{% elseif meta.platform == 4 %}
-					<span class="platform-tag platform-tag-switch"></span>
-				{% elseif meta.platform == 5 %}
-					<span class="platform-tag platform-tag-switch-wiiu"></span>
-				{% elseif meta.platform == 6 %}
-					<span class="platform-tag platform-tag-wii"></span>
-				{% elseif meta.platform == 7 %}
-					<span class="platform-tag platform-tag-ds"></span>
-				{% elseif meta.platform == 8 %}
-					<span class="platform-tag platform-tag-wii-ds"></span>
+				{% if meta.PlatformTag is not empty %}
+					<span class="platform-tag platform-{{ meta.PlatformTag }}"></span>
 				{% endif %}
 			</div>
 			<div id="header-meta" class="header-meta-with-description">
