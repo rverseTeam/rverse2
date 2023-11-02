@@ -22,7 +22,7 @@ return [
 
     'pretendo' => [
         'title' => 'Authentication Error',
-        'desc' => ':name can\'t authenticate your conssole as you may be using Pretendo Network to access :name. Please switch back to Nintendo Network and try again.',
+        'desc' => ':name can\'t authenticate your console as you may be using Pretendo Network to access :name. Please switch back to Nintendo Network and try again.',
         'button' => 'Close',
     ],
 ];
