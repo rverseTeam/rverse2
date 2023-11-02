@@ -38,6 +38,7 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
         // Warnings
         Router::group(['prefix' => 'warnings'], function () {
             Router::get('/device_ban', 'CTR.Warnings@deviceBan', 'warning.deviceban');
+            Router::get('/pretendo', 'CTR.Warnings@pretendoNetwork', 'warning.pretendo');
         });
 
         // Communities
