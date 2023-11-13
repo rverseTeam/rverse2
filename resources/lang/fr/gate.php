@@ -16,7 +16,7 @@ return [
         ],
         'about' => [
             'title' => 'À propos de :name',
-            'message1' => ':name est une reconstitution de Miiverse faite par des fans, pour des fans.',
+            'message1' => ':name est une reconstitution de Miiverse faite par les fans, pour les fans.',
             'message2' => 'Comme il s’agit d’une reconstitution, il n'y aura peut-être pas les mêmes caractéristiques que sur le défunt Miiverse et nous travaillons à les rendre disponibles le plus rapidement possible.',
         ],
         'config' => [
@@ -27,14 +27,14 @@ return [
             'nnid_label' => 'Nous utilisons votre Identifiant Nintendo Network pour récupérer votre Mii.',
         ],
         'finish' => [
-            'title' => 'Amusez-vous sur :name!',
+            'title' => 'Amusez-vous bien sur :name!',
             'start' => 'Commencer',
         ],
     ],
 
     'welcome_guest' => [
         'title' => ':name est une communauté de jeux qui met en relation des personnes du monde entier utilisant des personnages Mii.<br>Utilisez :name pour partager vos expériences de jeu et rencontrer des gens du monde entier.',
-        'message' => 'Vous aurez besoin d\'un Identifiant Nintendo Network pour créer des publications ou créer un profil. Sélectionnez Lier un Identifiant pour lier un Identifiant nouveau ou existant.',
+        'message' => 'Vous aurez besoin d\'un Identifiant Nintendo Network pour créer des publications ou créer un profil. Sélectionnez \'Lier un Identifiant\' pour lier un Identifiant nouveau ou existant.',
         'link' => 'Lier l\'Identifiant',
         'exit' => 'Quitter',
     ],
