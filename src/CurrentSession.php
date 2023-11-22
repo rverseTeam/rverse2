@@ -39,7 +39,7 @@ class CurrentSession
         self::$session = new Session($session);
 
         // Create a user object
-        $user = User::construct($user);
+        $user = User::constructFromId($user);
 
         // Check if the session exists and check if the user is activated
         if (self::$session->validate($user->id, $ip)
@@ -47,7 +47,7 @@ class CurrentSession
             // Assign the user object
             self::$user = $user;
         } else {
-            self::$user = User::construct(0);
+            self::$user = User::constructFromId(0);
         }
     }
 
@@ -117,17 +117,17 @@ class CurrentSession
 
         if (isset($user)) {
             // Populate the user data
-            $user = User::construct($user->user_id);
+            $user = User::constructFromId($user->user_id);
 
             // Check if the user is activated
             if ($user->activated) {
                 // Assign the user object
                 self::$user = $user;
             } else {
-                self::$user = User::construct(0);
+                self::$user = User::constructFromId(0);
             }
         } else {
-            self::$user = User::construct(0);
+            self::$user = User::constructFromId(0);
         }
 
         // Ban Check

@@ -255,6 +255,24 @@ class User
     public static function construct($uid, bool $forceRefresh = false) : self
     {
         if ($forceRefresh || !array_key_exists($uid, self::$userCache)) {
+            $user = DB::table("users")->where("user_id", $uid)->orWhere("username", $uid)->value('user_id');
+            self::$userCache[$uid] = new self($user);
+        }
+
+        return self::$userCache[$uid];
+    }
+
+    /**
+     * Cached constructor by id.
+     *
+     * @param int  $uid
+     * @param bool $forceRefresh
+     *
+     * @return User
+     */
+    public static function constructFromId(int $uid, bool $forceRefresh = false) : self
+    {
+        if ($forceRefresh || !array_key_exists($uid, self::$userCache)) {
             self::$userCache[$uid] = new self($uid);
         }
 
@@ -311,7 +329,6 @@ class User
     {
         $userRow = DB::table('users')
                         ->where('user_id', $userId)
-                        ->orWhere('username', clean_string($userId))
                         ->first();
 
         if ($userRow) {

@@ -151,7 +151,7 @@ class Community extends Page
                         ->get();
 
             foreach ($posts_pre as $post) {
-                $user = User::construct($post->user_id);
+            $user = User::constructFromId($post->user_id);
                 $latest_comment = [];
 
                 if (intval($post->comments) > 0) {
@@ -164,7 +164,7 @@ class Community extends Page
                                 ->first();
 
                     if ($commenter) {
-                        $commenter_user = User::construct($commenter->user);
+                    $commenter_user = User::constructFromId($commenter->user);
 
                         $latest_comment = [
                             'user'          => $commenter_user,
@@ -269,7 +269,7 @@ class Community extends Page
                         ->get();
 
         foreach ($posts_pre as $post) {
-            $user = User::construct($post->user_id);
+            $user = User::constructFromId($post->user_id);
             $latest_comment = [];
 
             if (intval($post->comments) > 0) {
