@@ -152,7 +152,7 @@ class Rank
 
         // Create User objects and store
         foreach ($userIds as $id) {
-            $users[$id] = User::construct($id);
+            $users[$id] = User::constructFromId($id);
         }
 
         // Return the array

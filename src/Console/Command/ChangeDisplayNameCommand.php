@@ -38,7 +38,7 @@ class ChangeDisplayNameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $formatter = $this->getHelper('formatter');
-        $user = User::construct($input->getOption('uid'));
+        $user = User::constructFromId($input->getOption('uid'));
         $newDisplayName = $input->getOption('new_name');
         $update = [];
 

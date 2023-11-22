@@ -281,7 +281,7 @@ class Post extends Page
                         ->first();
 
         $post->community = new Community($post->community);
-        $post->user = User::construct($post->user_id);
+        $post->user = User::constructFromId($post->user_id);
 
         $post->created = Carbon::createFromTimeString($post->created)->diffForHumans();
 
@@ -318,7 +318,7 @@ class Post extends Page
                         ->pluck('user');
 
         foreach ($likers_tmp as $liker) {
-            $liker = User::construct($liker);
+            $liker = User::constructFromId($liker);
 
             $likers[] = [
                 'data'     => $liker,
