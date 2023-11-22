@@ -9,7 +9,7 @@
         'title' => ':name Paramètres',
 
         'display_language' => [
-            'title' => 'En quel langage voulez-vous que :name s'affiche ?',
+            'title' => 'En quel langue voulez-vous que :name s'affiche ?',
             'note' => 'Note: Ce paramètre ne change pas l'affichage des publications.',
         ],
 
@@ -35,7 +35,7 @@
              'note_content' => 'S'il vous plaît ne rendez pas publique ces informations :<br>
 - Votre adresse, numéro de téléphone, addresse e-mail, le nom de votre école, ou toute autre information qui pourrait vous identifier. <br>
 - Des liens à des sites web extérieurs qui pourraient être utilisés pour vous contacter. <br>
-- D'autres informations qui pourraient enfreidre le Code de Conduite de :name.<br>
+- D'autres informations qui pourraient enfreindre le Code de Conduite de :name.<br>
 Publier ces informations est interdit par le Code de Conduite de :name et votre profil pourrait se faire cacher des autres utilisateurs.',
          ],
 
