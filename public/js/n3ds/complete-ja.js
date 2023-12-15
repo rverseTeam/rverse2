@@ -1,13 +1,4 @@
-
 /**
- * #Simply Deferred
- * ###Simplified Deferred Library (jQuery API) for Node and the Browser
- * ####MIT Licensed.
- * Portions of this code are inspired and borrowed from [underscore.js](http://underscorejs.org/) (MIT License)
- * ####[Source (github)](http://github.com/sudhirj/simply-deferred) | [Documentation](https://github.com/sudhirj/simply-deferred#simply-deferred)
- * &copy; Sudhir Jonathan [sudhirjonathan.com](http://www.sudhirjonathan.com)
- */
- /**
  * @license
  * Lo-Dash 1.3.1 (Custom Build) lodash.com/license | Underscore.js 1.5.1 underscorejs.org/LICENSE
  * Build: `lodash backbone exports="amd,commonjs,global,node" -o ./dist/lodash.backbone.js`
