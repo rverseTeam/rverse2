@@ -8,14 +8,16 @@ namespace Miiverse;
 
 // Checks
 Router::filter('maintenance', 'checkMaintenance');
+Router::filter('wiiu_check', 'authWiiU');
 Router::filter('auth', 'checkConsoleAuth');
+Router::filter('translation', 'Miiverse\Translation::init');
 
-Router::group(['before' => 'maintenance'], function() {
+Router::group(['before' => ['translation', 'maintenance']], function () {
     // Index page
     Router::get('/', 'WUP.Index@index', 'index.index');
 
     // Wii U required to load these pages
-    Router::group(['before' => 'auth'], function () {
+    Router::group(['before' => ['wiiu_check', 'auth']], function () {
         Router::get('/local_list.json', 'WUP.Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'WUP.Updates@news', 'news.checkupdate');
 
