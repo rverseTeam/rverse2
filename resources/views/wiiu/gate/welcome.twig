@@ -1,4 +1,195 @@
 {% extends '@wiiu/_master.twig' %}
 
 {% block content %}
+<div id="welcome-start" class="slide-page none" data-slide-number="1">
+    <div class="window-page">
+        <div class="window welcome-window">
+            <h1 class="window-title">{{ __('gate.welcome.intro.title', { name: config('general.name') }) }}</h1>
+            <div class="window-body">
+                <div class="window-body-inner message">
+                    <p>{{ __('gate.welcome.intro.message', { name: config('general.name') })|raw }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="fixed-bottom-button left exit-button welcome-exit-button" data-sound="SE_WAVE_EXIT">{{ __('gate.welcome.controls.close') }}</a>
+    <a href="#" class="fixed-bottom-button right next-button slide-button" data-slide="#welcome-parental_control">{{ __('gate.welcome.controls.next') }}</a>
+</div>
+<div id="welcome-parental_control" class="slide-page none" data-slide-number="3">
+    <div class="window-page">
+        <div class="window welcome-window">
+            <h1 class="window-title">{{ __('gate.welcome.parental.title') }}</h1>
+            <div class="window-body">
+                <div class="window-body-inner message">
+                    <p>{{ __('gate.welcome.parental.message', { name: config('general.name') }) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-start" data-sound="SE_WAVE_BACK">{{ __('gate.welcome.controls.back') }}</a>
+    <a href="#" class="fixed-bottom-button right next-button slide-button" data-slide="#welcome-about">{{ __('gate.welcome.controls.next') }}</a>
+</div>
+<div id="welcome-about" class="slide-page none" data-slide-number="4">
+    <div class="window-page">
+        <div class="window welcome-window">
+            <h1 class="window-title">{{ __('gate.welcome.about.title', { name: config('general.name') }) }}</h1>
+            <div class="window-body">
+                <div class="window-body-inner message">
+                    <p class="p1">{{ __('gate.welcome.about.message1', { name: config('general.name') }) }}</p>
+                    <p>{{ __('gate.welcome.about.message2') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-parental_control" data-sound="SE_WAVE_BACK">{{ __('gate.welcome.controls.back') }}</a>
+    <a href="#" class="fixed-bottom-button right next-button slide-button" data-slide="#welcome-guideline">{{ __('gate.welcome.controls.next') }}</a>
+</div>
+<div id="welcome-guideline" class="slide-page none" data-slide-number="5">
+    <div class="window-page">
+        <div class="guideline-container">
+            <h1 class="window-title">{{ __('gate.welcome.guidelines.title', { name: config('general.name') }) }}</h1>
+            <p>{{ __('gate.welcome.guidelines.message', { name: config('general.name') })|raw }}</p>
+            {% for _ in __('gate.welcome.guidelines.contents') %}
+                {% set key_base = 'gate.welcome.guidelines.contents.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.entries' %}
+                <div class="guideline{{ loop.index }}">
+                    <h2>{{ __(key_base ~ '.title', { name: config('general.name') }) }}</h2>
+                    {% for _ in __(entries) %}
+                        <p>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') }) }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <p class="guideline7">
+                <a href="#" class="guideline-button slide-button" data-slide="#welcome-guideline-body" data-save-scroll="1">{{ __('gate.welcome.guidelines.read', { name: config('general.name') }) }}</a>
+            </p>
+            <a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-about" data-sound="SE_WAVE_BACK">{{ __('gate.welcome.controls.back') }}</a>
+            <a href="#" class="next-button slide-button" data-slide="#welcome-luminous_opt_in">{{ __('gate.welcome.guidelines.accept', { name: config('general.name') }) }}</a>
+        </div>
+    </div>
+</div>
+<div id="welcome-guideline-body" class="slide-page none" data-body-id="help" data-slide-number="6">
+    <div class="help-left-button">
+        <a href="#" class="guide-exit-button exit-button index" data-sound="SE_WAVE_BACK">{{ __('gate.welcome.guidelines.close', { name: config('general.name') }) }}</a>
+    </div>
+    <h2 id="sub-header" class="guide-sub-header">{{ __('safety.conduct.title', { name: config('general.name') }) }}</h2>
+    <div id="guide" class="help-content">
+        <div class="num1">
+            <h2>{{ __('gate.welcome.guidelines.title', { name: config('general.name') }) }}</h2>
+            <p>{{ __('gate.welcome.guidelines.message', { name: config('general.name') })|raw }}</p>
+
+            {% for _ in __('safety.conduct.guidelines') %}
+                {% set key_base = 'safety.conduct.guidelines.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.messages' %}
+                <h3>{{ __(key_base ~ '.title', { name: config('general.name') }) }}</h3>
+                {% for _ in __(entries) %}
+                    <p>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') }) }}</p>
+                {% endfor %}
+                <p class="guide-img{{ __(key_base ~ '.image.img') }}"><img src="{{ __(key_base ~ '.image.src') }}" width="{{ __(key_base ~ '.image.width') }}" height="{{ __(key_base ~ '.image.height') }}"></p>
+            {% endfor %}
+        </div>
+
+        <div class="num2">
+            <h2>{{ __('safety.conduct.reminders.title', { name: config('general.name') }) }}</h2>
+            <p>{{ __('safety.conduct.reminders.message', { name: config('general.name') }) }}</p>
+
+            {% for _ in __('safety.conduct.reminders.contents') %}
+                {% set key_base = 'safety.conduct.reminders.contents.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.messages' %}
+                <h3>{{ __(key_base ~ '.title', { name: config('general.name') }) }}</h3>
+                {% for _ in __(entries) %}
+                    <p>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') }) }}</p>
+                {% endfor %}
+            {% endfor %}
+
+            <h3>{{ __('safety.conduct.reminders.violations.title', { name: config('general.name') }) }}</h3>
+            <p>{{ __('safety.conduct.reminders.violations.message', { name: config('general.name') }) }}</p>
+            <ul>
+            {% for _ in __('safety.conduct.reminders.violations.contents') %}
+                {% set key_base = 'safety.conduct.reminders.violations.contents.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.contents' %}
+                <li>{{ __(key_base ~ '.title', { name: config('general.name') }) }}
+                    <p>{{ __(key_base ~ '.message', { name: config('general.name') }) }}</p>
+                </li>
+                {% if key_base ~ '.contents' is defined %}
+                    <ul>
+                        {% for _ in __(entries) %}
+                            <li>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') }) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+            </ul>
+
+            {% for _ in __('safety.conduct.reminders.extra') %}
+                {% set key_base = 'safety.conduct.reminders.extra.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.messages' %}
+                <h3>{{ __(key_base ~ '.title', { name: config('general.name') }) }}</h3>
+                {% for _ in __(entries) %}
+                    <p>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') })|raw }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="num3">
+            <h2>{{ __('safety.conduct.faq.title', { name: config('general.name') }) }}</h2>
+            <p>{{ __('safety.conduct.faq.message', { name: config('general.name') }) }}</p>
+
+            {% for _ in __('safety.conduct.faq.entries') %}
+                {% set key_base = 'safety.conduct.faq.entries.' ~ loop.index0 %}
+                {% set entries = key_base ~ '.messages' %}
+                {% set list = key_base ~ '.list' %}
+                {% set post = key_base ~ '.post' %}
+                <h3>{{ __(key_base ~ '.title', { name: config('general.name') }) }}</h3>
+                {% for _ in __(entries) %}
+                    <p>{{ __(entries ~ '.' ~ loop.index0, { name: config('general.name') })|raw }}</p>
+                {% endfor %}
+                {% if key_base ~ '.list' is defined %}
+                    <ol>
+                        {% for _ in __(list) %}
+                            <li>{{ __(list ~ '.' ~ loop.index0, { name: config('general.name') })|raw }}</li>
+                        {% endfor %}
+                    </ol>
+                {% endif %}
+                {% if key_base ~ '.post' is defined %}
+                    {% for _ in __(post) %}
+                        <p>{{ __(post ~ '.' ~ loop.index0, { name: config('general.name') })|raw }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="welcome-luminous_opt_in" class="slide-page none" data-slide-number="11">
+    <div class="window-page">
+        <div class="window welcome-window with-button">
+            <h1 class="window-title">{{ __('gate.welcome.config.title', { name: config('general.name') }) }}</h1>
+            <div class="window-body">
+                <div class="window-body-inner message">
+                    <p>{{ __('gate.welcome.config.message', { name: config('general.name') }) }}</p>
+                </div>
+            </div>
+            <div class="window-bottom-input">
+                <form action="{{ route('gate.check') }}" method="post" accept-charset="utf-8" id="user_data" data-check-url="{{ route('gate.check') }}">
+                    <input type="text" id="welcome_username" name="welcome_username" placeholder="{{ __('gate.welcome.config.display_name') }}">
+                    <input type="text" id="welcome_nnid" name="welcome_nnid" placeholder="{{ __('gate.welcome.config.nnid') }}"><br>
+                    <label for="welcome_nnid">{{ __('gate.welcome.config.nnid_label') }}</label>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="fixed-bottom-button left back-button slide-button accesskey-B" data-slide="#welcome-guideline" data-sound="SE_WAVE_BACK">{{ __('gate.welcome.controls.back') }}</a>
+    <a href="#" class="fixed-bottom-button right next-button welcome-luminous_opt_in-button" data-slide="#welcome-finish">{{ __('gate.welcome.controls.next') }}</a>
+</div>
+<div id="welcome-finish" class="slide-page none" data-bgm="JGL_OLV_INIT_END" data-slide-number="9">
+    <div class="window-page">
+        <div class="window welcome-window">
+            <div class="window-body">
+                <div class="window-body-inner message">
+                    <p>{{ __('gate.welcome.finish.title', { name: config('general.name') }) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="/" class="fixed-bottom-button right next-button welcome-finish-button" data-activate-url="/welcome/activate?update_with_default=1" data-replace="1">{{ __('gate.welcome.finish.start') }}</a>
+</div>
 {% endblock %}

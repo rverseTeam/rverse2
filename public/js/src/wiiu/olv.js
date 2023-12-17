@@ -3793,7 +3793,7 @@ var Olv = Olv || {};
           if ("welcome-finish" === c.attr("id")) {
             var d = c.find(".welcome-finish-button"),
               e = d.attr("data-activate-url");
-            b.Form.post(e, null, d, !0).fail(function () {
+            b.Form.post(e, a("#user_data").serialize(), d, !0).fail(function () {
               b.Browsing.reload();
             });
           }
@@ -3817,33 +3817,38 @@ var Olv = Olv || {};
               });
         }),
         a(".welcome-luminous_opt_in-button").on("click", function (c) {
-          c.preventDefault();
-          a(this);
-          return a('input[name="luminous_opt_in"]:checked').length
-            ? void f(a(this))
-            : void b.deferredAlert(
-                b.loc("olv.portal.welcome.select_luminous_opt_in")
-              );
-        }),
-        a('input[name="luminous_opt_in"]').on("click", function (c) {
-          var d = a(this),
-            e = +d.val(),
-            f = void 0;
-          return (
-            (f =
-              1 === e
-                ? b.Utils.callWiiuBOSSFuncWithFallback(
-                    "registerDirectMessageTaskEx"
-                  )
-                : b.Utils.callWiiuBOSSFuncWithFallback(
-                    "unregisterDirectMessageTask"
-                  )),
-            f.error
-              ? (b.ErrorViewer.open(f.error),
-                a(this).prop("checked", !1),
-                void a(this).parent().removeClass("checked"))
-              : void 0
-          );
+            c.preventDefault();
+            a(this);
+            var pp = this;
+            b.Utils.callWiiuBOSSFuncWithFallback(
+                "unregisterDirectMessageTask"
+            );
+            if (a('input[name="welcome_username"]').val().length > 0 && a('input[name="welcome_nnid"]').val().length > 0) {
+                var o = a("#user_data"),
+                    n = o.attr("data-check-url");
+
+                b.Form.post(n, o.serialize(), o, !0).done(function(data) {
+                    switch (data) {
+                        case 'username':
+                            b.deferredAlert(e.loc("olv.welcome.check.username"));
+                            break;
+                        case 'nnid':
+                            b.deferredAlert(e.loc("olv.welcome.check.nnid"));
+                            break;
+                        case 'nonnid':
+                            b.deferredAlert(e.loc("olv.welcome.check.nonnid"));
+                            break;
+                        case 'ok':
+                            f(a(pp));
+                            break;
+                        default:
+                            b.deferredAlert(e.loc("olv.portal.error.500"));
+                            break;
+                    }
+                }).fail(function() {
+                    b.deferredAlert(e.loc("olv.portal.error.500"))
+                })
+            }
         }),
         a(".guide-exit-button")
           .addClass("slide-button")

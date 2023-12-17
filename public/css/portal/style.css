@@ -1,5 +1,4 @@
-﻿@font-face{  font-family: 'nintendo';src: url('/img/font/nintendoNTLG-DB002.woff');} * {font-family: 'nintendo' !important;
-}
+﻿/*@font-face{  font-family: 'nintendo';src: url('/img/font/nintendoNTLG-DB002.woff');} * {font-family: 'nintendo' !important;}*/
 body {
   position: relative;
   font-size: 28px;
@@ -3188,9 +3187,36 @@ input.fixed-bottom-button {
   padding-bottom: 40px;
   text-align: center;
 }
+.window .window-bottom-input {
+  padding-bottom: 40px;
+  text-align: center;
+  margin: 0 auto;
+}
 .window .window-bottom-buttons.single-button {
   width: 420px;
   margin: 0 auto;
+}
+.window .window-bottom-input input {
+  box-align: center;
+  -webkit-box-align: center;
+  box-pack: center;
+  -webkit-box-pack: center;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  min-height: 60px;
+  padding: 5px 15px;
+  border: 0;
+  margin: 0 25px 15px;
+  font-size: 24px;
+  color: #323232;
+  line-height: 1.2;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(0.5, #ffffff), color-stop(0.8, #f6f6f6), color-stop(0.96, #f5f5f5), to(#bbbbbb)) 0 0;
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+  width: 300px;
 }
 .window .window-bottom-buttons .button {
   display: box;
