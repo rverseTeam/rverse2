@@ -15,6 +15,7 @@
     {% if not user.favorited %}data-is-first-favorite="1"{% endif %}
     data-user-id="{{ user.username }}"
     data-profile-url="/users/{{ user.username }}">
+    {% if hide_menu is not defined %}
     <menu id="global-menu">
         <li id="global-menu-mymenu"><a href="{{ route('user.profile', [ user.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_MENU"><span class="mii-icon"><img src="http://game-dev-mii-images.account.nintendo.net/18t8jmdaz0nah_normal_face.png" alt="User Page"></span><span>User Page</span></a></li>
         <li id="global-menu-feed"><a href="{{ route('index.index') }}" data-pjax="#body" data-sound="SE_WAVE_MENU">Activity Feed</a></li>
@@ -24,6 +25,7 @@
         <li id="global-menu-exit"><a href="#" role="button" data-sound="SE_WAVE_EXIT">Close</a></li>
         <li id="global-menu-back" class="none"><a href="#" role="button" class="accesskey-B" data-sound="SE_WAVE_BACK">Back</a></li>
     </menu>
+    {% endif %}
     <div id="body">
 {% endif %}
 {% block content %}
