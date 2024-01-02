@@ -12335,3 +12335,32 @@ textarea.placeholder {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
   -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
 }
+.close-announce-content a {
+  display: block;
+  min-height: 20px;
+  padding: 5px;
+  margin: 0 auto;
+  font-size: 100%;
+  cursor: pointer;
+  color: #FF9100;
+  line-height: 1.5;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fffdf0), color-stop(0.5, #fffce4), color-stop(0.8, #fff9cd), color-stop(0.96, #fff9cd), to(#f3e99e)) 0 0;
+  border: 1px solid #f2db1c;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  padding: 6px 20px;
+  text-align: left;
+}
+.close-announce-content a a {
+  color: #323232;
+}
+.close-announce-content a.disabled,
+.close-announce-content a:disabled {
+  color: #969696;
+}
+.body-content > .close-announce-content {
+  margin: -30px 0px 0px -40px;
+  padding-right: 0;
+  padding-bottom: 0;
+}

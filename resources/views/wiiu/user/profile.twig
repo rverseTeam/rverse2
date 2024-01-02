@@ -1,4 +1,127 @@
 {% extends '@wiiu/_master.twig' %}
+{% from '@wiiu/_macros.twig' import header %}
+{% set own_profile = profile.id == user.id %}
+{% set is_verified = profile.title is not empty %}
 
 {% block content %}
+    {% if own_profile == false %}
+        {% set report_dropdown = '<div id="dropdown-user-report" class="dropdown">
+  <a href="#" class="option-button user-option-menu dropdown-toggle setting-button" data-toggle="dropdown" data-sound="SE_WAVE_BALLOON_OPEN"></a>
+  <div class="dropdown-menu">
+      <a href="#" class="button report-button" data-modal-open="#report-violator-page" data-sound="SE_WAVE_OK_SUB" data-community-id="" data-url-id="" data-track-label="user" data-title-id="" data-track-action="openReportModal" data-track-category="reportViolator">' ~ __('user.profile.meta.violation.create') ~ '</a>
+      <a href="#" class="button block-button relationship-button" data-modal-open="#block-confirm-page" data-user-id="' ~ profile.username ~ '" data-screen-name="' ~ profile.displayName ~ '" data-mii-face-url="' ~ profile.mii.normal ~ '" data-action="' ~ route('user.block', [ profile.username ]) ~ '" data-sound="SE_WAVE_OK_SUB">' ~ __('user.profile.meta.violation.blacklist') ~ '</a>
+  </div>
+</div>' %}
+    {% else %}
+    {% set report_dropdown = '' %}
+    {% endif %}
+    {{ header('User Page', false, '', report_dropdown) }}
+    <div class="body-content user-page {% if own_profile %}is-visitor{% endif %}">
+        {% if own_profile %}
+        <a id="header-mymenu-button" href="{{ route('user.mymenu') }}" data-pjax="#body">{{ __('user.profile.meta.mymenu') }}</a>
+        {% endif %}
+        <div class="user-info info-content">
+            <div class="user-profile-memo-container no-profile-memo"></div>
+            <span class="icon-container {% if is_verified %}official-user{% endif %}"><a href="{{ route('user.profile', [ profile.username ]) }}"><img src="{{ profile.mii.normal }}" class="icon"></a></span>
+            {% if is_verified %}
+                <p class="user-organization">{{ profile.title }}</p>
+            {% endif %}
+            <p class="title">
+                <span class="nick-name">{{ profile.displayName }}</span>
+                <span class="id-name">{{ profile.username }}</span>
+            </p>
+            {% if own_profile %}
+                <a href="#" data-pjax="#body" class="button edit-button">{{ __('user.profile.meta.settings') }}</a>
+            {% else %}
+                <div class="toggle-button">
+                    <a class="follow-button button add-button relationship-button {% if follower > 0 %}none{% endif %}" href="#" data-action="{{ route('user.follow', [ profile.username ]) }}" data-sound="SE_WAVE_FRIEND_ADD" data-community-id="" data-url-id="" data-track-label="user" data-title-id="" data-track-action="follow" data-track-category="follow">{{ __('user.profile.meta.follow') }}</a>
+                    <a href="#" class="unfollow-button button remove-button none relationship-button {% if follower == 0 %}none{% endif %}" data-modal-open="#unfollow-confirm-page" data-user-id="{{ profile.username }}" data-screen-name="{{ profile.displayName }}" data-mii-face-url="{{ profile.mii.normal }}" data-action="{{ route('user.unfollow', [ profile.username ]) }}" data-community-id="" data-url-id="" data-track-label="user" data-title-id="" data-track-action="openUnfollowModal" data-track-category="follow">{{ __('user.profile.meta.unfollow') }}</a>
+                </div>
+            {% endif %}
+        </div>
+    
+        <div id="unfollow-confirm-page" class="unfollow-confirm-page window-page none" data-modal-types="confirm-relationship confirm-unfollow" data-is-template="1">
+            <div class="window user-window">
+                <h1 class="window-title">Unfollow</h1>
+                <div class="window-body">
+                    <div class="window-body-inner">
+                        <div class="user-container">
+                            <span class="icon-container"><img src="data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2FwAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D" class="icon"></span>
+                            <p class="nickname">
+                                <span class="screen-name"></span>
+                                <span class="id-name"></span>
+                            </p>
+                        </div>
+                        <div class="message">
+                            <p>Stop following this user?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="window-bottom-buttons">
+                    <input type="button" class="cancel-button button" value="Back" data-sound="SE_WAVE_CANCEL">
+                    <input type="button" class="post-button button" value="Yes" data-done-msgid="olv.portal.unfollow_succeeded_to">
+                </div>
+            </div>
+        </div>
+        <div id="block-confirm-page" class="block-confirm-page window-page none" data-modal-types="confirm-relationship confirm-block" data-is-template="1">
+            <div class="window user-window">
+                <h1 class="window-title">Block</h1>
+                <div class="window-body">
+                    <div class="window-body-inner">
+                        <div class="user-container">
+                            <span class="icon-container"><img src="data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2FwAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D" class="icon"></span>
+                            <p class="nickname">
+                                <span class="screen-name"></span>
+                                <span class="id-name"></span>
+                            </p>
+                        </div>
+                        <div class="message">
+                            <p>Are you sure you want to block this user? You will no longer receive friend requests from this user, and you will be less likely to encounter him or her in games.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="window-bottom-buttons">
+                    <input type="button" class="cancel-button button" value="Back" data-sound="SE_WAVE_CANCEL">
+                    <input type="button" class="post-button button" value="Block" data-done-msgid="olv.portal.blocklist.block_successed_to" data-track-category="block" data-track-action="block">
+                </div>
+            </div>
+        </div>
+        <menu class="user-menu tab-header">
+            <li class="test-user-posts-count tab-button-profile"><a href="{{ route('user.posts', [ profile.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_SELECT_TAB"><span class="label">{{ __('user.profile.nav.posts') }}</span><span class="number">{{ profile.posts }}</span></a></li>
+            <li class="test-user-followings-count tab-button-activity"><a href="{{ route('user.following', [ profile.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_SELECT_TAB"><span class="label">{{ __('user.profile.nav.following') }}</span><span class="number"><span class="js-following-count">{{ profile.follows }}</span></span></a></li>
+            <li class="test-user-followers-count tab-button-relationship"><a href="{{ route('user.followers', [ profile.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_SELECT_TAB"><span class="label">{{ __('user.profile.nav.followers') }}</span><span class="number">{{ profile.followers }}</span></a></li>
+        </menu>
+
+        <div class="tab-body">
+            <div class="favorite-communities scroll">
+                <h2 class="headline">{{ __('user.profile.content.favorite') }}</h2>
+                <ul class="list-content-with-icon arrow-list">
+                    {% for favorite in favorites %}
+                        {% set id,title_id = hashid(favorite.id), hashid(favorite.LocalTitleId) %}
+                        <li class="favorite-community">
+                            <a href="{{ route('title.community', [ title_id, id ]) }}" data-pjax="#body">
+                                <span class="icon-container">
+                                    <img class="icon" src="{{ favorite.icon }}">
+                                </span>
+                            </a>
+                            {% if favorite.PlatformTag is not empty %}
+                                <span class="platform-tag platform-tag-{{ favorite.PlatformTag }}"></span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    {% if favorites|length < 7 %}
+                        {% set fillers = 7 - favorites|length %}
+                        {% for i in 1..fillers %}
+                            <li class="favorite-community empty">
+                                <span class="icon-container"></span>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    <li>
+                        <a href="{{ route('user.favorites', [ profile.username ]) }}" data-pjax="#body" class="arrow-button"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

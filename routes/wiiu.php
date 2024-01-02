@@ -13,13 +13,18 @@ Router::filter('auth', 'checkConsoleAuth');
 Router::filter('translation', 'Miiverse\Translation::init');
 
 Router::group(['before' => ['translation', 'maintenance']], function () {
-    // Index page
-    Router::get('/', 'WUP.Index@index', 'index.index');
-
     // Wii U required to load these pages
     Router::group(['before' => ['wiiu_check', 'auth']], function () {
-        Router::get('/local_list.json', 'WUP.Dummy@dummy', 'local.list');
+        // Index page
+        Router::get('/', 'Index@index', 'index.index');
+        
+        Router::get('/local_list.json', 'Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'WUP.Updates@news', 'news.checkupdate');
+
+        // Users
+        Router::group(['prefix' => 'users'], function () {
+            Router::get('/{id}', 'User@profile', 'user.profile');
+        });
 
         // Titles
         Router::group(['prefix' => 'titles'], function () {
@@ -28,18 +33,18 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
 
         // Me?
         Router::group(['prefix' => 'my'], function () {
-            Router::get('/latest_following_related_profile_posts', 'WUP.Dummy@dummy', 'my.following');
+            Router::get('/latest_following_related_profile_posts', 'Dummy@dummy', 'my.following');
         });
 
-        // Users
-        Router::group(['prefix' => 'users'], function () {
-            Router::get('/{id}', 'WUP.User@profile', 'user.profile');
-        });
+        // Communities
+        Router::group(['prefix' => 'communities'], function () {
+            Router::get('/', 'WUP.Community@index', 'community.index');
 
+        });
 
         // Settings
         Router::group(['prefix' => 'settings'], function () {
-            Router::post('/played_title_ids', 'WUP.Dummy@dummy', 'settings.playedtitles');
+            Router::post('/played_title_ids', 'Dummy@dummy', 'settings.playedtitles');
         });
 
         // Welcome
