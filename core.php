@@ -57,6 +57,7 @@ if (php_sapi_name() !== "cli") {
         $template = 'admin';
         require_once path('routes/admin.php');
     } else if (in_array($siteUrl, config('sites.api'))) {
+        $template = "web";
         require_once path('routes/api.php');
     } else {
         require_once path('routes/default.php');
