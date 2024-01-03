@@ -11,6 +11,7 @@
         "nesbot/carbon": "^2.31",
         "phroute/phroute": "^2.1",
         "predis/predis": "^2.0",
+        "spatie/array-to-xml": "^3.2",
         "symfony/console": "^6.0",
         "twig/twig": "^3.0"
     },
