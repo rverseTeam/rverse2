@@ -1,25 +1,25 @@
 var Olv = Olv || {};
-(function(e) {
-    e.init || (e.init = !0, $(function() {
-        cave.transition_end(), cave.toolbar_enableBackBtnFunc(!1), e.router = new e.Router, e.Pjax.start(), Backbone.history.checkUrl = function(t) {
-            e.History.needToSetState && (history.state = t.state), Backbone.History.prototype.checkUrl.call(Backbone.history, t)
+(function(Olive) {
+    Olive.init || (Olive.init = !0, $(function() {
+        cave.transition_end(), cave.toolbar_enableBackBtnFunc(!1), Olive.router = new Olive.Router, Olive.Pjax.start(), Backbone.history.checkUrl = function(t) {
+            Olive.History.needToSetState && (history.state = t.state), Backbone.History.prototype.checkUrl.call(Backbone.history, t)
         }, Backbone.history.start({
             pushState: !0,
             root: "/",
             silent: !0
-        }), e.router.navigate(location.pathname + location.search, {
+        }), Olive.router.navigate(location.pathname + location.search, {
             trigger: !0
-        }), e.OneTime.update(), e.ImageViewer.setup()
-    }), e.Locale = {
+        }), Olive.OneTime.update(), Olive.ImageViewer.setup()
+    }), Olive.Locale = {
         Data: {},
         text: function(t) {
             var i = Array.prototype.slice.call(arguments);
-            return i.splice(1, 0, -1), e.Locale.textN.apply(this, i)
+            return i.splice(1, 0, -1), Olive.Locale.textN.apply(this, i)
         },
         textN: function(t, i) {
-            if (e.Cookie.get("plain_msgid")) return t;
+            if (Olive.Cookie.get("plain_msgid")) return t;
             i = +i || 0;
-            var o = e.Locale.Data[t];
+            var o = Olive.Locale.Data[t];
             if (!o) return t;
             var n, a, s = o.quanttype || "o";
             if ("1_o" === s && 1 === i || "01_o" === s && (0 === i || 1 === i) ? (n = o.text_value_1 || o.value_1, a = o.text_args_1 || o.args_1) : (n = o.text_value || o.value, a = o.text_args || o.args), !a) return n;
@@ -29,28 +29,28 @@ var Olv = Olv || {};
                 return r[a[l++] - 1]
             })
         }
-    }, e.loc = e.Locale.text, e.loc_n = e.Locale.textN, e.alert = function(t, i, o) {
-        e.Loading.isLocked() || (arguments.length <= 2 && (o = e.loc("olv.portal.n3ds.ok")), o = String.fromCharCode(57344) + " " + o, cave.dialog_oneButton(t, i, o))
-    }, e.confirm = function(t, i, o, n) {
-        if (!e.Loading.isLocked()) {
-            arguments.length <= 2 && (o = e.loc("olv.portal.cancel"), n = e.loc("olv.portal.n3ds.ok")), n = String.fromCharCode(57344) + " " + n, o = String.fromCharCode(57345) + " " + o;
+    }, Olive.loc = Olive.Locale.text, Olive.loc_n = Olive.Locale.textN, Olive.alert = function(t, i, o) {
+        Olive.Loading.isLocked() || (arguments.length <= 2 && (o = Olive.loc("olv.portal.n3ds.ok")), o = String.fromCharCode(57344) + " " + o, cave.dialog_oneButton(t, i, o))
+    }, Olive.confirm = function(t, i, o, n) {
+        if (!Olive.Loading.isLocked()) {
+            arguments.length <= 2 && (o = Olive.loc("olv.portal.cancel"), n = Olive.loc("olv.portal.n3ds.ok")), n = String.fromCharCode(57344) + " " + n, o = String.fromCharCode(57345) + " " + o;
             var a = cave.dialog_twoButton(t, i, o, n);
             return 1 === a || 0 !== a && null
         }
-    }, e.deferredAlert = function(t, i, o) {
+    }, Olive.deferredAlert = function(t, i, o) {
         var n = arguments,
             a = $.Deferred();
         return setTimeout(function() {
-            e.alert.apply(null, n), a.resolve()
+            Olive.alert.apply(null, n), a.resolve()
         }, 0), a.promise()
-    }, e.deferredConfirm = function(t, i, o, n) {
+    }, Olive.deferredConfirm = function(t, i, o, n) {
         var a = arguments,
             s = $.Deferred();
         return setTimeout(function() {
-            var t = e.confirm.apply(null, a);
+            var t = Olive.confirm.apply(null, a);
             s.resolve(t)
         }, 0), s.promise()
-    }, e.PostStorage = {
+    }, Olive.PostStorage = {
         maxLocalStorageNum: 3,
         getAll: function() {
             for (var e = {}, t = cave.lls_getCount(), i = new RegExp("^[0-9]+$"), o = 0, n = 0; n < t; n++) {
@@ -60,7 +60,7 @@ var Olv = Olv || {};
             return [e, o]
         },
         getCount: function() {
-            return e.PostStorage.getAll()[1]
+            return Olive.PostStorage.getAll()[1]
         },
         setItem: function(e) {
             var t = (new Date).getTime();
@@ -76,15 +76,15 @@ var Olv = Olv || {};
             return !1
         },
         sweep: function() {
-            var t = e.PostStorage.getAll(),
+            var t = Olive.PostStorage.getAll(),
                 i = t[0];
             if (t[1] > 0)
                 for (var o in i) {
                     var n = JSON.parse(cave.lls_getItem(o)).screenShotKey;
-                    n && !e.PostStorage.hasKey(n) && cave.lls_removeItem(o)
+                    n && !Olive.PostStorage.hasKey(n) && cave.lls_removeItem(o)
                 }
         }
-    }, e.Cookie = {
+    }, Olive.Cookie = {
         set: function(e, t) {
             var i = encodeURIComponent(e) + "=" + encodeURIComponent(t) + "; path=/";
             document.cookie = i
@@ -96,10 +96,10 @@ var Olv = Olv || {};
                     if (e === decodeURIComponent(o[0])) return decodeURIComponent(o[1])
                 }
         }
-    }, e.OneTime = {
+    }, Olive.OneTime = {
         updateLocalList: function() {
             var t = $("#body").attr("data-region-id");
-            t && e.Net.ajax({
+            t && Olive.Net.ajax({
                 url: "/local_list.json?region_id=" + t,
                 silent: !0,
                 cache: !1
@@ -117,10 +117,10 @@ var Olv = Olv || {};
             /^\/(?:welcome\/|warning\/device_ban)/.test(location.pathname) || cave.lls_setItem("agree_olv", "1")
         },
         updatePlayedTitles: function() {
-            if (!e.Guest.isGuest()) {
+            if (!Olive.Guest.isGuest()) {
                 var t = void 0,
                     i = cave.plog_getPlayTitlesFilteredByPlayTime(1);
-                void 0 !== i && (t = JSON.parse(i).IDs), t && t.length && e.Net.ajax({
+                void 0 !== i && (t = JSON.parse(i).IDs), t && t.length && Olive.Net.ajax({
                     type: "POST",
                     url: "/settings/played_title_ids",
                     data: t.map(function(e) {
@@ -134,12 +134,12 @@ var Olv = Olv || {};
             }
         },
         activateCommunityToolbar: function() {
-            "/communities" === location.pathname && e.Toolbar.activateButton(e.Toolbar.buttons.COMMUNITY)
+            "/communities" === location.pathname && Olive.Toolbar.activateButton(Olive.Toolbar.buttons.COMMUNITY)
         },
         update: function() {
-            e.Cookie.get("onetime") || (e.Cookie.set("onetime", !0), this.updateLocalList(), this.updateUseTokenCache(), this.clearBossLuminous(), this.updateAgreeOlvFlag(), this.updatePlayedTitles(), this.activateCommunityToolbar())
+            Olive.Cookie.get("onetime") || (Olive.Cookie.set("onetime", !0), this.updateLocalList(), this.updateUseTokenCache(), this.clearBossLuminous(), this.updateAgreeOlvFlag(), this.updatePlayedTitles(), this.activateCommunityToolbar())
         }
-    }, e.Loading = {
+    }, Olive.Loading = {
         locked_: !1,
         lock: function() {
             this.locked_ || (this.locked_ = !0, cave.transition_begin())
@@ -152,28 +152,28 @@ var Olv = Olv || {};
         },
         setup: function() {
             $(document).on("olv:pagechange:start olv:pjax:start", function(t, i) {
-                e.Loading.lock(), cave.brw_notifyPageMoving()
+                Olive.Loading.lock(), cave.brw_notifyPageMoving()
             }), $(document).on("olv:pagechange:end olv:pjax:error", function() {
-                e.router.lockRequest = !1, e.Loading.unlock()
+                Olive.router.lockRequest = !1, Olive.Loading.unlock()
             })
         }
-    }, e.Loading.setup(), e.ErrorViewer = {
+    }, Olive.Loading.setup(), Olive.ErrorViewer = {
         open: function(t) {
-            if (!e.Loading.isLocked()) {
+            if (!Olive.Loading.isLocked()) {
                 var i = +((t = t || {}).error_code || t.code || 0),
-                    o = t.message || t.msgid && e.loc(t.msgid);
-                i || (i = 1219999, o = o || e.loc("olv.portal.error.500.for_n3ds")), o ? cave.error_callFreeErrorViewer(i, o) : cave.error_callErrorViewer(i)
+                    o = t.message || t.msgid && Olive.loc(t.msgid);
+                i || (i = 1219999, o = o || Olive.loc("olv.portal.error.500.for_n3ds")), o ? cave.error_callFreeErrorViewer(i, o) : cave.error_callErrorViewer(i)
             }
         },
         deferredOpen: function(t) {
             var i = $.Deferred();
             return setTimeout(function() {
-                e.ErrorViewer.open(t), i.resolve()
+                Olive.ErrorViewer.open(t), i.resolve()
             }, 0), i.promise()
         }
-    }, e.Net = {
+    }, Olive.Net = {
         ajax: function(t) {
-            "POST" === (t.method || t.type || "").toUpperCase() && e.Net.needsPostFix && (history.pushState(history.state, document.title, location.href), cave.history_removeAt(0), e.Net.needsPostFix = !1);
+            "POST" === (t.method || t.type || "").toUpperCase() && Olive.Net.needsPostFix && (history.pushState(history.state, document.title, location.href), cave.history_removeAt(0), Olive.Net.needsPostFix = !1);
             var i = $.ajax(t),
                 o = history.state && history.state.id || 0,
                 n = i.then(function(e, t, i) {
@@ -181,14 +181,14 @@ var Olv = Olv || {};
                         a = [e, t, i, n];
                     return e && "object" == typeof e && !e.success || !n ? $.Deferred().rejectWith(this, a) : $.Deferred().resolveWith(this, a)
                 }, function(t, i) {
-                    var n = e.Net.getDataFromXHR(t);
+                    var n = Olive.Net.getDataFromXHR(t);
                     void 0 === n && (n = t.responseText);
                     var a = history.state.id === o;
                     return $.Deferred().rejectWith(this, [n, i, t, a])
                 });
-            return t.lock && (e.Loading.lock(), n.always(function() {
-                e.Loading.unlock()
-            })), t.silent || n.fail(e.Net.errorFeedbackHandler), n.promise(i), i
+            return t.lock && (Olive.Loading.lock(), n.always(function() {
+                Olive.Loading.unlock()
+            })), t.silent || n.fail(Olive.Net.errorFeedbackHandler), n.promise(i), i
         },
         getDataFromXHR: function(e) {
             var t = e.responseText,
@@ -198,32 +198,32 @@ var Olv = Olv || {};
             } catch (e) {}
         },
         getErrorFromXHR: function(t) {
-            var i = e.Net.getDataFromXHR(t),
+            var i = Olive.Net.getDataFromXHR(t),
                 o = i && i.errors && i.errors[0];
             if (o && "object" == typeof o) return o;
             var n = t.status;
             return n ? 503 == n ? {
                 error_code: 1211503,
-                message: e.loc("olv.portal.error.503.content")
+                message: Olive.loc("olv.portal.error.503.content")
             } : n < 500 ? {
                 error_code: 1210902,
-                message: e.loc("olv.portal.error.failed_to_connect")
+                message: Olive.loc("olv.portal.error.failed_to_connect")
             } : {
                 error_code: 1219999,
-                message: e.loc("olv.portal.error.500.for_n3ds")
+                message: Olive.loc("olv.portal.error.500.for_n3ds")
             } : {
                 error_code: 1219998,
-                message: e.loc("olv.portal.error.network_unavailable")
+                message: Olive.loc("olv.portal.error.network_unavailable")
             }
         },
         errorFeedbackHandler: function(t, i, o, n) {
-            if ("abort" !== i && n && !e.Loading.isLocked()) {
-                var a = e.Net.getErrorFromXHR(o);
-                e.ErrorViewer.open(a)
+            if ("abort" !== i && n && !Olive.Loading.isLocked()) {
+                var a = Olive.Net.getErrorFromXHR(o);
+                Olive.ErrorViewer.open(a)
             }
         },
         get: function(t, i, o, n) {
-            return e.Net.ajax({
+            return Olive.Net.ajax({
                 type: "GET",
                 url: t,
                 data: i,
@@ -232,7 +232,7 @@ var Olv = Olv || {};
             })
         },
         post: function(t, i, o, n) {
-            return e.Net.ajax({
+            return Olive.Net.ajax({
                 type: "POST",
                 url: t,
                 data: i,
@@ -243,9 +243,9 @@ var Olv = Olv || {};
         needsPostFix: !0,
         _pageId: 1,
         onPageChange: function() {
-            e.Net._pageId++, e.Net.needsPostFix = !0
+            Olive.Net._pageId++, Olive.Net.needsPostFix = !0
         }
-    }, $(document).on("olv:pagechange:end", e.Net.onPageChange), e.Pjax = {
+    }, $(document).on("olv:pagechange:end", Olive.Net.onPageChange), Olive.Pjax = {
         isEnabled: !1,
         cacheMapping_: {},
         stack_: [],
@@ -255,14 +255,14 @@ var Olv = Olv || {};
             $(document).on("click", "a[href][data-pjax]", function(t) {
                 t.preventDefault();
                 var i = $(t.currentTarget);
-                if (!e.Form.isDisabled(i)) {
+                if (!Olive.Form.isDisabled(i)) {
                     var o = $(this).attr("href");
-                    e.router.navigate(o, {
+                    Olive.router.navigate(o, {
                         trigger: !0,
                         replace: !!$(this).attr("data-pjax-replace")
                     })
                 }
-            }), e.Pjax.isEnabled = !0
+            }), Olive.Pjax.isEnabled = !0
         },
         load: function(t) {
             $(document).trigger("olv:pjax:start");
@@ -274,11 +274,11 @@ var Olv = Olv || {};
                         var s = _.extend({}, history.state, {
                             url: a
                         });
-                        window.history.replaceState(s, null, a), e.History.needToSetState && (history.state = s)
+                        window.history.replaceState(s, null, a), Olive.History.needToSetState && (history.state = s)
                     }
                     $(document).trigger("olv:pjax:end");
                     var r = new Date - i;
-                    console.log("olv:pjax:end " + r), e.Content.replaceBody(t), $(document).trigger("olv:pagechange:ready");
+                    console.log("olv:pjax:end " + r), Olive.Content.replaceBody(t), $(document).trigger("olv:pagechange:ready");
                     var l = new Date - i;
                     return console.log("olv:pagechange:ready " + l), setTimeout(function() {
                         var e = new Date - i;
@@ -287,7 +287,7 @@ var Olv = Olv || {};
                         ])
                     }, 0), $.Deferred().resolveWith(this, arguments)
                 },
-                n = e.Net.ajax({
+                n = Olive.Net.ajax({
                     url: t,
                     data: {
                         _pjax: 1
@@ -301,82 +301,82 @@ var Olv = Olv || {};
             return n.then(o, function(t, i, n) {
                 if (n.getResponseHeader("X-PJAX-OK")) return o.apply(this, arguments);
                 $(document).trigger("olv:pjax:error");
-                var a = e.Net.getErrorFromXHR(n);
-                return e.ErrorViewer.open(a), $.Deferred().rejectWith(this, arguments)
+                var a = Olive.Net.getErrorFromXHR(n);
+                return Olive.ErrorViewer.open(a), $.Deferred().rejectWith(this, arguments)
             }).promise(n), n
         },
         cachePush: function(t, i) {
-            for (e.Pjax.cacheMapping_[t] = i, ++e.Pjax.current_; e.Pjax.current_ < e.Pjax.stack_.length;) delete e.Pjax.cacheMapping_[e.Pjax.stack_.pop()];
-            e.Pjax.stack_.push(t);
-            for (var o = 0; o < e.Pjax.stack_.length - e.Pjax.maxCacheLength; o++) e.Pjax.cacheMapping_[e.Pjax.stack_[o]] = void 0
+            for (Olive.Pjax.cacheMapping_[t] = i, ++Olive.Pjax.current_; Olive.Pjax.current_ < Olive.Pjax.stack_.length;) delete Olive.Pjax.cacheMapping_[Olive.Pjax.stack_.pop()];
+            Olive.Pjax.stack_.push(t);
+            for (var o = 0; o < Olive.Pjax.stack_.length - Olive.Pjax.maxCacheLength; o++) Olive.Pjax.cacheMapping_[Olive.Pjax.stack_[o]] = void 0
         },
         cachePop: function(t) {
-            "forward" === t ? ++e.Pjax.current_ : --e.Pjax.current_;
-            var i = e.Pjax.stack_[e.Pjax.current_];
-            return e.Pjax.cacheMapping_[i]
+            "forward" === t ? ++Olive.Pjax.current_ : --Olive.Pjax.current_;
+            var i = Olive.Pjax.stack_[Olive.Pjax.current_];
+            return Olive.Pjax.cacheMapping_[i]
         },
         cacheSet: function(t) {
-            var i = e.Pjax.stack_[e.Pjax.current_];
-            e.Pjax.cacheMapping_[i] = t
+            var i = Olive.Pjax.stack_[Olive.Pjax.current_];
+            Olive.Pjax.cacheMapping_[i] = t
         },
         cacheReplace: function(t, i) {
-            delete e.Pjax.cacheMapping_[e.Pjax.stack_[e.Pjax.current_]], e.Pjax.stack_[e.Pjax.current_] = t, e.Pjax.cacheMapping_[t] = i
+            delete Olive.Pjax.cacheMapping_[Olive.Pjax.stack_[Olive.Pjax.current_]], Olive.Pjax.stack_[Olive.Pjax.current_] = t, Olive.Pjax.cacheMapping_[t] = i
         },
         canGo: function(t) {
             if (!t || "replace" === t) return !1;
             var i = "forward" === t ? 1 : -1,
-                o = e.Pjax.stack_[e.Pjax.current_ + i];
+                o = Olive.Pjax.stack_[Olive.Pjax.current_ + i];
             return !!o && history.state.id == o
         },
         go: function(t, i) {
             var o = i.direction,
                 n = i.cacheId || history.state.id,
                 a = history.state && history.state.scrollTo || 0;
-            if ($(document).trigger("olv:pagechange:start"), !o || o && "back" !== o && !e.Pjax.canGo(o)) return e.Pjax.load(t).done(function(t) {
+            if ($(document).trigger("olv:pagechange:start"), !o || o && "back" !== o && !Olive.Pjax.canGo(o)) return Olive.Pjax.load(t).done(function(t) {
                 setTimeout(function() {
                     cave.brw_scrollImmediately(0, 0)
-                }, 0), "forward" === o ? e.Pjax.cachePush(n, t) : "replace" === o && e.Pjax.cacheReplace(n, t)
+                }, 0), "forward" === o ? Olive.Pjax.cachePush(n, t) : "replace" === o && Olive.Pjax.cacheReplace(n, t)
             }).fail(function() {
-                "forward" === o && (e.router.isReverting = !0, history.back())
+                "forward" === o && (Olive.router.isReverting = !0, history.back())
             });
-            var s = e.Pjax.cachePop(o);
-            return s ? (e.Content.replaceBody(s), $(document).trigger("olv:pagechange:ready"), setTimeout(function() {
+            var s = Olive.Pjax.cachePop(o);
+            return s ? (Olive.Content.replaceBody(s), $(document).trigger("olv:pagechange:ready"), setTimeout(function() {
                 $(document).trigger("olv:pagechange:end"), cave.brw_scrollImmediately(0, a)
-            }, 0), $.Deferred().resolve().promise()) : e.Pjax.load(t).done(function(e) {
+            }, 0), $.Deferred().resolve().promise()) : Olive.Pjax.load(t).done(function(e) {
                 setTimeout(function() {
                     cave.brw_scrollImmediately(0, a)
                 }, 0)
             }).fail(function() {
-                "back" === o && (e.router.isReverting = !0, history.forward())
+                "back" === o && (Olive.router.isReverting = !0, history.forward())
             })
         },
         uniqueId: function() {
             return (new Date).getTime()
         },
         cacheClear: function() {
-            e.Pjax.isEnabled && (e.Pjax.cacheMapping_ = {})
+            Olive.Pjax.isEnabled && (Olive.Pjax.cacheMapping_ = {})
         }
-    }, e.History = {
+    }, Olive.History = {
         isInitialLoad: !0,
         state: void 0,
         needToSetState: void 0 === history.state
-    }, e.Browsing = {
+    }, Olive.Browsing = {
         navigate: function(t) {
-            e.router.navigate(t, !0)
+            Olive.router.navigate(t, !0)
         },
         replaceWith: function(t) {
-            e.router.navigate(t, {
+            Olive.router.navigate(t, {
                 trigger: !0,
                 replace: !0
             })
         },
         reload: function() {
-            e.Pjax.isEnabled ? e.Browsing.replaceWith(location.href) : location.reload()
+            Olive.Pjax.isEnabled ? Olive.Browsing.replaceWith(location.href) : location.reload()
         },
         goBack: function() {
-            cave.brw_notifyPageMoving(), e.Loading.lock(), history.back()
+            cave.brw_notifyPageMoving(), Olive.Loading.lock(), history.back()
         }
-    }, e.Toolbar = {
+    }, Olive.Toolbar = {
         setup: function() {
             var e = ["BACK", "BACK_KEY", "ACTIVITY", "COMMUNITY", "NOTIFICATION", "MYMENU", "GUIDE"],
                 t = this;
@@ -395,27 +395,27 @@ var Olv = Olv || {};
             BACK_KEY: 99
         },
         backCallback: function() {
-            e.router.lockRequest || (e.router.lockRequest = !0, history.back())
+            Olive.router.lockRequest || (Olive.router.lockRequest = !0, history.back())
         },
         back_keyCallback: function() {
-            e.Toolbar.backCallback()
+            Olive.Toolbar.backCallback()
         },
         activityCallback: function() {
-            e.Toolbar.activateButton(e.Toolbar.buttons.ACTIVITY), e.Browsing.navigate("/")
+            Olive.Toolbar.activateButton(Olive.Toolbar.buttons.ACTIVITY), Olive.Browsing.navigate("/")
         },
         communityCallback: function() {
-            e.Toolbar.activateButton(e.Toolbar.buttons.COMMUNITY), e.Browsing.navigate("/communities")
+            Olive.Toolbar.activateButton(Olive.Toolbar.buttons.COMMUNITY), Olive.Browsing.navigate("/communities")
         },
         notificationCallback: function() {
-            e.Toolbar.activateButton(e.Toolbar.buttons.NOTIFICATION), e.Browsing.navigate("/news/my_news")
+            Olive.Toolbar.activateButton(Olive.Toolbar.buttons.NOTIFICATION), Olive.Browsing.navigate("/news/my_news")
         },
         mymenuCallback: function() {
-            e.Toolbar.activateButton(e.Toolbar.buttons.MYMENU);
+            Olive.Toolbar.activateButton(Olive.Toolbar.buttons.MYMENU);
             var t = $("body").attr("data-profile-url");
-            e.Browsing.navigate(t)
+            Olive.Browsing.navigate(t)
         },
         guideCallback: function() {
-            e.Toolbar.activateButton(e.Toolbar.buttons.GUIDE), e.Browsing.navigate("/guide/for_guest")
+            Olive.Toolbar.activateButton(Olive.Toolbar.buttons.GUIDE), Olive.Browsing.navigate("/guide/for_guest")
         },
         setCornerButtonType: function(e) {
             e != this.buttons.EXIT && e != this.buttons.BACK || cave.toolbar_setButtonType(e)
@@ -434,32 +434,32 @@ var Olv = Olv || {};
         setNotificationCount: function(e) {
             cave.toolbar_setNotificationCount(e)
         }
-    }, e.ImageViewer = {
+    }, Olive.ImageViewer = {
         setup: function() {
             cave.viewer_setOnCloseCallback(this.close_viewerCallback)
         },
         close_viewerCallback: function() {
-            e.router.lockRequest = !1
+            Olive.router.lockRequest = !1
         }
     }, document.addEventListener("DOMContentLoaded", function() {
-        e.Toolbar.setup()
-    }), e.View = e.View || {}, e.View.Page = e.View.Page || {}, e.View.Page.current = void 0, e.View.Page.Common = Backbone.View.extend({
+        Olive.Toolbar.setup()
+    }), Olive.View = Olive.View || {}, Olive.View.Page = Olive.View.Page || {}, Olive.View.Page.current = void 0, Olive.View.Page.Common = Backbone.View.extend({
         widgets: [],
         isCurrent: function() {
-            return e.View.Page.current && e.View.Page.current.cid === this.cid
+            return Olive.View.Page.current && Olive.View.Page.current.cid === this.cid
         },
         initialize: function() {
-            this.widgets = [], e.View.Page.current && !this.isCurrent() && e.View.Page.current.undelegateEvents(), e.View.Page.current = this, e.Guest.isGuest() ? this.widgets.push(new e.View.Widget.GuestDialog({
+            this.widgets = [], Olive.View.Page.current && !this.isCurrent() && Olive.View.Page.current.undelegateEvents(), Olive.View.Page.current = this, Olive.Guest.isGuest() ? this.widgets.push(new Olive.View.Widget.GuestDialog({
                 el: $("#body")
-            })) : this.widgets.push(new e.View.Widget.UpdateChecker({
+            })) : this.widgets.push(new Olive.View.Widget.UpdateChecker({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.ExitOrBackButton({
+            })), this.widgets.push(new Olive.View.Widget.ExitOrBackButton({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.ToolbarVisibility({
+            })), this.widgets.push(new Olive.View.Widget.ToolbarVisibility({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.PostScroller({
+            })), this.widgets.push(new Olive.View.Widget.PostScroller({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.HomeButton({
+            })), this.widgets.push(new Olive.View.Widget.HomeButton({
                 el: $(document)
             }))
         },
@@ -473,10 +473,10 @@ var Olv = Olv || {};
                 e.undelegateEvents()
             }), Backbone.View.prototype.undelegateEvents.call(this)
         }
-    }), e.View.Page.Activity = e.View.Page.Common.extend({
+    }), Olive.View.Page.Activity = Olive.View.Page.Common.extend({
         isAbortByPageChange: !1,
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this);
+            Olive.View.Page.Common.prototype.initialize.call(this);
             var t = this.loadActivity(),
                 i = this.loadFollowingsProfilePosts(),
                 o = this;
@@ -490,7 +490,7 @@ var Olv = Olv || {};
                     o && ($(t).html(o), n.push(t))
                 }), $(n).removeClass("none")
             }).done(function() {
-                o.widgets.push(new e.View.Widget.Follow({
+                o.widgets.push(new Olive.View.Widget.Follow({
                     el: o.$(".toggle-follow-button")
                 }))
             })
@@ -498,12 +498,12 @@ var Olv = Olv || {};
         loadActivity: function() {
             var t = this,
                 i = $(".content-loading-window");
-            return (i.length ? e.Net.ajax({
+            return (i.length ? Olive.Net.ajax({
                 type: "GET",
                 url: location.pathname + location.search,
                 silent: !0
             }).done(function(t) {
-                e.Content.replaceBody(t)
+                Olive.Content.replaceBody(t)
             }).fail(function(e, o, n, a) {
                 i.remove(), t.isAbortByPageChange || $(".content-load-error-window").removeClass("none")
             }) : $.Deferred().resolve().promise()).then(function() {
@@ -511,35 +511,35 @@ var Olv = Olv || {};
             })
         },
         loadFollowingsProfilePosts: function() {
-            return e.Net.ajax({
+            return Olive.Net.ajax({
                 type: "GET",
                 url: "/my/latest_following_related_profile_posts",
                 silent: !0
             })
         },
         delayedInitialize: function() {
-            this.widgets.push(new e.View.Widget.Empathy({
+            this.widgets.push(new Olive.View.Widget.Empathy({
                 el: this.$(".post")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: this.$(".post")
-            })), this.widgets.push(new e.View.Widget.CloseTutorial({
+            })), this.widgets.push(new Olive.View.Widget.CloseTutorial({
                 el: this.$(".tutorial-close-button")
-            })), this.widgets.push(new e.View.Widget.PageReloader({
+            })), this.widgets.push(new Olive.View.Widget.PageReloader({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.Follow({
+            })), this.widgets.push(new Olive.View.Widget.Follow({
                 el: $(".toggle-follow-button")
-            })), this.widgets.push(new e.View.Widget.UserSearch({
+            })), this.widgets.push(new Olive.View.Widget.UserSearch({
                 el: $(".user-search-button")
             }))
         }
-    }), e.View.Page.PostForm = e.View.Page.Common.extend({
+    }), Olive.View.Page.PostForm = Olive.View.Page.Common.extend({
         events: {
             'click input[type="checkbox"]': "onCheckboxClick",
             "click .forbidden-image-selector": "onForbiddenImageSelectorClick",
             "click .cancel-button": function() {
-                cave.memo_clear(), e.Browsing.goBack()
+                cave.memo_clear(), Olive.Browsing.goBack()
             },
             "input .textarea-text": "onInput",
             "input .js-topic-title-input": "onInput",
@@ -553,22 +553,22 @@ var Olv = Olv || {};
             "change select[data-required]": "onInput"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.restoreStateFromAlbumImageSelector(), this.widgets.push(new e.View.Widget.TextareaWithMenu({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.restoreStateFromAlbumImageSelector(), this.widgets.push(new Olive.View.Widget.TextareaWithMenu({
                 el: $(".textarea-with-menu").first()
-            })), this.widgets.push(new e.View.Widget.OverlaidPreview({
+            })), this.widgets.push(new Olive.View.Widget.OverlaidPreview({
                 el: $(".textarea-text").first()
             }));
             var t = $(".js-topic-title-input");
-            t.length && this.widgets.push(new e.View.Widget.OverlaidPreview({
+            t.length && this.widgets.push(new Olive.View.Widget.OverlaidPreview({
                 el: t.first()
-            })), this.widgets.push(new e.View.Widget.CheckableControls({
+            })), this.widgets.push(new Olive.View.Widget.CheckableControls({
                 el: $(".feeling-selector").first()
-            })), this.widgets.push(new e.View.Widget.CheckableControls({
+            })), this.widgets.push(new Olive.View.Widget.CheckableControls({
                 el: $(".spoiler-button").first()
             }));
             var i = $("#tab-header-topic-categories");
             if (i.length) {
-                var o = new e.View.Widget.SelectButtons({
+                var o = new Olive.View.Widget.SelectButtons({
                     el: i
                 });
                 o.updateLabel(i.find("select")), this.widgets.push(o)
@@ -579,26 +579,26 @@ var Olv = Olv || {};
             var t = this.$(".image-selector").first(),
                 i = t.find(".preview-image"),
                 o = t.length && !t.hasClass("disabled"),
-                n = e.Screenshot.isEnabledAnySide(),
+                n = Olive.Screenshot.isEnabledAnySide(),
                 a = t.find(".select-from-album-button").length;
             if (o && (n || a)) {
-                this.widgets.push(new e.View.Widget.Dropdown({
+                this.widgets.push(new Olive.View.Widget.Dropdown({
                     el: t
-                })), this.widgets.push(new e.View.Widget.CheckableControls({
+                })), this.widgets.push(new Olive.View.Widget.CheckableControls({
                     el: t.find(".dropdown-menu").first()
                 }));
                 var s = t.find(".upside");
                 s.css("display", "none");
                 var r = t.find(".downside");
-                r.css("display", "none"), e.Screenshot.isEnabled(e.Screenshot.SCREEN_UPSIDE) && (t.find(".upside .capture-image").attr("src", e.Screenshot.retrieveImagePath(e.Screenshot.SCREEN_UPSIDE)), s.css("display", "")), e.Screenshot.isEnabled(e.Screenshot.SCREEN_DOWNSIDE) && (t.find(".downside .capture-image").attr("src", e.Screenshot.retrieveImagePath(e.Screenshot.SCREEN_DOWNSIDE)), r.css("display", "")), i.attr("data-default-src", i.attr("src")), this.screenshotSelect(t.find('input[name="screenshot_type"]:checked'))
+                r.css("display", "none"), Olive.Screenshot.isEnabled(Olive.Screenshot.SCREEN_UPSIDE) && (t.find(".upside .capture-image").attr("src", Olive.Screenshot.retrieveImagePath(Olive.Screenshot.SCREEN_UPSIDE)), s.css("display", "")), Olive.Screenshot.isEnabled(Olive.Screenshot.SCREEN_DOWNSIDE) && (t.find(".downside .capture-image").attr("src", Olive.Screenshot.retrieveImagePath(Olive.Screenshot.SCREEN_DOWNSIDE)), r.css("display", "")), i.attr("data-default-src", i.attr("src")), this.screenshotSelect(t.find('input[name="screenshot_type"]:checked'))
             } else t.length && (t.addClass("disabled"), t.find(".dropdown-toggle").addClass("forbidden-image-selector"), i.attr("src", i.attr("data-forbidden-src")))
         },
         onClickSelectFromAlbum: function(t) {
-            var i = e.Form.serializeUserInputs(this),
+            var i = Olive.Form.serializeUserInputs(this),
                 o = {
                     "album-preview-src": this.$("input.js-screenshot-radio-album").attr("data-src")
                 };
-            e.View.Page.PostForm.postArgsStock.push({
+            Olive.View.Page.PostForm.postArgsStock.push({
                 formControls: i,
                 miscAttributes: o
             })
@@ -608,7 +608,7 @@ var Olv = Olv || {};
             $(t).attr("data-sound", t.checked ? "SE_OLV_CHECKBOX_CHECK" : "SE_OLV_CHECKBOX_UNCHECK")
         },
         onForbiddenImageSelectorClick: function(t) {
-            t.preventDefault(), e.deferredAlert(null, e.loc("olv.portal.post.screenshot_forbidden.for_n3ds"))
+            t.preventDefault(), Olive.deferredAlert(null, Olive.loc("olv.portal.post.screenshot_forbidden.for_n3ds"))
         },
         onInput: function(e) {
             this.toggleSubmit()
@@ -628,9 +628,9 @@ var Olv = Olv || {};
             }).length > 0
         },
         onSubmit: function(t) {
-            e.Loading.lock();
+            Olive.Loading.lock();
             var i = $(t.currentTarget).find('input[type="submit"]');
-            e.Form.toggleDisabled(i, !0), this.painting && this.painting.prop("disabled") && this.painting.val("")
+            Olive.Form.toggleDisabled(i, !0), this.painting && this.painting.prop("disabled") && this.painting.val("")
         },
         onScreenshotSelect: function(e) {
             var t = $(e.currentTarget);
@@ -665,41 +665,41 @@ var Olv = Olv || {};
             }
         },
         onDropdownOpen: function(t, i) {
-            this.overlaidElements = this.$("#bottom-menu input:enabled"), e.Form.toggleDisabled(this.overlaidElements, !0)
+            this.overlaidElements = this.$("#bottom-menu input:enabled"), Olive.Form.toggleDisabled(this.overlaidElements, !0)
         },
         onDropdownClose: function(t, i) {
-            e.Form.toggleDisabled(this.overlaidElements, !1), this.overlaidElements = $()
+            Olive.Form.toggleDisabled(this.overlaidElements, !1), this.overlaidElements = $()
         },
         restoreStateFromAlbumImageSelector: function() {
-            var t = e.View.Page.PostForm.postArgsStock.shift();
+            var t = Olive.View.Page.PostForm.postArgsStock.shift();
             if (t) {
                 var i = t.formControls;
-                e.Form.fillInputsWithSerializedObject(this, i);
+                Olive.Form.fillInputsWithSerializedObject(this, i);
                 var o = t.miscAttributes;
                 $("input.js-screenshot-radio-album").attr("data-src", o["album-preview-src"])
             }
-            var n = e.View.Page.PostFormAlbumSelector.stock.shift();
+            var n = Olive.View.Page.PostFormAlbumSelector.stock.shift();
             n && ($('input[name="album_image_id"]').val(n.albumImageId), $("input.js-screenshot-radio-album").attr("data-src", n.previewUrl).prop("checked", !0))
         }
-    }), e.View.Page.PostForm.postArgsStock = [], e.View.Page.PostFormError = e.View.Page.Common.extend({
+    }), Olive.View.Page.PostForm.postArgsStock = [], Olive.View.Page.PostFormError = Olive.View.Page.Common.extend({
         events: {
             "click .back-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         }
-    }), e.View.Page.ReplyForm = e.View.Page.PostForm.extend({}), e.View.Page.PostMemo = e.View.Page.Common.extend({
+    }), Olive.View.Page.ReplyForm = Olive.View.Page.PostForm.extend({}), Olive.View.Page.PostMemo = Olive.View.Page.Common.extend({
         events: {
             "click .delete-button": "onDeleteButton",
             "submit form": "onSubmit"
         },
         onSubmit: function(t) {
-            e.Loading.lock();
+            Olive.Loading.lock();
             var i = $(t.currentTarget).find('input[type="submit"]');
-            e.Form.toggleDisabled(i, !0)
+            Olive.Form.toggleDisabled(i, !0)
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), e.PostStorage.sweep();
-            var t = e.PostStorage.getAll(),
+            Olive.View.Page.Common.prototype.initialize.call(this), Olive.PostStorage.sweep();
+            var t = Olive.PostStorage.getAll(),
                 i = t[0];
             if (t[1] > 0) {
                 this.$(".no-content-window").addClass("none").siblings().removeClass("none");
@@ -710,7 +710,7 @@ var Olv = Olv || {};
                 }), function(e) {
                     n.viewPost(i[e], e, o), o += 1
                 });
-                for (var a = o; a < e.PostStorage.maxLocalStorageNum; a++) this.clearContent(this.$("#post-" + a));
+                for (var a = o; a < Olive.PostStorage.maxLocalStorageNum; a++) this.clearContent(this.$("#post-" + a));
                 $('input[name="screenshot"], input[name="thumbnail"]').forEach(function(e) {
                     e.focus(), $(e).trigger("click"), $(e).css("display", "none"), e.blur()
                 })
@@ -728,7 +728,7 @@ var Olv = Olv || {};
                 s = this.$("#post-" + o);
             s.find(".user-name").text(cave.mii_getName());
             var r = cave.convertTimeToString(Number(i)).match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2}):([0-9]{2})/),
-                l = e.loc("olv.datetime"),
+                l = Olive.loc("olv.datetime"),
                 c = r[1],
                 u = r[2],
                 d = r[3],
@@ -739,7 +739,7 @@ var Olv = Olv || {};
             var m = "";
             /a/.test(l) ? (g < 12 ? m = " AM" : (m = " PM", g -= 12), p = 1 === l.match(/h/g).length ? n(g) : function(e) {
                 return 1 === (e += "").length ? "0" + e : e
-            }(g)) : 1 === l.match(/H/g).length && (p = n(p)), s.find(".timestamp-container .timestamp").text(e.loc("olv.datetime.n3ds.date", c, u, d) + " " + p + ":" + h + m), s.find(".user-icon").attr("src", cave.mii_getIconBase64(Number(a.feeling))), a.titleID && s.find('input[name="memo_title_id"]').val(a.titleID);
+            }(g)) : 1 === l.match(/H/g).length && (p = n(p)), s.find(".timestamp-container .timestamp").text(Olive.loc("olv.datetime.n3ds.date", c, u, d) + " " + p + ":" + h + m), s.find(".user-icon").attr("src", cave.mii_getIconBase64(Number(a.feeling))), a.titleID && s.find('input[name="memo_title_id"]').val(a.titleID);
             var f = s.find(".screenshot-container");
             f.toggleClass("none", !a.screenShotKey);
             var v = s.find('input[name="screenshot"]');
@@ -771,7 +771,7 @@ var Olv = Olv || {};
             s.toggleClass("forbidden", !0), s.find(".post-button").prop("disabled", !0);
             var S = {};
             S.post_type = y, a.titleID && (S.src_title_id = a.titleID), a.screenShotKey && (S.has_screenshot = "1"), void 0 !== a.communityId && null !== a.communityId && (S.dst_nex_community_id = a.communityId);
-            e.Net.get("post_memo.check.json", S).done(function(e) {
+            Olive.Net.get("post_memo.check.json", S).done(function(e) {
                 if (e.show_community_name) {
                     var t = s.find(".community-container");
                     t.removeClass("none"), e.community_path ? t.find("a").attr("href", e.community_path) : t.find("a").removeAttr("href"), t.find("img").attr("src", e.community_icon_url), t.find(".community-container-inner").append(e.community_name)
@@ -784,20 +784,20 @@ var Olv = Olv || {};
             e.addClass("none")
         },
         onDeleteButton: function(t) {
-            e.deferredConfirm(null, e.loc("olv.portal.offline.post.delete")).done($.proxy(function(i) {
+            Olive.deferredConfirm(null, Olive.loc("olv.portal.offline.post.delete")).done($.proxy(function(i) {
                 if (i) {
                     var o = $(t.target).closest(".post"),
                         n = o.attr("data-ls-key");
-                    e.PostStorage.removeItem(n), this.clearContent(o), 0 === e.PostStorage.getCount() && this.$(".no-content-window").removeClass("none")
+                    Olive.PostStorage.removeItem(n), this.clearContent(o), 0 === Olive.PostStorage.getCount() && this.$(".no-content-window").removeClass("none")
                 }
             }, this))
         }
-    }), e.View.Page.PostDiaryForm = e.View.Page.PostForm.extend({
+    }), Olive.View.Page.PostDiaryForm = Olive.View.Page.PostForm.extend({
         setupScreenshotSelector: function() {
             var t = this.$('[name="screenshot"]');
             if (t) {
                 var i = t.attr("lls");
-                i ? this.setupPreSpecifiedScreenshotSelector(i) : e.View.Page.PostForm.prototype.setupScreenshotSelector.call(this)
+                i ? this.setupPreSpecifiedScreenshotSelector(i) : Olive.View.Page.PostForm.prototype.setupScreenshotSelector.call(this)
             }
         },
         setupPreSpecifiedScreenshotSelector: function(e) {
@@ -826,121 +826,121 @@ var Olv = Olv || {};
                     o = this.$(".image-selector").first(),
                     n = o.length && !o.hasClass("disabled"),
                     a = !i.attr("disabled");
-                if (e.Screenshot.isEnabledAnySide() && n && !a) return e.deferredAlert(null, e.loc("olv.portal.post.screenshot_required")), !1
+                if (Olive.Screenshot.isEnabledAnySide() && n && !a) return Olive.deferredAlert(null, Olive.loc("olv.portal.post.screenshot_required")), !1
             }
-            return e.View.Page.PostForm.prototype.onSubmit.call(this, t), !0
+            return Olive.View.Page.PostForm.prototype.onSubmit.call(this, t), !0
         }
-    }), e.View.Page.PostRedirection = e.View.Page.Common.extend({
+    }), Olive.View.Page.PostRedirection = Olive.View.Page.Common.extend({
         initialize: function() {
             var t = $("#fresh-post-fragment");
             if (t.length) {
                 var i = t.attr("data-ls-key");
-                i ? e.PostStorage.removeItem(i) : cave.memo_clear();
+                i ? Olive.PostStorage.removeItem(i) : cave.memo_clear();
                 var o = cave.history_getPrev();
                 /\/(?:post|post\.memo|reply)(?:$|[?#])/.test(o) && (cave.history_removePrev(), o = cave.history_getPrev());
                 var n = t.attr("data-back-url");
-                location.protocol + "//" + location.host + n === o && cave.history_removePrev(), e.View.Widget.FreshPost.stock.push(t), setTimeout(function() {
-                    e.Browsing.replaceWith(n)
+                location.protocol + "//" + location.host + n === o && cave.history_removePrev(), Olive.View.Widget.FreshPost.stock.push(t), setTimeout(function() {
+                    Olive.Browsing.replaceWith(n)
                 }, 0)
             }
         }
-    }), e.View.Page.Community = e.View.Page.Common.extend({
+    }), Olive.View.Page.Community = Olive.View.Page.Common.extend({
         events: {
             "click .unfavorite-button": "onUnfavorite",
             "click .js-topic-post-button": "clickTopicPost"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.FavoriteButtons({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.FavoriteButtons({
                 el: $("#header-meta").find(".favorite-button")
-            })), this.widgets.push(new e.View.Widget.FreshPost({
+            })), this.widgets.push(new Olive.View.Widget.FreshPost({
                 el: $(".post-list")
-            })), e.Guest.isGuest() || this.widgets.push(new e.View.Widget.InfoTicker({
+            })), Olive.Guest.isGuest() || this.widgets.push(new Olive.View.Widget.InfoTicker({
                 el: $(".info-ticker")
-            })), this.widgets.push(new e.View.Widget.Empathy({
+            })), this.widgets.push(new Olive.View.Widget.Empathy({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: $(".multi-timeline-post")
-            })), this.widgets.push(new e.View.Widget.URLSelector({
+            })), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#post-filter")
-            })), this.widgets.push(new e.View.Widget.eShopJump({
+            })), this.widgets.push(new Olive.View.Widget.eShopJump({
                 el: $(".eshop-button")
-            })), this.widgets.push(new e.View.Widget.PageReloader({
+            })), this.widgets.push(new Olive.View.Widget.PageReloader({
                 el: $(document)
-            })), this.widgets.push(new e.View.Widget.FirstPostNotice({
+            })), this.widgets.push(new Olive.View.Widget.FirstPostNotice({
                 el: $(".js-post-button")
-            })), this.widgets.push(new e.View.Widget.URLSelector({
+            })), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $(".js-select-button")
-            })), $(".age-gate-dialog").length && (this.widgets.push(new e.View.Widget.AgeGateDialog({
+            })), $(".age-gate-dialog").length && (this.widgets.push(new Olive.View.Widget.AgeGateDialog({
                 el: this.$(".age-gate-dialog")
-            })), this.widgets.push(new e.View.Widget.SelectButtons({
+            })), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: this.$(".age-gate-dialog .window-body-inner")
-            }))), $(".toggle-follow-button").length && this.widgets.push(new e.View.Widget.Follow({
+            }))), $(".toggle-follow-button").length && this.widgets.push(new Olive.View.Widget.Follow({
                 el: $(".toggle-follow-button")
             }))
         },
         onUnfavorite: function(t) {
             t.preventDefault();
             var i = $(t.currentTarget);
-            e.Form.isDisabled(i) || e.Form.post(i.attr("data-action"), null, i).done(function() {
-                e.deferredAlert(null, e.loc("olv.portal.unfavorite_succeeded_to")), i.add(i.prev()).remove(), $(".unfavorite-confirm-message").remove()
+            Olive.Form.isDisabled(i) || Olive.Form.post(i.attr("data-action"), null, i).done(function() {
+                Olive.deferredAlert(null, Olive.loc("olv.portal.unfavorite_succeeded_to")), i.add(i.prev()).remove(), $(".unfavorite-confirm-message").remove()
             })
         },
         clickTopicPost: function(e) {
             e.preventDefault(), $(".js-topic-filter").addClass("open")
         }
-    }), e.View.Page.Post = e.View.Page.Common.extend({
+    }), Olive.View.Page.Post = Olive.View.Page.Common.extend({
         events: {
             "click .link-button": "onPostLinkClick",
             "click .app-jump-button": "onAppJumpClick"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.FreshReply({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.FreshReply({
                 el: this.$(".post-permalink-reply")
-            })), this.widgets.push(new e.View.Widget.EmpathyWithIcons({
+            })), this.widgets.push(new Olive.View.Widget.EmpathyWithIcons({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.Empathy({
+            })), this.widgets.push(new Olive.View.Widget.Empathy({
                 el: $("#post-permalink-comments")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.Reply({
+            })), this.widgets.push(new Olive.View.Widget.Reply({
                 el: this.$("#post-permalink-comments")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: this.$("#post-permalink-comments")
-            })), this.widgets.push(new e.View.Widget.YoutubeJump({
+            })), this.widgets.push(new Olive.View.Widget.YoutubeJump({
                 el: this.$(".video")
-            })), this.widgets.push(new e.View.Widget.FirstPostNotice({
+            })), this.widgets.push(new Olive.View.Widget.FirstPostNotice({
                 el: $(".reply-button")
-            })), this.widgets.push(new e.View.Widget.PageReloader({
+            })), this.widgets.push(new Olive.View.Widget.PageReloader({
                 el: $(document)
-            })), $("#body-language-selector").length && (this.widgets.push(new e.View.Widget.BodyLanguageSelector({
+            })), $("#body-language-selector").length && (this.widgets.push(new Olive.View.Widget.BodyLanguageSelector({
                 el: $("#body-language-selector")
-            })), this.widgets.push(new e.View.Widget.SelectButtons({
+            })), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: $(".select-button")
-            }))), $(".post.official-user.post-subtype-default").length && this.widgets.push(new e.View.Widget.MoreContentButton({
+            }))), $(".post.official-user.post-subtype-default").length && this.widgets.push(new Olive.View.Widget.MoreContentButton({
                 el: $(".post.official-user.post-subtype-default")
-            })), this.widgets.push(new e.View.Widget.CloseTopicPost({
+            })), this.widgets.push(new Olive.View.Widget.CloseTopicPost({
                 el: this.$(".post-meta")
             }))
         },
         onPostLinkClick: function(t) {
             var i = $(t.currentTarget);
-            if (!e.Form.isDisabled(i) && !t.isDefaultPrevented()) {
+            if (!Olive.Form.isDisabled(i) && !t.isDefaultPrevented()) {
                 t.preventDefault();
                 var o = i.attr("href");
-                cave.jump_existsWebbrs && !cave.jump_existsWebbrs() ? e.deferredConfirm(e.loc("olv.portal.confirm_syste_update.title"), e.loc("olv.portal.confirm_syste_update.body")).done(function(e) {
+                cave.jump_existsWebbrs && !cave.jump_existsWebbrs() ? Olive.deferredConfirm(Olive.loc("olv.portal.confirm_syste_update.title"), Olive.loc("olv.portal.confirm_syste_update.body")).done(function(e) {
                     e && cave.jump_toSystemUpdate(1)
-                }) : e.deferredConfirm(e.loc("olv.portal.confirm_url_form.title"), e.loc("olv.portal.confirm_url_form.body.for_n3ds") + "\n" + o).done(function(e) {
+                }) : Olive.deferredConfirm(Olive.loc("olv.portal.confirm_url_form.title"), Olive.loc("olv.portal.confirm_url_form.body.for_n3ds") + "\n" + o).done(function(e) {
                     e && cave.jump_toWebbrs(o)
                 })
             }
         },
         onAppJumpClick: function(t) {
             var i = $(t.currentTarget);
-            if (!e.Form.isDisabled(i) && !t.isDefaultPrevented()) {
+            if (!Olive.Form.isDisabled(i) && !t.isDefaultPrevented()) {
                 t.preventDefault();
                 var o = i.attr("data-app-jump-title-ids").split(","),
                     n = i.attr("data-title-id");
@@ -950,7 +950,7 @@ var Olv = Olv || {};
                         a = o[s];
                         break
                     }
-                a ? e.deferredConfirm(null, e.loc("olv.portal.confirm_app_jump")).done(function(e) {
+                a ? Olive.deferredConfirm(null, Olive.loc("olv.portal.confirm_app_jump")).done(function(e) {
                     if (e) {
                         if (cave.jump_resetParamToApp(), cave.jump_canUseQuery(a)) {
                             cave.jump_setModeToApp(2), cave.jump_setDataUTF8ToApp(13, i.attr("data-url-id")), cave.jump_setNumberDataToApp(12, Number(i.attr("data-nex-community-id")));
@@ -959,36 +959,36 @@ var Olv = Olv || {};
                         }
                         cave.jump_toApplication(1, a)
                     }
-                }) : e.deferredAlert(null, e.loc("olv.portal.confirm_you_have_no_soft"))
+                }) : Olive.deferredAlert(null, Olive.loc("olv.portal.confirm_you_have_no_soft"))
             }
         },
         mayIncrementMoreRepliesButtonCount: function(e) {}
-    }), e.View.Page.Reply = e.View.Page.Post.extend({
+    }), Olive.View.Page.Reply = Olive.View.Page.Post.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.EmpathyWithIcons({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.EmpathyWithIcons({
                 el: $(".reply-permalink-content")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: this.$("#post-permalink-comments")
-            })), this.widgets.push(new e.View.Widget.PageReloader({
+            })), this.widgets.push(new Olive.View.Widget.PageReloader({
                 el: $(document)
-            })), $("#body-language-selector").length && (this.widgets.push(new e.View.Widget.BodyLanguageSelector({
+            })), $("#body-language-selector").length && (this.widgets.push(new Olive.View.Widget.BodyLanguageSelector({
                 el: $("#body-language-selector")
-            })), this.widgets.push(new e.View.Widget.SelectButtons({
+            })), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: $(".select-button")
             })))
         }
-    }), e.View.Page.Violation = e.View.Page.Common.extend({
+    }), Olive.View.Page.Violation = Olive.View.Page.Common.extend({
         events: {
             "change select": "onChangeViolationType",
             'input textarea[name="body"]': "onInputBody",
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.PostToBack({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.PostToBack({
                 el: $("form")
             })), this.$selectContent = this.$("span.select-button-content"), this.$type = this.$('select[name="type"]'), this.$body = this.$('textarea[name="body"]'), this.$submit = this.$(".post-button")
         },
@@ -1007,16 +1007,16 @@ var Olv = Olv || {};
                 o = !t || i && /^\s*$/.test(this.$body.val());
             this.$submit.prop("disabled", o)
         }
-    }), e.View.Page.EditForm = e.View.Page.Common.extend({
+    }), Olive.View.Page.EditForm = Olive.View.Page.Common.extend({
         events: {
             "change select": "onSelectChange",
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             },
             submit: "onSubmit"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.SelectButtons({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: this.$(".select-button")
             }))
         },
@@ -1028,81 +1028,81 @@ var Olv = Olv || {};
             t.preventDefault();
             var i = $("#edit_type").val(),
                 o = /^(screenshot|painting)-profile-post$/.test(i);
-            if (!o || e.confirm(e.loc("olv.portal.profile_post"), e.loc("olv.portal.profile_post.confirm_update"), e.loc("olv.portal.cancel"), e.loc("olv.portal.profile_post.confirm_update.yes"))) {
+            if (!o || Olive.confirm(Olive.loc("olv.portal.profile_post"), Olive.loc("olv.portal.profile_post.confirm_update"), Olive.loc("olv.portal.cancel"), Olive.loc("olv.portal.profile_post.confirm_update.yes"))) {
                 var n = $("form"),
                     a = n.find('input[type="submit"]');
-                e.Form.submit(n, a, !0).done(function() {
-                    o && e.confirm(e.loc("olv.portal.profile_post"), e.loc("olv.portal.profile_post.done"), e.loc("olv.portal.close"), e.loc("olv.portal.user.search.go")) ? e.Browsing.replaceWith("/users/@me") : history.back()
+                Olive.Form.submit(n, a, !0).done(function() {
+                    o && Olive.confirm(Olive.loc("olv.portal.profile_post"), Olive.loc("olv.portal.profile_post.done"), Olive.loc("olv.portal.close"), Olive.loc("olv.portal.user.search.go")) ? Olive.Browsing.replaceWith("/users/@me") : history.back()
                 })
             }
         }
-    }), e.View.Page.Blacklist = e.View.Page.Common.extend({
+    }), Olive.View.Page.Blacklist = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.Blacklist({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.Blacklist({
                 el: $("#block-list-page")
             }))
         }
-    }), e.View.Page.ConfirmBlacklist = e.View.Page.Common.extend({
+    }), Olive.View.Page.ConfirmBlacklist = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.ConfirmBlacklist({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.ConfirmBlacklist({
                 el: $(".window-bottom-buttons")
             }))
         }
-    }), e.View.Page.IdentifiedUserPosts = e.View.Page.Common.extend({
+    }), Olive.View.Page.IdentifiedUserPosts = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.Follow({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.Follow({
                 el: $(".toggle-follow-button")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
             }))
         }
-    }), e.View.Page.User = e.View.Page.Common.extend({
+    }), Olive.View.Page.User = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.URLSelector({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#user-violator-blacklist")
-            })), this.widgets.push(new e.View.Widget.Follow({
+            })), this.widgets.push(new Olive.View.Widget.Follow({
                 el: $(".toggle-follow-button")
-            })), this.widgets.push(new e.View.Widget.Empathy({
+            })), this.widgets.push(new Olive.View.Widget.Empathy({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: $(".post, .multi-timeline-post")
             }))
         }
-    }), e.View.Page.UserDiary = e.View.Page.Common.extend({
+    }), Olive.View.Page.UserDiary = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.URLSelector({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#user-violator-blacklist")
-            })), this.widgets.push(new e.View.Widget.Empathy({
+            })), this.widgets.push(new Olive.View.Widget.Empathy({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.ImageViewer({
+            })), this.widgets.push(new Olive.View.Widget.ImageViewer({
                 el: $(".js-open-image-viewer")
-            })), this.widgets.push(new e.View.Widget.HiddenContent({
+            })), this.widgets.push(new Olive.View.Widget.HiddenContent({
                 el: $(".post")
-            })), this.widgets.push(new e.View.Widget.CheckableControls({
+            })), this.widgets.push(new Olive.View.Widget.CheckableControls({
                 el: $(".js-diary-screenshot-window")
-            })), this.widgets.push(new e.View.Widget.CreateDiaryOrSaveScreenshotWindow({
+            })), this.widgets.push(new Olive.View.Widget.CreateDiaryOrSaveScreenshotWindow({
                 el: $(".js-diary-screenshot-window")
-            })), this.widgets.push(new e.View.Widget.FreshPost({
+            })), this.widgets.push(new Olive.View.Widget.FreshPost({
                 el: this.$(".post-list")
             }))
         }
-    }), e.View.Page.Settings = e.View.Page.Common.extend({
+    }), Olive.View.Page.Settings = Olive.View.Page.Common.extend({
         events: {
             "submit .setting-form": "onSubmit",
             "click #profile-post": "onProfilePostRemoveClick"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.SelectButtons({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: this.$(".settings-list")
-            })), e.ScrollGuide.activate()
+            })), Olive.ScrollGuide.activate()
         },
         onProfilePostRemoveClick: function(t) {
             t.preventDefault();
             var i = $(t.currentTarget);
-            e.deferredConfirm(e.loc("olv.portal.profile_post"), e.loc("olv.portal.profile_post.confirm_remove"), e.loc("olv.portal.stop"), e.loc("olv.portal.button.remove")).done(function(t) {
-                t && e.Form.post("/settings/profile_post.unset.json", null, i, !0).done(function() {
+            Olive.deferredConfirm(Olive.loc("olv.portal.profile_post"), Olive.loc("olv.portal.profile_post.confirm_remove"), Olive.loc("olv.portal.stop"), Olive.loc("olv.portal.button.remove")).done(function(t) {
+                t && Olive.Form.post("/settings/profile_post.unset.json", null, i, !0).done(function() {
                     i.remove()
                 })
             })
@@ -1111,30 +1111,30 @@ var Olv = Olv || {};
             t.preventDefault();
             var i = $(t.currentTarget),
                 o = i.find('input[type="submit"]');
-            e.Form.submit(i, o, !0).done(function() {
-                e.alert(null, e.loc("olv.portal.dialog.apply_settings_done"))
+            Olive.Form.submit(i, o, !0).done(function() {
+                Olive.alert(null, Olive.loc("olv.portal.dialog.apply_settings_done"))
             })
         }
-    }), e.View.Page.AccountSettings = e.View.Page.Settings.extend({
+    }), Olive.View.Page.AccountSettings = Olive.View.Page.Settings.extend({
         events: {
             "submit .setting-form": "onSubmit"
         },
         initialize: function() {
-            e.View.Page.Settings.prototype.initialize.call(this)
+            Olive.View.Page.Settings.prototype.initialize.call(this)
         },
         onSubmit: function(t) {
-            t.preventDefault(), cave.boss_unregist(), e.View.Page.Settings.prototype.onSubmit.call(this, t)
+            t.preventDefault(), cave.boss_unregist(), Olive.View.Page.Settings.prototype.onSubmit.call(this, t)
         }
-    }), e.View.Page.ProfileSettings = e.View.Page.Settings.extend({
+    }), Olive.View.Page.ProfileSettings = Olive.View.Page.Settings.extend({
         initialize: function() {
-            e.View.Page.Settings.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.MultipleSelectMediator({
+            Olive.View.Page.Settings.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.MultipleSelectMediator({
                 el: this.$("#favorite-game-genre")
             }))
         },
         onSubmit: function(t) {
-            e.View.Page.Settings.prototype.onSubmit.call(this, t)
+            Olive.View.Page.Settings.prototype.onSubmit.call(this, t)
         }
-    }), e.View.Page.Welcome = e.View.Page.Common.extend({
+    }), Olive.View.Page.Welcome = Olive.View.Page.Common.extend({
         events: {
             "click .slide-button": "onSlideClick",
             "click .welcome-exit-button": "onExitClick",
@@ -1143,7 +1143,7 @@ var Olv = Olv || {};
             "olv:welcome:slide .slide-page": "onSlide"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(), this.slideByButton($("<button/>").attr("data-slide", ".start-page")), this.showScrollGuideTimer = null
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(), this.slideByButton($("<button/>").attr("data-slide", ".start-page")), this.showScrollGuideTimer = null
         },
         slideByButton: function(t) {
             document.activeElement.blur();
@@ -1151,27 +1151,27 @@ var Olv = Olv || {};
                 o = $(t.attr("data-slide"));
             cave.brw_notifyPageMoving(), i.attr("data-scroll", t.attr("data-save-scroll") ? cave.brw_getScrollTopY() : null), i.hide(), o.show(), cave.brw_scrollImmediately(0, +o.attr("data-scroll") || 0);
             var n = o.attr("data-bgm");
-            n && e.Sound.playBGM(n), o.trigger("olv:welcome:slide")
+            n && Olive.Sound.playBGM(n), o.trigger("olv:welcome:slide")
         },
         onSlide: function(t) {
             var i = $(t.currentTarget).attr("id");
             if (clearTimeout(this.showScrollGuideTimer), "welcome-guideline" === i || "welcome-guideline-body" === i) this.showScrollGuideTimer = setTimeout(function() {
-                cave.brw_getScrollTopY() <= 0 && e.ScrollGuide.show()
+                cave.brw_getScrollTopY() <= 0 && Olive.ScrollGuide.show()
             }, 1500);
             else if ("welcome-finish" === i) {
                 var o = this.$(".welcome-finish-button"),
                     n = o.attr("data-activate-url");
-                e.Form.post(n, $("#user_data").serialize(), o, !0).done(function(done) {
-                    e.OneTime.updatePlayedTitles()
+                Olive.Form.post(n, $("#user_data").serialize(), o, !0).done(function(done) {
+                    Olive.OneTime.updatePlayedTitles()
                 }).fail(function() {
-                    e.Browsing.reload()
+                    Olive.Browsing.reload()
                 })
             }
         },
         onSlideClick: function(t) {
             t.preventDefault();
             var i = $(t.currentTarget);
-            e.Form.isDisabled(i) || this.slideByButton(i)
+            Olive.Form.isDisabled(i) || this.slideByButton(i)
         },
         onExitClick: function(e) {
             e.preventDefault(), setTimeout(function() {
@@ -1186,29 +1186,29 @@ var Olv = Olv || {};
                 var o = this.$("#user_data"),
                     n = o.attr("data-check-url")
                     self = this;
-                e.Form.post(n, o.serialize(), o, !0).done(function(data) {
+                Olive.Form.post(n, o.serialize(), o, !0).done(function(data) {
                     switch (data) {
                         case 'username':
-                            e.deferredAlert(null, e.loc("olv.welcome.check.username"));
+                            Olive.deferredAlert(null, Olive.loc("olv.welcome.check.username"));
                             break;
                         case 'nnid':
-                            e.deferredAlert(null, e.loc("olv.welcome.check.nnid"));
+                            Olive.deferredAlert(null, Olive.loc("olv.welcome.check.nnid"));
                             break;
                         case 'nonnid':
-                            e.deferredAlert(null, e.loc("olv.welcome.check.nonnid"));
+                            Olive.deferredAlert(null, Olive.loc("olv.welcome.check.nonnid"));
                             break;
                         case 'ok':
                             self.slideByButton(i);
                             break;
                         default:
-                            e.deferredAlert(null, e.loc("olv.portal.error.500.for_n3ds"));
+                            Olive.deferredAlert(null, Olive.loc("olv.portal.error.500.for_n3ds"));
                             break;
                     }
                 }).fail(function() {
-                    e.deferredAlert(null, e.loc("olv.portal.error.500.for_n3ds"))
+                    Olive.deferredAlert(null, Olive.loc("olv.portal.error.500.for_n3ds"))
                 })
             } else {
-                e.deferredAlert(null, e.loc("olv.portal.welcome.user_data"))
+                Olive.deferredAlert(null, Olive.loc("olv.portal.welcome.user_data"))
             }
         },
         onLuminousOptInButtonClick: function(e) {
@@ -1217,19 +1217,19 @@ var Olv = Olv || {};
         onFinishClick: function(e) {
             cave.lls_setItem("agree_olv", "1")
         }
-    }), e.View.Page.WelcomeProfile = e.View.Page.Common.extend({
+    }), Olive.View.Page.WelcomeProfile = Olive.View.Page.Common.extend({
         events: {
             "click .js-slide-button.back-button": "onBackButtonClick",
             "click .js-slide-button.next-button": "onNextButtonClick"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.CheckableControls({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.CheckableControls({
                 el: this.$(".js-checkable-controls")
-            })), this.widgets.push(new e.View.Widget.MultipleSelectMediator({
+            })), this.widgets.push(new Olive.View.Widget.MultipleSelectMediator({
                 el: this.$("#js-favorite-game-genre-form")
-            })), this.widgets.push(new e.View.Widget.SelectButtons({
+            })), this.widgets.push(new Olive.View.Widget.SelectButtons({
                 el: this.$("#js-favorite-game-genre-form")
-            })), this.widgets.push(new e.View.Widget.AchievementUpdater({
+            })), this.widgets.push(new Olive.View.Widget.AchievementUpdater({
                 el: this.$("#welcome-profile-window")
             })), this.$pageWindow = $("#welcome-profile-window");
             this.slideByButton($("<button/>").attr("data-slide", "#profile-game-skill"))
@@ -1250,20 +1250,20 @@ var Olv = Olv || {};
             var i = $(t.currentTarget),
                 o = i.closest(".js-slide-page").find("form"),
                 n = this;
-            e.Form.submit(o, i, !0).done(function() {
+            Olive.Form.submit(o, i, !0).done(function() {
                 i.attr("data-slide") && n.slideByButton(i), i.hasClass("finish-button") && (i.one("olv:achievement:update:done", function() {
-                    e.Browsing.replaceWith(i.attr("data-href"))
+                    Olive.Browsing.replaceWith(i.attr("data-href"))
                 }), i.trigger("olv:achievement:update"))
             })
         }
-    }), e.View.Page.WelcomeFavoriteCommunityVisibility = e.View.Page.Common.extend({
+    }), Olive.View.Page.WelcomeFavoriteCommunityVisibility = Olive.View.Page.Common.extend({
         events: {
             "click .next-button": "onClickToMyPageButton"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.CheckableControls({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.CheckableControls({
                 el: this.$(".js-checkable-controls")
-            })), this.widgets.push(new e.View.Widget.AchievementUpdater({
+            })), this.widgets.push(new Olive.View.Widget.AchievementUpdater({
                 el: this.$("#favorite-community-suggest")
             }))
         },
@@ -1271,13 +1271,13 @@ var Olv = Olv || {};
             t.preventDefault();
             var i = $(t.currentTarget),
                 o = $("#js-favorite-community-visibility-form");
-            e.Form.submit(o, i, !0).done(function() {
+            Olive.Form.submit(o, i, !0).done(function() {
                 i.one("olv:achievement:update:done", function() {
-                    e.Browsing.replaceWith(i.attr("data-href"))
+                    Olive.Browsing.replaceWith(i.attr("data-href"))
                 }), i.trigger("olv:achievement:update")
             })
         }
-    }), e.View.Page.GuestWelcome = e.View.Page.Common.extend({
+    }), Olive.View.Page.GuestWelcome = Olive.View.Page.Common.extend({
         events: {
             "click a[href]":"onAnyLinkClick"
         },
@@ -1291,69 +1291,69 @@ var Olv = Olv || {};
                 cave.exitApp()
             }, 0))
         }
-    }), e.View.Page.Users = e.View.Page.Common.extend({
+    }), Olive.View.Page.Users = Olive.View.Page.Common.extend({
         events: {
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.UserSearch({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.UserSearch({
                 el: $(".user-search-button")
             }))
         }
-    }), e.View.Page.TitleSearch = e.View.Page.Common.extend({
+    }), Olive.View.Page.TitleSearch = Olive.View.Page.Common.extend({
         events: {
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.TitleSearch({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.TitleSearch({
                 el: $(".title-search-button")
             }))
         }
-    }), e.View.Page.Communities = e.View.Page.Common.extend({
+    }), Olive.View.Page.Communities = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), e.Guest.isGuest() || this.widgets.push(new e.View.Widget.InfoTicker({
+            Olive.View.Page.Common.prototype.initialize.call(this), Olive.Guest.isGuest() || this.widgets.push(new Olive.View.Widget.InfoTicker({
                 el: $(".info-ticker")
-            })), this.widgets.push(new e.View.Widget.URLSelector({
+            })), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#view-region-selector")
-            })), this.widgets.push(new e.View.Widget.URLSelector({
+            })), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#view-language-selector")
-            })), this.widgets.push(new e.View.Widget.CloseTutorial({
+            })), this.widgets.push(new Olive.View.Widget.CloseTutorial({
                 el: $(".tutorial-close-button")
-            })), this.widgets.push(new e.View.Widget.TitleSearch({
+            })), this.widgets.push(new Olive.View.Widget.TitleSearch({
                 el: $(".title-search-button")
             }))
         }
-    }), e.View.Page.MyNews = e.View.Page.Common.extend({
+    }), Olive.View.Page.MyNews = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.CloseTutorial({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.CloseTutorial({
                 el: $(".tutorial-close-button")
-            })), this.widgets.push(new e.View.Widget.Follow({
+            })), this.widgets.push(new Olive.View.Widget.Follow({
                 el: $(".toggle-follow-button")
             }))
         }
-    }), e.View.Page.ConfirmAlbum = e.View.Page.Common.extend({
+    }), Olive.View.Page.ConfirmAlbum = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.ConfirmAlbum({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.ConfirmAlbum({
                 el: $(".js-confirm-album-window")
             }))
         }
-    }), e.View.Page.Warning = e.View.Page.Common.extend({
+    }), Olive.View.Page.Warning = Olive.View.Page.Common.extend({
         events: {
             'click input[type="submit"]': "onSubmit",
             "click .exit-button": "onExitButton"
         },
         onSubmit: function(t) {
             var i = $(t.currentTarget);
-            if (!e.Form.isDisabled(i) && !t.defaultPrevented) {
+            if (!Olive.Form.isDisabled(i) && !t.defaultPrevented) {
                 t.preventDefault();
                 var o = $(t.currentTarget.form);
-                e.Form.submit(o, i, !0, !0).done(function(t) {
-                    var o = e.Browsing.replaceWith(t.location || "/");
-                    e.Form.disable(i, o)
+                Olive.Form.submit(o, i, !0, !0).done(function(t) {
+                    var o = Olive.Browsing.replaceWith(t.location || "/");
+                    Olive.Form.disable(i, o)
                 })
             }
         },
@@ -1362,17 +1362,17 @@ var Olv = Olv || {};
                 cave.exitApp()
             }, 0)
         }
-    }), e.View.Page.PostError = e.View.Page.Common.extend({
+    }), Olive.View.Page.PostError = Olive.View.Page.Common.extend({
         events: {
             "click .back-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         }
-    }), e.View.Page.Help = e.View.Page.Common.extend({
+    }), Olive.View.Page.Help = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), e.ScrollGuide.activate()
+            Olive.View.Page.Common.prototype.initialize.call(this), Olive.ScrollGuide.activate()
         }
-    }), e.View.Widget = e.View.Widget || {}, e.View.Widget.OverlaidPreview = Backbone.View.extend({
+    }), Olive.View.Widget = Olive.View.Widget || {}, Olive.View.Widget.OverlaidPreview = Backbone.View.extend({
         events: {
             input: "onTextInput"
         },
@@ -1389,7 +1389,7 @@ var Olv = Olv || {};
                 i = t.val();
             this.textPreview.text(i || t.attr("placeholder")), this.textPreview.toggleClass("placeholder", !i)
         }
-    }), e.View.Widget.TextareaWithMenu = Backbone.View.extend({
+    }), Olive.View.Widget.TextareaWithMenu = Backbone.View.extend({
         className: "textarea-with-menu",
         events: {
             'click input[name="_post_type"]': "onMenuClicked",
@@ -1427,12 +1427,12 @@ var Olv = Olv || {};
                 t = "data:image/bmp;base64," + e;
             this.paintingPreview.css("background-image", "url(" + t + ")"), this.painting.val(e)
         }
-    }), e.View.Widget.UpdateChecker = Backbone.View.extend({
+    }), Olive.View.Widget.UpdateChecker = Backbone.View.extend({
         events: {
             "olv:updatechecker:update": "onUpdate"
         },
         onUpdate: function(t, i) {
-            var o = e.UpdateChecker.getInstance();
+            var o = Olive.UpdateChecker.getInstance();
             $.each(o._settings, function(e, t) {
                 $.each(t.params, function(e, t) {
                     void 0 == i[e] && (this.success = !1)
@@ -1440,8 +1440,8 @@ var Olv = Olv || {};
             })
         },
         initialize: function() {
-            var t = e.UpdateChecker.getInstance();
-            e.View.Widget.UpdateChecker.isInvoked || (t.onUpdate("checkupdate", {
+            var t = Olive.UpdateChecker.getInstance();
+            Olive.View.Widget.UpdateChecker.isInvoked || (t.onUpdate("checkupdate", {
                 news: {},
                 admin_message: {},
                 mission: {}
@@ -1449,8 +1449,8 @@ var Olv = Olv || {};
                 var o = 0;
                 $.each(i, function(e, i) {
                     o += Number(t[e].unread_count)
-                }), e.Toolbar.setNotificationCount(o)
-            }), e.View.Widget.UpdateChecker.isInvoked = !0), t.invoke(), $(document).one("olv:pagechange:end", function(e, i) {
+                }), Olive.Toolbar.setNotificationCount(o)
+            }), Olive.View.Widget.UpdateChecker.isInvoked = !0), t.invoke(), $(document).one("olv:pagechange:end", function(e, i) {
                 t.pjaxLoadLog = i ? i.join(",") : ""
             }), $(document).one("olv:pagechange:start", function() {
                 t.clearTimeout()
@@ -1458,22 +1458,22 @@ var Olv = Olv || {};
         }
     }, {
         isInvoked: !1
-    }), e.View.Widget.GuestDialog = Backbone.View.extend({
+    }), Olive.View.Widget.GuestDialog = Backbone.View.extend({
         events: {
             "click .guest-dialog": "onButtonClick"
         },
         onButtonClick: function(t) {
-            t.preventDefault(), e.deferredConfirm(null, e.loc("olv.portal.guest.alert.message")).done(function(e) {
+            t.preventDefault(), Olive.deferredConfirm(null, Olive.loc("olv.portal.guest.alert.message")).done(function(e) {
                 e && cave.jump_toAccount(0)
             })
         }
-    }), e.View.Widget.AgeGateDialog = Backbone.View.extend({
+    }), Olive.View.Widget.AgeGateDialog = Backbone.View.extend({
         events: {
             "click .age-confirm-button": "onAgeConfirmButton",
             "mousedown .age-gate select": "onMousedownSelect",
             "change .age-gate select": "onChangeSelect",
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         initialize: function() {
@@ -1523,7 +1523,7 @@ var Olv = Olv || {};
             }
         },
         passAgeGate: function() {
-            this.$el.remove(), $("#body").children().show(), e.Cookie.set("age_gate_done", "1")
+            this.$el.remove(), $("#body").children().show(), Olive.Cookie.set("age_gate_done", "1")
         },
         onChangeSelect: function(e) {
             this.adjustDay()
@@ -1532,9 +1532,9 @@ var Olv = Olv || {};
             var i = +this.$year.val(),
                 o = +this.$month.val(),
                 n = +this.$day.val();
-            e.Cookie.get("age_gate_done") ? this.passAgeGate() : this.validateDate(i, o, n) ? this.validateAge(i, o, n) ? this.passAgeGate() : (this.$(".age-gate").addClass("none"), this.$(".back-dialog").removeClass("none")) : e.deferredAlert(null, e.Locale.text("olv.portal.age_gate.select_label"))
+            Olive.Cookie.get("age_gate_done") ? this.passAgeGate() : this.validateDate(i, o, n) ? this.validateAge(i, o, n) ? this.passAgeGate() : (this.$(".age-gate").addClass("none"), this.$(".back-dialog").removeClass("none")) : Olive.deferredAlert(null, Olive.Locale.text("olv.portal.age_gate.select_label"))
         }
-    }), e.View.Widget.HiddenContent = Backbone.View.extend({
+    }), Olive.View.Widget.HiddenContent = Backbone.View.extend({
         className: "post multi-timeline-post",
         events: {
             "click .hidden-content-button": "onHiddenClick"
@@ -1547,7 +1547,7 @@ var Olv = Olv || {};
                 e.attr(e.is("a") ? "href" : "data-href", e.attr("data-href-hidden"))
             }), t.closest(".hidden-content").remove()
         }
-    }), e.View.Widget.YoutubeJump = Backbone.View.extend({
+    }), Olive.View.Widget.YoutubeJump = Backbone.View.extend({
         events: {
             click: "onClick"
         },
@@ -1555,19 +1555,19 @@ var Olv = Olv || {};
             t.preventDefault();
             var i = $(t.currentTarget),
                 o = cave.jump_getYoutubeVersion(),
-                n = i.attr("data-jump-query"); - 1 !== o ? o < 1024 ? e.deferredAlert(null, e.loc("olv.portal.n3ds.youtube.alert.patch")) : cave.jump_suspendedYoutube() ? e.deferredConfirm(null, e.loc("olv.portal.n3ds.youtube.jump")).done(function(e) {
+                n = i.attr("data-jump-query"); - 1 !== o ? o < 1024 ? Olive.deferredAlert(null, Olive.loc("olv.portal.n3ds.youtube.alert.patch")) : cave.jump_suspendedYoutube() ? Olive.deferredConfirm(null, Olive.loc("olv.portal.n3ds.youtube.jump")).done(function(e) {
                 e && cave.jump_toSuspendedYoutube(n)
             }) : setTimeout(function() {
                 cave.jump_toYoutube(1, n)
-            }, 0) : e.deferredAlert(null, e.loc("olv.portal.n3ds.youtube.alert"))
+            }, 0) : Olive.deferredAlert(null, Olive.loc("olv.portal.n3ds.youtube.alert"))
         }
-    }), e.View.Widget.Reply = Backbone.View.extend({
+    }), Olive.View.Widget.Reply = Backbone.View.extend({
         events: {
             "click .more-button": "onMoreButtonClick"
         },
         onMoreButtonClick: function(t) {
             var i = $(t.currentTarget).closest("a");
-            t.preventDefault(), this.loader || e.Form.isDisabled(i) || (e.Loading.lock(), this.loader = e.Form.get(i.attr("href"), null, i, !1).done($.proxy(function(e) {
+            t.preventDefault(), this.loader || Olive.Form.isDisabled(i) || (Olive.Loading.lock(), this.loader = Olive.Form.get(i.attr("href"), null, i, !1).done($.proxy(function(e) {
                 var t = $(e);
                 if (i.hasClass("all-replies-button")) {
                     i.remove();
@@ -1579,18 +1579,18 @@ var Olv = Olv || {};
                 i.hasClass("newer-replies-button") ? window.scroll(0, this.$el.offset().top) : (i.hasClass("older-replies-button") || i.hasClass("newest-replies-button")) && window.scroll(0, $(document).height())
             }, this)).always($.proxy(function() {
                 i.removeClass("loading"), this.loader = null, setTimeout(function() {
-                    e.Loading.unlock()
+                    Olive.Loading.unlock()
                 }, 0)
             }, this)))
         }
-    }), e.View.Widget.FirstPostNotice = Backbone.View.extend({
+    }), Olive.View.Widget.FirstPostNotice = Backbone.View.extend({
         events: {
             click: "onTriggerClick"
         },
         onTriggerClick: function(t) {
-            if ($(document.body).attr("data-is-first-post") && !e.Form.isDisabled(this.$el)) {
+            if ($(document.body).attr("data-is-first-post") && !Olive.Form.isDisabled(this.$el)) {
                 var i = $(t.currentTarget);
-                t.preventDefault(), i.removeAttr("data-pjax"), e.deferredAlert(null, e.loc("olv.portal.confirm_display_played_mark")).done(function() {
+                t.preventDefault(), i.removeAttr("data-pjax"), Olive.deferredAlert(null, Olive.loc("olv.portal.confirm_display_played_mark")).done(function() {
                     i.attr("data-pjax", "1");
                     var e = i.attr("data-sound");
                     i.attr("data-sound", ""), i.trigger("click"), i.attr("data-sound", e)
@@ -1599,7 +1599,7 @@ var Olv = Olv || {};
                 })
             }
         }
-    }), e.View.Widget.Empathy = Backbone.View.extend({
+    }), Olive.View.Widget.Empathy = Backbone.View.extend({
         className: "post",
         events: {
             "click .empathy-button": "onEmpathyClick",
@@ -1611,11 +1611,11 @@ var Olv = Olv || {};
         },
         onEmpathyClick: function(t) {
             var i = $(t.currentTarget);
-            if (!(e.Form.isDisabled(i) || e.Guest.isGuest() || t.defaultPrevented)) {
+            if (!(Olive.Form.isDisabled(i) || Olive.Guest.isGuest() || t.defaultPrevented)) {
                 var o = this.isEmpathyAdded(i),
                     n = !o,
                     a = i.attr("data-action");
-                return i.trigger("olv:entry:empathy:toggle", [n]), o && (a += ".delete"), e.Form.post(a, null, i).done(function() {
+                return i.trigger("olv:entry:empathy:toggle", [n]), o && (a += ".delete"), Olive.Form.post(a, null, i).done(function() {
                     i.trigger("olv:entry:empathy:toggle:done", [n])
                 }).fail(function() {
                     i.trigger("olv:entry:empathy:toggle:fail", [o])
@@ -1631,19 +1631,19 @@ var Olv = Olv || {};
         toggleButtonStatus: function(t, i) {
             t.toggleClass("empathy-added", i), t.attr("data-sound", i ? "SE_OLV_MII_ADD" : "SE_OLV_CANCEL");
             var o = t.attr("data-feeling") || "normal";
-            t.find(".empathy-button-text").text(e.loc("olv.portal.miitoo." + o + (i ? ".delete" : "")))
+            t.find(".empathy-button-text").text(Olive.loc("olv.portal.miitoo." + o + (i ? ".delete" : "")))
         }
-    }), e.View.Widget.ImageViewer = Backbone.View.extend({
+    }), Olive.View.Widget.ImageViewer = Backbone.View.extend({
         events: {
             "click a": "onScreenshotClick"
         },
         onScreenshotClick: function(t) {
-            if (e.router.lockRequest) return !1;
-            e.router.lockRequest = !0, cave.brw_notifyPageMoving()
+            if (Olive.router.lockRequest) return !1;
+            Olive.router.lockRequest = !0, cave.brw_notifyPageMoving()
         }
-    }), e.View.Widget.EmpathyWithIcons = e.View.Widget.Empathy.extend({
+    }), Olive.View.Widget.EmpathyWithIcons = Olive.View.Widget.Empathy.extend({
         initialize: function() {
-            e.View.Widget.Empathy.prototype.initialize.call(this);
+            Olive.View.Widget.Empathy.prototype.initialize.call(this);
             var t = this.$(".empathy-button"),
                 i = this.isEmpathyAdded(t);
             this.updateIcons(t, i)
@@ -1655,14 +1655,14 @@ var Olv = Olv || {};
         updateIcons: function(t, i) {
             var o = $("#empathy-content"),
                 n = +t.attr("data-other-empathy-count"),
-                a = n > 0 ? e.loc_n(i ? "olv.portal.empathy.you_and_n_added" : "olv.portal.empathy.n_added", n, n) : i ? e.loc("olv.portal.empathy.you_added") : "";
+                a = n > 0 ? Olive.loc_n(i ? "olv.portal.empathy.you_and_n_added" : "olv.portal.empathy.n_added", n, n) : i ? Olive.loc("olv.portal.empathy.you_added") : "";
             o.toggle(!!a), o.find(".post-permalink-feeling-text").text(a), o.find(".visitor").toggle(i), o.find(".extra").toggle(!i)
         }
-    }), e.View.Widget.ConfirmBlacklist = Backbone.View.extend({
+    }), Olive.View.Widget.ConfirmBlacklist = Backbone.View.extend({
         events: {
             "click .unblock-button, .block-button": "onButtonClick",
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         onButtonClick: function(t) {
@@ -1671,23 +1671,23 @@ var Olv = Olv || {};
                 n = i.attr("data-action"),
                 a = i.attr("data-screen-name"),
                 s = o ? {
-                    title: e.loc("olv.portal.blocklist.add"),
-                    body: e.loc("olv.portal.blocklist.block_successed_to", a)
+                    title: Olive.loc("olv.portal.blocklist.add"),
+                    body: Olive.loc("olv.portal.blocklist.block_successed_to", a)
                 } : {
-                    title: e.loc("olv.portal.blocklist.delete"),
-                    body: e.loc("olv.portal.blocklist.unblock_successed_to", a)
+                    title: Olive.loc("olv.portal.blocklist.delete"),
+                    body: Olive.loc("olv.portal.blocklist.unblock_successed_to", a)
                 };
-            e.Net.ajax({
+            Olive.Net.ajax({
                 type: "POST",
                 url: n,
                 lock: !0
             }).done(function() {
-                e.alert(s.title, s.body);
+                Olive.alert(s.title, s.body);
                 var t = i.attr("data-user-url");
-                location.protocol + "//" + location.host + t === cave.history_getPrev() && cave.history_removePrev(), e.Browsing.replaceWith(t)
+                location.protocol + "//" + location.host + t === cave.history_getPrev() && cave.history_removePrev(), Olive.Browsing.replaceWith(t)
             })
         }
-    }), e.View.Widget.Blacklist = Backbone.View.extend({
+    }), Olive.View.Widget.Blacklist = Backbone.View.extend({
         events: {
             "click .unblock-button, .block-button": "onButtonClick"
         },
@@ -1696,69 +1696,69 @@ var Olv = Olv || {};
                 o = i.hasClass("block"),
                 n = i.attr("data-screen-name"),
                 a = o ? {
-                    title: e.loc("olv.portal.blocklist.add"),
-                    body: e.loc("olv.portal.blocklist.block_confirm_to.for_n3ds", n),
-                    back: e.loc("olv.portal.back"),
-                    ok: e.loc("olv.portal.block"),
-                    done: e.loc("olv.portal.blocklist.block_successed_to", n)
+                    title: Olive.loc("olv.portal.blocklist.add"),
+                    body: Olive.loc("olv.portal.blocklist.block_confirm_to.for_n3ds", n),
+                    back: Olive.loc("olv.portal.back"),
+                    ok: Olive.loc("olv.portal.block"),
+                    done: Olive.loc("olv.portal.blocklist.block_successed_to", n)
                 } : {
-                    title: e.loc("olv.portal.blocklist.delete"),
-                    body: e.loc("olv.portal.confirm.remove_from_blocklist_to", n),
-                    back: e.loc("olv.portal.back"),
-                    ok: e.loc("olv.portal.button.remove"),
-                    done: e.loc("olv.portal.blocklist.unblock_successed_to", n)
+                    title: Olive.loc("olv.portal.blocklist.delete"),
+                    body: Olive.loc("olv.portal.confirm.remove_from_blocklist_to", n),
+                    back: Olive.loc("olv.portal.back"),
+                    ok: Olive.loc("olv.portal.button.remove"),
+                    done: Olive.loc("olv.portal.blocklist.unblock_successed_to", n)
                 };
-            e.deferredConfirm(a.title, a.body, a.back, a.ok).done(function(t) {
+            Olive.deferredConfirm(a.title, a.body, a.back, a.ok).done(function(t) {
                 if (t) {
                     var o = i.attr("data-action");
-                    e.Form.post(o, null, i, !0).done(function() {
-                        e.alert(a.title, a.done), e.Browsing.replaceWith(location.pathname)
+                    Olive.Form.post(o, null, i, !0).done(function() {
+                        Olive.alert(a.title, a.done), Olive.Browsing.replaceWith(location.pathname)
                     }).fail(function(t, i, o, n) {
-                        n && o.status && 503 !== o.status && e.Browsing.replaceWith(location.pathname)
+                        n && o.status && 503 !== o.status && Olive.Browsing.replaceWith(location.pathname)
                     })
                 }
             })
         }
-    }), e.View.Widget.Follow = Backbone.View.extend({
+    }), Olive.View.Widget.Follow = Backbone.View.extend({
         events: {
             "click .unfollow-button, .follow-button": "onButtonClick"
         },
         onButtonClick: function(t) {
             var i = $(t.currentTarget);
-            if (!(e.Form.isDisabled(i) || e.Guest.isGuest() || t.defaultPrevented)) {
+            if (!(Olive.Form.isDisabled(i) || Olive.Guest.isGuest() || t.defaultPrevented)) {
                 var o, n = i.hasClass("unfollow-button"),
                     a = "",
                     s = "";
                 if (n) {
-                    a = i.attr("data-screen-name"), s = e.loc("olv.portal.unfollow");
-                    var r = e.loc("olv.portal.followlist.confirm_unfollow_to", a);
-                    o = e.deferredConfirm(s, r, e.loc("olv.portal.back"), e.loc("olv.portal.button.remove"))
+                    a = i.attr("data-screen-name"), s = Olive.loc("olv.portal.unfollow");
+                    var r = Olive.loc("olv.portal.followlist.confirm_unfollow_to", a);
+                    o = Olive.deferredConfirm(s, r, Olive.loc("olv.portal.back"), Olive.loc("olv.portal.button.remove"))
                 } else o = $.Deferred().resolve(!0);
                 o.done(function(t) {
                     if (t) {
                         var o = i.attr("data-action");
-                        e.Form.post(o, null, i, !0).done(function() {
-                            n && e.alert(s, e.loc("olv.portal.unfollow_succeeded_to", a)), i.addClass("none").siblings().removeClass("none"), i.hasClass("relation") && e.Browsing.replaceWith(location.href)
+                        Olive.Form.post(o, null, i, !0).done(function() {
+                            n && Olive.alert(s, Olive.loc("olv.portal.unfollow_succeeded_to", a)), i.addClass("none").siblings().removeClass("none"), i.hasClass("relation") && Olive.Browsing.replaceWith(location.href)
                         })
                     }
                 })
             }
         }
-    }), e.View.Widget.FavoriteButtons = Backbone.View.extend({
+    }), Olive.View.Widget.FavoriteButtons = Backbone.View.extend({
         events: {
             "click .favorite-button": "onFavoriteClick"
         },
         onFavoriteClick: function(t) {
             t.preventDefault();
             var i = $(t.currentTarget);
-            if (!e.Form.isDisabled(i)) {
+            if (!Olive.Form.isDisabled(i)) {
                 var o = i.hasClass("checked"),
                     n = i.attr(o ? "data-action-unfavorite" : "data-action-favorite");
-                this.toggleFavoriteButton(i, !o), $(document.body).attr("data-is-first-favorite") && !o && e.deferredAlert(null, e.loc("olv.portal.confirm_first_favorite")).done(function() {
+                this.toggleFavoriteButton(i, !o), $(document.body).attr("data-is-first-favorite") && !o && Olive.deferredAlert(null, Olive.loc("olv.portal.confirm_first_favorite")).done(function() {
                     $(document.body).removeAttr("data-is-first-favorite")
                 });
                 var a = this;
-                e.Form.post(n, null, i).done(function() {
+                Olive.Form.post(n, null, i).done(function() {
                     o = !o, i.trigger("olv:community:favorite:toggle", [o])
                 }).fail(function() {
                     a.toggleFavoriteButton(i, o)
@@ -1768,24 +1768,24 @@ var Olv = Olv || {};
         toggleFavoriteButton: function(e, t) {
             e.toggleClass("checked", t), e.attr("data-sound", t ? "SE_OLV_CHECKBOX_CHECK" : "SE_OLV_CHECKBOX_UNCHECK")
         }
-    }), e.View.Widget._Search = Backbone.View.extend({
+    }), Olive.View.Widget._Search = Backbone.View.extend({
         onInput: function(t) {
             var i = $(t.currentTarget),
                 o = i.attr("data-action"),
                 n = i.val();
-            n && (i.val(""), e.Browsing.navigate(o + "?" + i.attr("name") + "=" + encodeURIComponent(n)))
+            n && (i.val(""), Olive.Browsing.navigate(o + "?" + i.attr("name") + "=" + encodeURIComponent(n)))
         }
-    }), e.View.Widget.UserSearch = e.View.Widget._Search.extend({
+    }), Olive.View.Widget.UserSearch = Olive.View.Widget._Search.extend({
         className: "user-search-button",
         events: {
             "input .user-search-user-id": "onInput"
         }
-    }), e.View.Widget.TitleSearch = e.View.Widget._Search.extend({
+    }), Olive.View.Widget.TitleSearch = Olive.View.Widget._Search.extend({
         className: "title-search-button",
         events: {
             "input .title-search-title-id": "onInput"
         }
-    }), e.View.Widget.InfoTicker = Backbone.View.extend({
+    }), Olive.View.Widget.InfoTicker = Backbone.View.extend({
         events: {
             "click a[href]": "onTickerClick"
         },
@@ -1798,7 +1798,7 @@ var Olv = Olv || {};
         },
         onTickerClick: function(t) {
             var i = $(t.currentTarget);
-            if (!e.Form.isDisabled(i) && !t.defaultPrevented) {
+            if (!Olive.Form.isDisabled(i) && !t.defaultPrevented) {
                 if (i.attr("data-pjax")) {
                     var o = this;
                     $(document).one("olv:pjax:end olv:pjax:error", function() {
@@ -1806,30 +1806,30 @@ var Olv = Olv || {};
                     })
                 } else t.preventDefault(), this.$el.remove();
                 var n = "last-seen." + this.$el.attr("data-olive-title-id");
-                cave.ls_setItem(n, "" + Math.floor(+new Date / 1e3)), !e.Guest.isGuest() && this.$el.attr("data-is-of-miiverse") && $.post("/settings/miiverse_info_post")
+                cave.ls_setItem(n, "" + Math.floor(+new Date / 1e3)), !Olive.Guest.isGuest() && this.$el.attr("data-is-of-miiverse") && $.post("/settings/miiverse_info_post")
             }
         }
-    }), e.View.Widget.ExitOrBackButton = Backbone.View.extend({
+    }), Olive.View.Widget.ExitOrBackButton = Backbone.View.extend({
         initialize: function() {
             var t = location.pathname,
                 i = location.search,
                 o = $("body").attr("data-profile-url"),
                 n = new RegExp("^(/|/communities|/friend_messages|/guide/for_guest|/news/.+|" + o + "|/welcome/profile)$"),
-                a = "1" === e.URI.getQueryVars()._cannot_back,
+                a = "1" === Olive.URI.getQueryVars()._cannot_back,
                 s = (!n.test(t) || /^\/$/.test(t) && /^\?.*page_param=/.test(i)) && cave.history_getBackCount() > 0 && !a,
-                r = e.Toolbar;
+                r = Olive.Toolbar;
             r.setCornerButtonType(s ? r.buttons.BACK : r.buttons.EXIT)
         }
-    }), e.View.Widget.ToolbarVisibility = Backbone.View.extend({
+    }), Olive.View.Widget.ToolbarVisibility = Backbone.View.extend({
         initialize: function() {
             var t = !/^\/(?:titles\/.+\/.+\/(?:topic\/|artwork\/)?(?:post)|users\/.+\/diary\/post|posts\/.+\/reply|welcome\/(?:3ds|redesign_tutorial)?|warning\/.+|welcome|register|login|titles\/.+\/select_album_image)$/.test(location.pathname);
-            e.Toolbar.setVisible(t)
+            Olive.Toolbar.setVisible(t)
         }
-    }), e.View.Widget.HomeButton = Backbone.View.extend({
+    }), Olive.View.Widget.HomeButton = Backbone.View.extend({
         initialize: function() {
             cave.home_setEnabled && (/^\/(?:titles\/.+\/.+\/(?:topic\/|artwork\/)?(?:post)|users\/.+\/diary\/post|posts\/.+\/reply)$/.test(location.pathname) ? cave.home_setEnabled(0) : cave.home_setEnabled(1))
         }
-    }), e.View.Widget.SelectButtons = Backbone.View.extend({
+    }), Olive.View.Widget.SelectButtons = Backbone.View.extend({
         events: {
             "change select": "onSelectChange"
         },
@@ -1841,7 +1841,7 @@ var Olv = Olv || {};
             var t = e[0].options[e[0].selectedIndex];
             e.siblings(".select-button-content").text(t.text)
         }
-    }), e.View.Widget.SelectableElements = Backbone.View.extend({
+    }), Olive.View.Widget.SelectableElements = Backbone.View.extend({
         events: {
             "change select": "onSelectChange"
         },
@@ -1859,38 +1859,38 @@ var Olv = Olv || {};
             var t = $(e.currentTarget);
             this.updateClass(t)
         }
-    }), e.View.Widget.URLSelector = e.View.Widget.SelectableElements.extend({
+    }), Olive.View.Widget.URLSelector = Olive.View.Widget.SelectableElements.extend({
         onSelectChange: function(t) {
-            e.View.Widget.SelectableElements.prototype.onSelectChange.call(this, t);
+            Olive.View.Widget.SelectableElements.prototype.onSelectChange.call(this, t);
             var i = $(t.currentTarget).val();
-            i && e.Browsing.navigate(i)
+            i && Olive.Browsing.navigate(i)
         }
-    }), e.View.Widget.eShopJump = Backbone.View.extend({
+    }), Olive.View.Widget.eShopJump = Backbone.View.extend({
         events: {
             click: "onClick"
         },
         onClick: function(t) {
             t.preventDefault();
             var i = $(t.currentTarget).attr("data-dst-title-id");
-            i && e.deferredConfirm(null, e.loc("olv.portal.confirm_open_eshop")).done(function(e) {
+            i && Olive.deferredConfirm(null, Olive.loc("olv.portal.confirm_open_eshop")).done(function(e) {
                 cave.jump_toShop(1, i)
             })
         }
-    }), e.View.Widget.CheckableControls = Backbone.View.extend({
+    }), Olive.View.Widget.CheckableControls = Backbone.View.extend({
         events: {
             "click input": "onClick"
         },
         initialize: function() {
             ("input" === this.el.tagName.toLowerCase() ? this.$el : this.$("input:checked")).each(function() {
-                e.Form.updateParentClass(this)
+                Olive.Form.updateParentClass(this)
             })
         },
         onClick: function(t) {
-            e.Form.updateParentClass(t.currentTarget)
+            Olive.Form.updateParentClass(t.currentTarget)
         }
-    }), e.View.Widget.FreshPost = Backbone.View.extend({
+    }), Olive.View.Widget.FreshPost = Backbone.View.extend({
         initialize: function() {
-            var t = e.View.Widget.FreshPost.stock.shift();
+            var t = Olive.View.Widget.FreshPost.stock.shift();
             if (t) {
                 var i = !!$("#" + t.attr("data-id")).length,
                     o = this.isInAppropriatePage(t);
@@ -1911,7 +1911,7 @@ var Olv = Olv || {};
             t.length && t.hasClass("no-content-window") && t.remove(), this.el.insertAdjacentHTML("afterbegin", e.prop("text"))
         },
         scrollToPost: function(t) {
-            var i = e.ScrollGuide.WINDOW_INNER_HEIGHT / 2 - 20,
+            var i = Olive.ScrollGuide.WINDOW_INNER_HEIGHT / 2 - 20,
                 o = $("#" + t.attr("data-id"));
             o.length && $(document).one("olv:pagechange:end", function() {
                 setTimeout(function() {
@@ -1919,7 +1919,7 @@ var Olv = Olv || {};
                 }, 5)
             })
         }
-    }), e.View.Widget.FreshPost.stock = [], e.View.Widget.FreshReply = e.View.Widget.FreshPost.extend({
+    }), Olive.View.Widget.FreshPost.stock = [], Olive.View.Widget.FreshReply = Olive.View.Widget.FreshPost.extend({
         isInAppropriatePage: function(e) {
             var t = e.attr("data-parent-post-id");
             return !!t && t === this.$el.attr("data-parent-post-id")
@@ -1927,7 +1927,7 @@ var Olv = Olv || {};
         insertPost: function(e) {
             this.el.insertAdjacentHTML("beforeend", e.prop("text"))
         }
-    }), e.View.Widget.PostScroller = Backbone.View.extend({
+    }), Olive.View.Widget.PostScroller = Backbone.View.extend({
         events: {
             keydown: "onKeyDown"
         },
@@ -1959,14 +1959,14 @@ var Olv = Olv || {};
             } else s = e ? 0 : a, $(document.activeElement).blur(), $(document).trigger("olv:keyhandler:scroll:document");
             return window.scrollTo(0, s), this.lastScrollTop = s, i
         }
-    }), e.View.Widget.PageReloader = Backbone.View.extend({
+    }), Olive.View.Widget.PageReloader = Backbone.View.extend({
         events: {
             keydown: "onKeyDown"
         },
         onKeyDown: function(t) {
-            89 === t.which && ($(document).trigger("olv:pagereloader:reload"), e.Browsing.reload())
+            89 === t.which && ($(document).trigger("olv:pagereloader:reload"), Olive.Browsing.reload())
         }
-    }), e.View.Widget.Dropdown = Backbone.View.extend({
+    }), Olive.View.Widget.Dropdown = Backbone.View.extend({
         className: "dropdown",
         events: {
             "click .dropdown-toggle": "onToggleClick"
@@ -2005,22 +2005,22 @@ var Olv = Olv || {};
         undelegateEvents: function() {
             this.close(), Backbone.View.prototype.undelegateEvents.call(this)
         }
-    }), e.View.Widget.CloseTutorial = Backbone.View.extend({
+    }), Olive.View.Widget.CloseTutorial = Backbone.View.extend({
         events: {
             click: "onCloseTutorialClick"
         },
         onCloseTutorialClick: function(t) {
             var i = $(t.currentTarget);
-            if (i.parent().hide(), i.attr("data-tutorial-name")) e.Net.post("/settings/tutorial_post", {
+            if (i.parent().hide(), i.attr("data-tutorial-name")) Olive.Net.post("/settings/tutorial_post", {
                 tutorial_name: i.attr("data-tutorial-name")
             }).done(function() {});
             else if (i.attr("data-achievement-name")) {
                 var o = i.attr("data-achievement-name").split(/\s*,\s*/);
-                e.Achievement.requestAchieveWithoutRegard(o)
+                Olive.Achievement.requestAchieveWithoutRegard(o)
             }
             t.preventDefault()
         }
-    }), e.View.Widget.PostToBack = Backbone.View.extend({
+    }), Olive.View.Widget.PostToBack = Backbone.View.extend({
         events: {
             submit: "onSubmit"
         },
@@ -2028,11 +2028,11 @@ var Olv = Olv || {};
             t.preventDefault();
             var i = $(t.currentTarget),
                 o = i.find('input[type="submit"]');
-            e.Form.submit(i, o, !0).done(function() {
+            Olive.Form.submit(i, o, !0).done(function() {
                 history.back()
             })
         }
-    }), e.View.Widget.BodyLanguageSelector = Backbone.View.extend({
+    }), Olive.View.Widget.BodyLanguageSelector = Backbone.View.extend({
         events: {
             "change select": "onSelectChange"
         },
@@ -2040,7 +2040,7 @@ var Olv = Olv || {};
             var t = $(e.currentTarget).val();
             $("#body-language-" + t).toggleClass("none", !1).siblings(".multi-language-body").toggleClass("none", !0)
         }
-    }), e.View.Widget.MoreContentButton = Backbone.View.extend({
+    }), Olive.View.Widget.MoreContentButton = Backbone.View.extend({
         events: {
             "click .more-content-button": "onMoreContentButton"
         },
@@ -2054,7 +2054,7 @@ var Olv = Olv || {};
                     var o = $('<span class="wrapped none"></span>').text(i[2]);
                     t.append(o);
                     var n = $('<a href="#" class="more-content-button"></a>');
-                    n.text(e.loc("olv.portal.read_more_content")), t.after(n)
+                    n.text(Olive.loc("olv.portal.read_more_content")), t.after(n)
                 }
             })
         },
@@ -2063,14 +2063,14 @@ var Olv = Olv || {};
             var t = $(e.currentTarget);
             t.prev().find(".wrapped").removeClass("none"), t.remove()
         }
-    }), e.View.Widget.MultipleSelectMediator = Backbone.View.extend({
+    }), Olive.View.Widget.MultipleSelectMediator = Backbone.View.extend({
         events: {
             "change select": "onChange"
         },
         initialize: function() {
             var t = this,
                 i = _.map(this.$("select"), function(t) {
-                    return new e.View.Widget.MultipleSelect({
+                    return new Olive.View.Widget.MultipleSelect({
                         el: t
                     })
                 });
@@ -2113,13 +2113,13 @@ var Olv = Olv || {};
                         return "[value=" + e + "]"
                     }))
                 };
-            new e.View.Widget.MultipleSelect({
+            new Olive.View.Widget.MultipleSelect({
                 el: t
             }).getSelectedConfigurableOption() && (l.disableOptionsSelector = "option[value=" + o + "]"), r.forEach(function(e) {
                 e.$el.trigger("olv:select:change", l)
             })
         }
-    }), e.View.Widget.MultipleSelect = Backbone.View.extend({
+    }), Olive.View.Widget.MultipleSelect = Backbone.View.extend({
         events: {
             "olv:select:change": "onChanged"
         },
@@ -2137,34 +2137,34 @@ var Olv = Olv || {};
         onChanged: function(e, t) {
             "enableOptionsSelector" in t && this.enableOptions(t.enableOptionsSelector), "disableOptionsSelector" in t && this.disableOptions(t.disableOptionsSelector)
         }
-    }), e.View.Widget.AchievementUpdater = Backbone.View.extend({
+    }), Olive.View.Widget.AchievementUpdater = Backbone.View.extend({
         events: {
             "olv:achievement:update": "onAchievementUpdate"
         },
         onAchievementUpdate: function(t) {
             var i = $(t.target),
                 o = i.attr("data-achievement-name");
-            o && e.Achievement.requestAchieveWithoutRegard([o]).done(function(e) {
+            o && Olive.Achievement.requestAchieveWithoutRegard([o]).done(function(e) {
                 i.trigger("olv:achievement:update:done", [e])
             })
         }
-    }), e.View.Page.AlbumDetail = e.View.Page.Common.extend({
+    }), Olive.View.Page.AlbumDetail = Olive.View.Page.Common.extend({
         events: {
             "click .js-album-delete-button": "onDeleteAlbumClick"
         },
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new e.View.Widget.URLSelector({
+            Olive.View.Page.Common.prototype.initialize.call(this), this.widgets.push(new Olive.View.Widget.URLSelector({
                 el: $("#post-target-selector")
             }))
         },
         onDeleteAlbumClick: function(t) {
             var i = $(t.currentTarget.form),
                 o = $(t.currentTarget).find(".js-album-delete-button");
-            e.Form.isDisabled(o) || t.defaultPrevented || (t.preventDefault(), e.confirm(null, e.loc("olv.portal.album.delete_confirm")) && e.Form.submit(i, o, !0).done(function(e) {
+            Olive.Form.isDisabled(o) || t.defaultPrevented || (t.preventDefault(), Olive.confirm(null, Olive.loc("olv.portal.album.delete_confirm")) && Olive.Form.submit(i, o, !0).done(function(e) {
                 history.back()
             }))
         }
-    }), e.View.Widget.CreateDiaryOrSaveScreenshotWindow = Backbone.View.extend({
+    }), Olive.View.Widget.CreateDiaryOrSaveScreenshotWindow = Backbone.View.extend({
         events: {
             "click .js-edit-diary-button": "onPostDiaryClick",
             "click .js-save-album-button": "onSaveScreenshotClick"
@@ -2192,9 +2192,9 @@ var Olv = Olv || {};
                 i = [];
             t.each(function(t, o) {
                 var n = $(o),
-                    a = e.Screenshot[n.hasClass("js-upside") ? "SCREEN_UPSIDE" : "SCREEN_DOWNSIDE"];
-                if (e.Screenshot.isEnabled(a)) {
-                    var s = e.Screenshot.retrieveImagePath(a);
+                    a = Olive.Screenshot[n.hasClass("js-upside") ? "SCREEN_UPSIDE" : "SCREEN_DOWNSIDE"];
+                if (Olive.Screenshot.isEnabled(a)) {
+                    var s = Olive.Screenshot.retrieveImagePath(a);
                     if (s) {
                         var r = n.find("img"),
                             l = $.Deferred();
@@ -2209,7 +2209,7 @@ var Olv = Olv || {};
                 for (var a = 0, s = t.length; a < s; a++) {
                     var r = t.eq(a).find('input[type="radio"]');
                     if (!r.prop("disabled")) {
-                        r.prop("checked", !0), e.Form.updateParentClass(r.get(0));
+                        r.prop("checked", !0), Olive.Form.updateParentClass(r.get(0));
                         break
                     }
                 }
@@ -2231,18 +2231,18 @@ var Olv = Olv || {};
         onPostDiaryClick: function(t) {
             t.preventDefault();
             var i = this.$el.find(".js-edit-diary-button");
-            if (!e.Form.isDisabled(i)) {
+            if (!Olive.Form.isDisabled(i)) {
                 this.toggleActionEnabled(!1);
                 var o = i.attr("href").split("?")[0] + "?lls=" + this.getSelectedScreenshotTarget();
-                e.Browsing.navigate(o)
+                Olive.Browsing.navigate(o)
             }
         },
         onSaveScreenshotClick: function(t) {
             t.preventDefault();
             var i = this.$el.find(".js-save-album");
-            e.Form.isDisabled(i.find(".js-save-album-button")) || (this.toggleActionEnabled(!1), this.setSelectedScreenshot(), e.Loading.lock(), i.submit())
+            Olive.Form.isDisabled(i.find(".js-save-album-button")) || (this.toggleActionEnabled(!1), this.setSelectedScreenshot(), Olive.Loading.lock(), i.submit())
         }
-    }), e.View.Widget.ConfirmAlbum = Backbone.View.extend({
+    }), Olive.View.Widget.ConfirmAlbum = Backbone.View.extend({
         events: {
             "click .js-return-to-game-button": "onReturnToGameClick"
         },
@@ -2251,48 +2251,48 @@ var Olv = Olv || {};
                 cave.jump_toSuspendedApplication()
             }, 0)
         }
-    }), e.View.Widget.CloseTopicPost = Backbone.View.extend({
+    }), Olive.View.Widget.CloseTopicPost = Backbone.View.extend({
         events: {
             "click .js-close-topic-post-button": "onCloseTopicPostClick"
         },
         onCloseTopicPostClick: function(t) {
             var i = $(t.currentTarget.form),
                 o = $(t.currentTarget).find(".js-close-topic-post-button");
-            e.Form.isDisabled(o) || t.defaultPrevented || (t.preventDefault(), e.confirm(e.loc("olv.portal.edit.action.close_topic_post"), e.loc("olv.portal.edit.action.close_topic_post.confirm"), e.loc("olv.portal.stop"), e.loc("olv.portal.yes")) && e.Form.submit(i, o, !0).done(function(t) {
-                e.Browsing.replaceWith(location.pathname)
+            Olive.Form.isDisabled(o) || t.defaultPrevented || (t.preventDefault(), Olive.confirm(Olive.loc("olv.portal.edit.action.close_topic_post"), Olive.loc("olv.portal.edit.action.close_topic_post.confirm"), Olive.loc("olv.portal.stop"), Olive.loc("olv.portal.yes")) && Olive.Form.submit(i, o, !0).done(function(t) {
+                Olive.Browsing.replaceWith(location.pathname)
             }))
         }
-    }), e.View.Page.PostFormAlbumSelector = e.View.Page.Common.extend({
+    }), Olive.View.Page.PostFormAlbumSelector = Olive.View.Page.Common.extend({
         initialize: function() {
-            e.View.Page.Common.prototype.initialize.call(this), this.oliveTitleId = $(".js-album-image-list").attr("data-olive-title-id"), this.lockingForBack = !1
+            Olive.View.Page.Common.prototype.initialize.call(this), this.oliveTitleId = $(".js-album-image-list").attr("data-olive-title-id"), this.lockingForBack = !1
         },
         events: {
             "click .js-select-album-image": "onSelectAlbumImage",
             "click .cancel-button": function() {
-                e.Browsing.goBack()
+                Olive.Browsing.goBack()
             }
         },
         onSelectAlbumImage: function(t) {
             if (t.preventDefault(), !this.lockingForBack) {
                 this.lockingForBack = !0;
                 var i = $(t.target);
-                e.View.Page.PostFormAlbumSelector.stock.push({
+                Olive.View.Page.PostFormAlbumSelector.stock.push({
                     oliveTitleId: this.oliveTitleId,
                     albumImageId: i.attr("data-album-image-id"),
                     previewUrl: i.attr("data-album-image-preview-src")
                 }), history.back()
             }
         }
-    }), e.View.Page.PostFormAlbumSelector.stock = [], e.Content = e.Content || {}, e.Content.replaceBody = function(e) {
+    }), Olive.View.Page.PostFormAlbumSelector.stock = [], Olive.Content = Olive.Content || {}, Olive.Content.replaceBody = function(e) {
         var t = $("#body"),
             i = $("<div>").html(e).find("#body");
         document.body.replaceChild(i[0], t[0])
-    }, e.Form = {
+    }, Olive.Form = {
         toggleDisabled: function(t, i) {
             var o = void 0 === i;
             return t.each(function() {
                 var t = $(this),
-                    n = o ? !e.Form.isDisabled(t) : i;
+                    n = o ? !Olive.Form.isDisabled(t) : i;
                 if (t.toggleClass("disabled", n), void 0 !== this.form) t.prop("disabled", n);
                 else {
                     var a = n ? "href" : "data-disabled-href",
@@ -2306,8 +2306,8 @@ var Olv = Olv || {};
             return e.length && void 0 !== e[0].form ? e.prop("disabled") : e.hasClass("disabled")
         },
         disable: function(t, i) {
-            return e.Form.toggleDisabled(t, !0), i.always(function() {
-                e.Form.toggleDisabled(t, !1)
+            return Olive.Form.toggleDisabled(t, !0), i.always(function() {
+                Olive.Form.toggleDisabled(t, !1)
             }), t
         },
         submit: function(e, t, i, o) {
@@ -2347,8 +2347,8 @@ var Olv = Olv || {};
             return this.send(n, i)
         },
         send: function(t, i) {
-            var o = e.Net.ajax(t);
-            return $(document).trigger("olv:form:send", [o, t, i || $()]), i && (e.Form.disable(i, o), i.addClass("loading"), o.always(function() {
+            var o = Olive.Net.ajax(t);
+            return $(document).trigger("olv:form:send", [o, t, i || $()]), i && (Olive.Form.disable(i, o), i.addClass("loading"), o.always(function() {
                 i.removeClass("loading")
             })), o
         },
@@ -2370,13 +2370,13 @@ var Olv = Olv || {};
         },
         setup: function() {
             $(document).on("olv:form:send", function(t, i, o) {
-                "POST" === (o.type || "").toUpperCase() && e.Pjax.cacheClear()
+                "POST" === (o.type || "").toUpperCase() && Olive.Pjax.cacheClear()
             })
         },
         reset: function(t) {
             t.each(function() {
                 this.reset(), $(this).find("input").each(function() {
-                    e.Form.updateParentClass(this)
+                    Olive.Form.updateParentClass(this)
                 })
             })
         },
@@ -2394,14 +2394,14 @@ var Olv = Olv || {};
             for (var o in i) {
                 var n = i[o],
                     a = t.$(o);
-                "checkbox" === a.attr("type") || "radio" === a.attr("type") ? (a.prop("checked", !1).filter('[value="' + n + '"]').prop("checked", !0), e.Form.updateParentClass(a.get(0))) : a.val(n)
+                "checkbox" === a.attr("type") || "radio" === a.attr("type") ? (a.prop("checked", !1).filter('[value="' + n + '"]').prop("checked", !0), Olive.Form.updateParentClass(a.get(0))) : a.val(n)
             }
         }
-    }, e.Form.setup(), e.Guest = {
+    }, Olive.Form.setup(), Olive.Guest = {
         isGuest: function() {
             return $("#body").hasClass("guest")
         }
-    }, e.Sound = {
+    }, Olive.Sound = {
         defaultActivationSound: "SE_OLV_OK",
         playActivationSound: function(e) {
             var t = e.attr("data-sound");
@@ -2470,7 +2470,7 @@ var Olv = Olv || {};
             var e = $(document);
             e.on("olv:pagechange:ready", $.proxy(this.onPageChange, this)), this.onPageChange(), e.on("olv:keyhandler:scroll:element", $.proxy(this.onScrollElement, this)), e.on("olv:keyhandler:scroll:document", $.proxy(this.onScrollDocument, this)), e.on("olv:pagereloader:reload", $.proxy(this.onPageReload, this)), e.on("olv:dropdown:open", $.proxy(this.onDropdownOpen, this)), e.on("olv:dropdown:close", $.proxy(this.onDropdownClose, this))
         }
-    }, e.Sound.setup(), e.ScrollGuide = {
+    }, Olive.Sound.setup(), Olive.ScrollGuide = {
         WINDOW_INNER_HEIGHT: 480,
         activate: function() {
             var e = this,
@@ -2483,12 +2483,12 @@ var Olv = Olv || {};
             })
         },
         show: function() {
-            e.Toolbar.isVisible() ? cave.effect_setScrollGuideOffsetPos(0, 28) : cave.effect_setScrollGuideOffsetPos(0, 0), cave.effect_scrollGuide(1)
+            Olive.Toolbar.isVisible() ? cave.effect_setScrollGuideOffsetPos(0, 28) : cave.effect_setScrollGuideOffsetPos(0, 0), cave.effect_scrollGuide(1)
         },
         hide: function() {
             cave.effect_scrollGuide(0)
         }
-    }, e.URI = {
+    }, Olive.URI = {
         getQueryVars: function() {
             for (var e, t = {}, i = window.location.href, o = i.slice(i.indexOf("?") + 1).split("&"), n = 0; n < o.length; n++) e = o[n].split("="), t[decodeURIComponent(e[0])] = decodeURIComponent(e[1]);
             return t
@@ -2496,7 +2496,7 @@ var Olv = Olv || {};
         origin: function() {
             return location.protocol + "//" + location.host
         }
-    }, e.Achievement = {
+    }, Olive.Achievement = {
         requestAchieveWithoutRegard: function(e) {
             var t = $.Deferred();
             return this.requestAchieve(e).always(function() {
@@ -2504,7 +2504,7 @@ var Olv = Olv || {};
             }), t.promise()
         },
         requestAchieve: function(t) {
-            return e.Net.ajax({
+            return Olive.Net.ajax({
                 type: "POST",
                 url: "/my/achievements.json",
                 contentType: "application/json",
@@ -2515,7 +2515,7 @@ var Olv = Olv || {};
                 lock: !0
             })
         }
-    }, e.Screenshot = {
+    }, Olive.Screenshot = {
         SCREEN_UPSIDE: 0,
         SCREEN_DOWNSIDE: 1,
         isEnabled: function(e) {
@@ -2529,23 +2529,23 @@ var Olv = Olv || {};
             if (e === this.SCREEN_DOWNSIDE) return cave.lls_setCaptureImage("downside", 0), cave.lls_getPath("downside");
             throw new Error("Invalid screen id")
         }
-    }, e.UpdateChecker = function(e) {
+    }, Olive.UpdateChecker = function(e) {
         this._settings = {}, this.delay_ = e || 1e3, this.timeout_ = null, this.pjaxLoadLog = ""
-    }, e.UpdateChecker.getInstance = function() {
-        return void 0 == e.UpdateChecker.instance && (e.UpdateChecker.instance = new e.UpdateChecker(1e3)), e.UpdateChecker.instance
-    }, e.UpdateChecker.prototype.invoke = function() {
+    }, Olive.UpdateChecker.getInstance = function() {
+        return void 0 == Olive.UpdateChecker.instance && (Olive.UpdateChecker.instance = new Olive.UpdateChecker(1e3)), Olive.UpdateChecker.instance
+    }, Olive.UpdateChecker.prototype.invoke = function() {
         this.timeout_ = setTimeout($.proxy(function() {
             this.callback_(), this.clearTimeout()
         }, this), this.delay_)
-    }, e.UpdateChecker.prototype.clearTimeout = function() {
+    }, Olive.UpdateChecker.prototype.clearTimeout = function() {
         clearTimeout(this.timeout_)
-    }, e.UpdateChecker.prototype.callback_ = function() {
+    }, Olive.UpdateChecker.prototype.callback_ = function() {
         var t = {};
         $.each(this._settings, $.proxy(function(e) {
             void 0 != this._settings[e].pathname && this._settings[e].pathname != location.pathname ? delete this._settings[e] : $.each(this._settings[e].params, function(e, i) {
                 t[e] = JSON.stringify(i)
             })
-        }, this)), this.pjaxLoadLog && (t.times = this.pjaxLoadLog), e.Net.ajax({
+        }, this)), this.pjaxLoadLog && (t.times = this.pjaxLoadLog), Olive.Net.ajax({
             url: "/check_update.json",
             data: t,
             silent: !0,
@@ -2553,7 +2553,7 @@ var Olv = Olv || {};
         }).done($.proxy(function(e) {
             $(document).triggerHandler("olv:updatechecker:update", [e])
         }, this))
-    }, e.UpdateChecker.prototype.onUpdate = function(e, t, i, o) {
+    }, Olive.UpdateChecker.prototype.onUpdate = function(e, t, i, o) {
         this._settings[e] = {
             params: t,
             update: i
@@ -2571,27 +2571,27 @@ var Olv = Olv || {};
                 e.indexOf(i) || (e = e.slice(i.length))
             } else e = this.getHash();
         return e.replace(/^\/+/, "")
-    }, e.Router = Backbone.Router.extend({
+    }, Olive.Router = Backbone.Router.extend({
         isReverting: !1,
         lockRequest: !1,
         initialize: function() {
             this.on("route", function() {
-                e.History.state = history.state
+                Olive.History.state = history.state
             })
         },
         navigate: function(t, i) {
             if (!this.lockRequest) {
-                e.History.isInitialLoad || (this.lockRequest = !0);
-                var o = t.replace(e.URI.origin(), "").replace(Backbone.history.options.root, "");
+                Olive.History.isInitialLoad || (this.lockRequest = !0);
+                var o = t.replace(Olive.URI.origin(), "").replace(Backbone.history.options.root, "");
                 if (i && !0 !== i || (i = {
                         trigger: !!i
-                    }), e.Pjax.isEnabled) {
+                    }), Olive.Pjax.isEnabled) {
                     var n = _.extend({}, history.state, {
                         scrollTo: cave.brw_getScrollTopY()
                     });
-                    window.history.replaceState(n, null), e.History.needToSetState && (history.state = n), e.Router.prototype._isSameUrl(n.url, t) && (console.log("Replacing: " + n.url + " -> " + t), i.replace = !0);
+                    window.history.replaceState(n, null), Olive.History.needToSetState && (history.state = n), Olive.Router.prototype._isSameUrl(n.url, t) && (console.log("Replacing: " + n.url + " -> " + t), i.replace = !0);
                     var a = {
-                        id: e.Pjax.uniqueId(),
+                        id: Olive.Pjax.uniqueId(),
                         url: t,
                         fragment: o,
                         scrollTo: 0,
@@ -2599,22 +2599,22 @@ var Olv = Olv || {};
                     };
                     Backbone.Router.prototype.navigate.call(this, o, _.extend({}, i, {
                         trigger: !1
-                    })), window.history.replaceState(a, null, t), e.History.needToSetState && (history.state = a), i.trigger && Backbone.history.loadUrl(o), e.History.isInitialLoad = !1
+                    })), window.history.replaceState(a, null, t), Olive.History.needToSetState && (history.state = a), i.trigger && Backbone.history.loadUrl(o), Olive.History.isInitialLoad = !1
                 } else Backbone.Router.prototype.navigate.call(this, o, i)
             }
         },
         route: function(t, i, o) {
             return _.isFunction(i) || o || (o = this[i]), Backbone.Router.prototype.route.call(this, t, i, function() {
                 function t() {
-                    e.Router.prototype._isSameUrl(r, history.state.url) ? o && o.apply(n, a) : e.Router.prototype._routeManually(Backbone.history.getFragment()), $(document).trigger("olv:router:dispatch:end")
+                    Olive.Router.prototype._isSameUrl(r, history.state.url) ? o && o.apply(n, a) : Olive.Router.prototype._routeManually(Backbone.history.getFragment()), $(document).trigger("olv:router:dispatch:end")
                 }
                 var n = this,
                     a = arguments;
                 if (n.isReverting) return n.isReverting = !1, void $(document).trigger("olv:pagechange:end");
                 console.log("Routing: " + Backbone.history.fragment + " -> " + i);
-                var s = e.History.state ? e.History.state.id > history.state.id ? "back" : history.state.replace ? "replace" : "forward" : void 0,
+                var s = Olive.History.state ? Olive.History.state.id > history.state.id ? "back" : history.state.replace ? "replace" : "forward" : void 0,
                     r = history.state.url;
-                e.History.isInitialLoad ? t() : e.Pjax.go(history.state.url, {
+                Olive.History.isInitialLoad ? t() : Olive.Pjax.go(history.state.url, {
                     direction: s,
                     cacheId: history.state.id
                 }).done(t)
@@ -2629,9 +2629,9 @@ var Olv = Olv || {};
                     return (i = Backbone.Router.prototype._routeToRegExp(t)).test(o)
                 }),
                 a = Backbone.Router.prototype._extractParameters(i, o);
-            _.isFunction(n) ? n.apply(e.router, a) : this[n] && this[n].apply(e.router, a)
+            _.isFunction(n) ? n.apply(Olive.router, a) : this[n] && this[n].apply(Olive.router, a)
         }
-    }), e.Router = e.Router.extend({
+    }), Olive.Router = Olive.Router.extend({
         routes: {
             "": "activity",
             communities: "communities",
@@ -2702,182 +2702,182 @@ var Olv = Olv || {};
             "*path": "defaultRoute"
         },
         defaultRoute: function(t) {
-            new e.View.Page.Common({
+            new Olive.View.Page.Common({
                 el: "body"
             })
         },
         activity: function() {
-            new e.View.Page.Activity({
+            new Olive.View.Page.Activity({
                 el: "body"
             })
         },
         communities: function() {
-            new e.View.Page.Communities({
+            new Olive.View.Page.Communities({
                 el: "body"
             })
         },
         postForm: function() {
-            new e.View.Page.PostForm({
+            new Olive.View.Page.PostForm({
                 el: "body"
             })
         },
         postDiaryForm: function() {
-            new e.View.Page.PostDiaryForm({
+            new Olive.View.Page.PostDiaryForm({
                 el: "body"
             })
         },
         replyForm: function() {
-            new e.View.Page.ReplyForm({
+            new Olive.View.Page.ReplyForm({
                 el: "body"
             })
         },
         postMemo: function() {
-            new e.View.Page.PostMemo({
+            new Olive.View.Page.PostMemo({
                 el: "body"
             })
         },
         postProcess: function() {
-            new e.View.Page.PostRedirection({
+            new Olive.View.Page.PostRedirection({
                 el: "body"
             })
         },
         postFormAlbumSelector: function() {
-            new e.View.Page.PostFormAlbumSelector({
+            new Olive.View.Page.PostFormAlbumSelector({
                 el: "body"
             })
         },
         violation: function() {
-            new e.View.Page.Violation({
+            new Olive.View.Page.Violation({
                 el: "body"
             })
         },
         editForm: function() {
-            new e.View.Page.EditForm({
+            new Olive.View.Page.EditForm({
                 el: "body"
             })
         },
         post: function() {
-            new e.View.Page.Post({
+            new Olive.View.Page.Post({
                 el: "body"
             })
         },
         reply: function() {
-            new e.View.Page.Reply({
+            new Olive.View.Page.Reply({
                 el: "body"
             })
         },
         community: function() {
-            new e.View.Page.Community({
+            new Olive.View.Page.Community({
                 el: "body"
             })
         },
         titleSearch: function() {
-            new e.View.Page.TitleSearch({
+            new Olive.View.Page.TitleSearch({
                 el: "body"
             })
         },
         user: function() {
-            new e.View.Page.User({
+            new Olive.View.Page.User({
                 el: "body"
             })
         },
         userDiary: function() {
-            new e.View.Page.UserDiary({
+            new Olive.View.Page.UserDiary({
                 el: "body"
             })
         },
         settings: function() {
-            new e.View.Page.Settings({
+            new Olive.View.Page.Settings({
                 el: "body"
             })
         },
         accountSettings: function() {
-            new e.View.Page.AccountSettings({
+            new Olive.View.Page.AccountSettings({
                 el: "body"
             })
         },
         profileSettings: function() {
-            new e.View.Page.ProfileSettings({
+            new Olive.View.Page.ProfileSettings({
                 el: "body"
             })
         },
         users: function() {
-            new e.View.Page.Users({
+            new Olive.View.Page.Users({
                 el: "body"
             })
         },
         blacklist: function() {
-            new e.View.Page.Blacklist({
+            new Olive.View.Page.Blacklist({
                 el: "body"
             })
         },
         confirmBlacklist: function() {
-            new e.View.Page.ConfirmBlacklist({
+            new Olive.View.Page.ConfirmBlacklist({
                 el: "body "
             })
         },
         identifiedUserPosts: function() {
-            new e.View.Page.IdentifiedUserPosts({
+            new Olive.View.Page.IdentifiedUserPosts({
                 el: "body"
             })
         },
         my_news: function() {
-            new e.View.Page.MyNews({
+            new Olive.View.Page.MyNews({
                 el: "body"
             })
         },
         welcome: function() {
-            new e.View.Page.Welcome({
+            new Olive.View.Page.Welcome({
                 el: "body"
             })
         },
         guestWelcome: function() {
-            new e.View.Page.GuestWelcome({
+            new Olive.View.Page.GuestWelcome({
                 el:"body"
             })
         },
         welcomeProfile: function() {
-            new e.View.Page.WelcomeProfile({
+            new Olive.View.Page.WelcomeProfile({
                 el: "body"
             })
         },
         welcomePage: function() {
-            new e.View.Page.Common({
+            new Olive.View.Page.Common({
                 el: "body"
             })
         },
         welcomeFavoriteCommunityVisibility: function() {
-            new e.View.Page.WelcomeFavoriteCommunityVisibility({
+            new Olive.View.Page.WelcomeFavoriteCommunityVisibility({
                 el: "body"
             })
         },
         warning: function() {
-            new e.View.Page.Warning({
+            new Olive.View.Page.Warning({
                 el: "body"
             })
         },
         help: function() {
-            new e.View.Page.Help({
+            new Olive.View.Page.Help({
                 el: "body"
             })
         },
         guide: function() {
-            new e.View.Page.Common({
+            new Olive.View.Page.Common({
                 el: "body"
-            }), $(".guide-exit-button").length && e.Toolbar.setVisible(!1), e.ScrollGuide.activate()
+            }), $(".guide-exit-button").length && Olive.Toolbar.setVisible(!1), Olive.ScrollGuide.activate()
         },
         albumDetail: function() {
-            new e.View.Page.AlbumDetail({
+            new Olive.View.Page.AlbumDetail({
                 el: "body"
             })
         },
         confirmAlbum: function() {
-            new e.View.Page.ConfirmAlbum({
+            new Olive.View.Page.ConfirmAlbum({
                 el: "body "
             })
         },
         errorPostForm: function() {
-            new e.View.Page.PostFormError({
+            new Olive.View.Page.PostFormError({
                 el: "body"
             })
         },

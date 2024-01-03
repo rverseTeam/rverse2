@@ -1,49 +1,49 @@
 var Olv = Olv || {};
-(function (a, b) {
-  b.init ||
-    ((b.init = a
+(function (jQuery, Olive) {
+  Olive.init ||
+    ((Olive.init = jQuery
       .Deferred(function () {
-        a(this.resolve);
+        jQuery(this.resolve);
       })
       .promise()),
-    (b.Router = function () {
-      (this.routes = []), (this.guard = a.Deferred());
+    (Olive.Router = function () {
+      (this.routes = []), (this.guard = jQuery.Deferred());
     }),
-    a.extend(b.Router.prototype, {
+    jQuery.extend(Olive.Router.prototype, {
       connect: function (a, b) {
         a instanceof RegExp || (a = new RegExp(a)), this.routes.push([a, b]);
       },
       dispatch: function (b) {
-        this.guard.resolve(b), (this.guard = a.Deferred());
+        this.guard.resolve(b), (this.guard = jQuery.Deferred());
         for (var c, d = b.pathname, e = 0; (c = this.routes[e]); e++) {
           var f = d.match(c[0]);
           f && c[1].call(this, f, b, this.guard.promise());
         }
       },
     }),
-    (b.router = new b.Router()),
-    a(document).on("pjax:end", function (c, d) {
-      a(document).trigger("olv:pagechange", [d]), b.router.dispatch(location);
+    (Olive.router = new Olive.Router()),
+    jQuery(document).on("pjax:end", function (c, d) {
+      jQuery(document).trigger("olv:pagechange", [d]), Olive.router.dispatch(location);
     }),
-    b.init.done(function () {
-      b.router.dispatch(location);
+    Olive.init.done(function () {
+      Olive.router.dispatch(location);
     }),
-    b.init.done(function () {
+    Olive.init.done(function () {
       var a = wiiuBOSS.isRegisteredDirectMessageTask();
       a &&
         a.isRegistered &&
-        b.Utils.callWiiuBOSSFuncWithFallback("registerDirectMessageTaskEx");
+        Olive.Utils.callWiiuBOSSFuncWithFallback("registerDirectMessageTaskEx");
     }),
-    (b.Locale = {
+    (Olive.Locale = {
       Data: {},
       text: function (a) {
         var c = Array.prototype.slice.call(arguments);
-        return c.splice(1, 0, -1), b.Locale.textN.apply(this, c);
+        return c.splice(1, 0, -1), Olive.Locale.textN.apply(this, c);
       },
       textN: function (a, c) {
-        if (b.Cookie.get("plain_msgid")) return a;
+        if (Olive.Cookie.get("plain_msgid")) return a;
         c = +c || 0;
-        var d = b.Locale.Data[a];
+        var d = Olive.Locale.Data[a];
         if (!d) return a;
         var e,
           f,
@@ -65,47 +65,47 @@ var Olv = Olv || {};
         });
       },
     }),
-    (b.loc = b.Locale.text),
-    (b.loc_n = b.Locale.textN),
-    (b.print = function (a) {
+    (Olive.loc = Olive.Locale.text),
+    (Olive.loc_n = Olive.Locale.textN),
+    (Olive.print = function (a) {
       "undefined" != typeof wiiuDebug
         ? wiiuDebug.print(a)
         : "undefined" != typeof console && console.log(a);
     }),
-    (b.alert = function (a, c) {
-      b.Loading.isLocked() ||
-        (arguments.length <= 1 && (c = b.loc("olv.portal.ok")),
+    (Olive.alert = function (a, c) {
+      Olive.Loading.isLocked() ||
+        (arguments.length <= 1 && (c = Olive.loc("olv.portal.ok")),
         wiiuDialog.alert(a, c));
     }),
-    (b.confirm = function (a, c, d) {
-      return b.Loading.isLocked()
+    (Olive.confirm = function (a, c, d) {
+      return Olive.Loading.isLocked()
         ? void 0
         : (arguments.length <= 1 &&
-            ((c = b.loc("olv.portal.cancel")), (d = b.loc("olv.portal.ok"))),
+            ((c = Olive.loc("olv.portal.cancel")), (d = Olive.loc("olv.portal.ok"))),
           wiiuDialog.confirm(a, c, d));
     }),
-    (b.deferredAlert = function (c, d) {
+    (Olive.deferredAlert = function (c, d) {
       var e = arguments,
-        f = a.Deferred();
+        f = jQuery.Deferred();
       return (
         setTimeout(function () {
-          b.alert.apply(null, e), f.resolve();
+          Olive.alert.apply(null, e), f.resolve();
         }, 0),
         f.promise()
       );
     }),
-    (b.deferredConfirm = function (c, d, e) {
+    (Olive.deferredConfirm = function (c, d, e) {
       var f = arguments,
-        g = a.Deferred();
+        g = jQuery.Deferred();
       return (
         setTimeout(function () {
-          var a = b.confirm.apply(null, f);
+          var a = Olive.confirm.apply(null, f);
           g.resolve(a);
         }, 0),
         g.promise()
       );
     }),
-    (b.Cookie = {
+    (Olive.Cookie = {
       set: function (a, b) {
         var c =
           encodeURIComponent(a) + "=" + encodeURIComponent(b) + "; path=/";
@@ -120,12 +120,12 @@ var Olv = Olv || {};
         return void 0;
       },
     }),
-    (b.Loading = {
+    (Olive.Loading = {
       _showCount: 0,
       show: function (b) {
         this._showCount++ || wiiuBrowser.showLoadingIcon(!0),
           b.always(
-            a.proxy(function () {
+            jQuery.proxy(function () {
               --this._showCount || wiiuBrowser.showLoadingIcon(!1);
             }, this)
           );
@@ -137,7 +137,7 @@ var Olv = Olv || {};
       lock: function (b) {
         this._lockCount++ || wiiuBrowser.lockUserOperation(!0),
           b.always(
-            a.proxy(function () {
+            jQuery.proxy(function () {
               --this._lockCount || wiiuBrowser.lockUserOperation(!1);
             }, this)
           );
@@ -148,66 +148,66 @@ var Olv = Olv || {};
       setup: function () {
         wiiuBrowser.showLoadingIcon(!1),
           wiiuBrowser.lockUserOperation(!1),
-          b.Loading.lock(b.init),
-          a(document).on("pjax:send", function (a, c) {
-            b.Loading.lock(c);
+          Olive.Loading.lock(Olive.init),
+          jQuery(document).on("pjax:send", function (a, c) {
+            Olive.Loading.lock(c);
           });
       },
     }),
-    b.Loading.setup(),
-    (b.ErrorViewer = {
+    Olive.Loading.setup(),
+    (Olive.ErrorViewer = {
       open: function (a) {
-        if (!b.Loading.isLocked()) {
+        if (!Olive.Loading.isLocked()) {
           a = a || {};
           var c = +(a.error_code || a.code || 0),
-            d = a.message || (a.msgid && b.loc(a.msgid));
-          c || ((c = 1219999), (d = d || b.loc("olv.portal.error.500"))),
+            d = a.message || (a.msgid && Olive.loc(a.msgid));
+          c || ((c = 1219999), (d = d || Olive.loc("olv.portal.error.500"))),
             d
               ? wiiuErrorViewer.openByCodeAndMessage(c, d)
               : wiiuErrorViewer.openByCode(c);
         }
       },
       deferredOpen: function (c) {
-        var d = a.Deferred();
+        var d = jQuery.Deferred();
         return (
           setTimeout(function () {
-            b.ErrorViewer.open(c), d.resolve();
+            Olive.ErrorViewer.open(c), d.resolve();
           }, 0),
           d.promise()
         );
       },
     }),
-    (b.Net = {
+    (Olive.Net = {
       ajax: function (c) {
-        var d = a.ajax(c),
-          e = b.Net._pageId,
+        var d = jQuery.ajax(c),
+          e = Olive.Net._pageId,
           f = d.pipe(
             function (c, d, f) {
-              var g = b.Net._pageId === e,
+              var g = Olive.Net._pageId === e,
                 h = (c && "object" == typeof c && !c.success) || !g,
                 i = [c, d, f, g];
               return h
-                ? a.Deferred().rejectWith(this, i)
-                : a.Deferred().resolveWith(this, i);
+                ? jQuery.Deferred().rejectWith(this, i)
+                : jQuery.Deferred().resolveWith(this, i);
             },
             function (c, d) {
-              var f = b.Net.getDataFromXHR(c);
+              var f = Olive.Net.getDataFromXHR(c);
               void 0 === f && (f = c.responseText);
-              var g = b.Net._pageId === e;
-              return a.Deferred().rejectWith(this, [f, d, c, g]);
+              var g = Olive.Net._pageId === e;
+              return jQuery.Deferred().rejectWith(this, [f, d, c, g]);
             }
           );
         return (
-          c.showLoading && b.Loading.show(f),
-          c.lock && b.Loading.lock(f),
-          c.silent || f.fail(b.Net.errorFeedbackHandler),
+          c.showLoading && Olive.Loading.show(f),
+          c.lock && Olive.Loading.lock(f),
+          c.silent || f.fail(Olive.Net.errorFeedbackHandler),
           f.promise(d),
           d
         );
       },
       _pageId: 1,
       onPageChange: function () {
-        b.Net._pageId++;
+        Olive.Net._pageId++;
       },
       getDataFromXHR: function (a) {
         var b = a.responseText,
@@ -219,7 +219,7 @@ var Olv = Olv || {};
         return void 0;
       },
       getErrorFromXHR: function (a) {
-        var c = b.Net.getDataFromXHR(a),
+        var c = Olive.Net.getDataFromXHR(a),
           d = c && c.errors && c.errors[0];
         if (d && "object" == typeof d) return d;
         var e = a.status;
@@ -227,28 +227,28 @@ var Olv = Olv || {};
           ? 503 == e
             ? {
                 error_code: 1211503,
-                message: b.loc("olv.portal.error.503.content"),
+                message: Olive.loc("olv.portal.error.503.content"),
               }
             : 500 > e
             ? {
                 error_code: 1210902,
-                message: b.loc("olv.portal.error.failed_to_connect"),
+                message: Olive.loc("olv.portal.error.failed_to_connect"),
               }
-            : { error_code: 1219999, message: b.loc("olv.portal.error.500") }
+            : { error_code: 1219999, message: Olive.loc("olv.portal.error.500") }
           : {
               error_code: 1219998,
-              message: b.loc("olv.portal.error.network_unavailable"),
+              message: Olive.loc("olv.portal.error.network_unavailable"),
             };
       },
       errorFeedbackHandler: function (c, d, e, f) {
-        if ("abort" !== d && f && !b.Loading.isLocked()) {
-          var g = b.Net.getErrorFromXHR(e);
-          a(document).trigger("olv:net:error", [g, d, e, f]),
-            b.ErrorViewer.open(g);
+        if ("abort" !== d && f && !Olive.Loading.isLocked()) {
+          var g = Olive.Net.getErrorFromXHR(e);
+          jQuery(document).trigger("olv:net:error", [g, d, e, f]),
+            Olive.ErrorViewer.open(g);
         }
       },
       get: function (a, c, d, e) {
-        return b.Net.ajax({
+        return Olive.Net.ajax({
           type: "GET",
           url: a,
           data: c,
@@ -257,7 +257,7 @@ var Olv = Olv || {};
         });
       },
       post: function (a, c, d, e) {
-        return b.Net.ajax({
+        return Olive.Net.ajax({
           type: "POST",
           url: a,
           data: c,
@@ -266,58 +266,58 @@ var Olv = Olv || {};
         });
       },
     }),
-    a(document).on("olv:pagechange", b.Net.onPageChange),
-    (b.Browsing = {
+    jQuery(document).on("olv:pagechange", Olive.Net.onPageChange),
+    (Olive.Browsing = {
       setup: function () {
-        a.pjax &&
-          ((a.pjax.defaults.timeout = 0),
-          (a.pjax.defaults.maxCacheLength = 5),
-          (a.pjax.defaults.lockRequest = !0),
-          a(document).pjax("a[href][data-pjax]"),
-          a(document).on(
+        jQuery.pjax &&
+          ((jQuery.pjax.defaults.timeout = 0),
+          (jQuery.pjax.defaults.maxCacheLength = 5),
+          (jQuery.pjax.defaults.lockRequest = !0),
+          jQuery(document).pjax("a[href][data-pjax]"),
+          jQuery(document).on(
             "click",
             "[data-href][data-pjax]",
             this.onDataHrefClick
           ),
-          a(document).on("click", "a[href][data-replace]", this.onReplaceClick),
-          a(window).on("click", "a[href]", this.onLinkClickFinally),
-          a(document).on("pjax:error", this.onPjaxError),
-          a(document).on("olv:pagechange", this.onPageChange));
+          jQuery(document).on("click", "a[href][data-replace]", this.onReplaceClick),
+          jQuery(window).on("click", "a[href]", this.onLinkClickFinally),
+          jQuery(document).on("pjax:error", this.onPjaxError),
+          jQuery(document).on("olv:pagechange", this.onPageChange));
       },
       guardPage: function () {
         function b() {
-          a(window).off("pagehide", b),
-            a(document).off("olv:pagechange", b),
+          jQuery(window).off("pagehide", b),
+            jQuery(document).off("olv:pagechange", b),
             c.resolve();
         }
-        var c = a.Deferred();
+        var c = jQuery.Deferred();
         return (
-          a(window).on("pagehide", b),
-          a(document).on("olv:pagechange", b),
+          jQuery(window).on("pagehide", b),
+          jQuery(document).on("olv:pagechange", b),
           c.promise()
         );
       },
       lockPage: function () {
-        var a = b.Browsing.guardPage();
-        return b.Loading.lock(a), a;
+        var a = Olive.Browsing.guardPage();
+        return Olive.Loading.lock(a), a;
       },
       replaceWith: function (a) {
-        var c = b.Browsing.lockPage();
+        var c = Olive.Browsing.lockPage();
         return location.replace(a), c;
       },
       reload: function () {
-        return a.pjax
-          ? a.pjax.reload("#body").promise()
-          : (location.reload(), b.Browsing.guardPage());
+        return jQuery.pjax
+          ? jQuery.pjax.reload("#body").promise()
+          : (location.reload(), Olive.Browsing.guardPage());
       },
       clearCache: function () {
-        a.pjax && a.pjax.clearCache();
+        jQuery.pjax && jQuery.pjax.clearCache();
       },
       onDataHrefClick: function (b) {
-        if (!b.isDefaultPrevented() && !a(b.target).closest("a").length) {
-          var c = a(this);
+        if (!b.isDefaultPrevented() && !jQuery(b.target).closest("a").length) {
+          var c = jQuery(this);
           c.hasClass("disabled") ||
-            (a.pjax({
+            (jQuery.pjax({
               url: c.attr("data-href"),
               container: c.attr("data-pjax"),
               target: c.get(0),
@@ -328,25 +328,25 @@ var Olv = Olv || {};
       onReplaceClick: function (c) {
         if (!c.isDefaultPrevented()) {
           c.preventDefault();
-          var d = a(this).attr("href");
+          var d = jQuery(this).attr("href");
           setTimeout(function () {
-            b.Browsing.replaceWith(d);
+            Olive.Browsing.replaceWith(d);
           }, 0);
         }
       },
       onLinkClickFinally: function (a) {
         a.isDefaultPrevented() ||
           this.href.replace(/#.*/, "") === location.href.replace(/#.*/, "") ||
-          b.Browsing.lockPage();
+          Olive.Browsing.lockPage();
       },
       onPjaxError: function (c, d, e, f, g) {
         if ("abort" !== e) {
           if ((c.preventDefault(), d.getResponseHeader("X-PJAX-OK")))
             return void g.success(d.responseText, e, d);
-          var h = b.Net.getErrorFromXHR(d);
+          var h = Olive.Net.getErrorFromXHR(d);
           setTimeout(function () {
-            a(document).trigger("olv:browsing:error", [h, e, d, g]),
-              b.ErrorViewer.open(h);
+            jQuery(document).trigger("olv:browsing:error", [h, e, d, g]),
+              Olive.ErrorViewer.open(h);
           }, 0),
             (g.revert = !0);
         }
@@ -355,16 +355,16 @@ var Olv = Olv || {};
       expires: +new Date() + 864e5,
       onPageChange: function (a, c) {
         if (c) {
-          var d = b.Browsing,
+          var d = Olive.Browsing,
             e = +c.getResponseHeader("X-Browsing-Revision");
           (d.revision < e || d.expires < +new Date()) &&
-            (b.Browsing.lockPage(), location.reload());
+            (Olive.Browsing.lockPage(), location.reload());
         }
       },
       setupAnchorLinkReplacer: function (b) {
         function c(b) {
           if (!b.isDefaultPrevented()) {
-            var c = a(this),
+            var c = jQuery(this),
               d = c.attr("href") || "";
             /^#.+$/.test(d) &&
               (b.preventDefault(),
@@ -373,26 +373,26 @@ var Olv = Olv || {};
               }, 0));
           }
         }
-        a(document).on("click", "a[href]", c),
+        jQuery(document).on("click", "a[href]", c),
           b.done(function () {
-            a(document).off("click", "a[href]", c);
+            jQuery(document).off("click", "a[href]", c);
           });
       },
     }),
-    b.init.done(function () {
-      b.Browsing.setup();
+    Olive.init.done(function () {
+      Olive.Browsing.setup();
     }),
-    (b.Utils = {}),
-    (b.Utils.containsNGWords = function (a) {
+    (Olive.Utils = {}),
+    (Olive.Utils.containsNGWords = function (a) {
       return "undefined" == typeof wiiuFilter
         ? !1
         : wiiuFilter.checkWord(a) < 0;
     }),
-    (b.Utils.ERROR_CONTAINS_NG_WORDS = {
+    (Olive.Utils.ERROR_CONTAINS_NG_WORDS = {
       error_code: 1215901,
       msgid: "olv.portal.contains.ng_words",
     }),
-    (b.Utils.callWiiuBOSSFuncWithFallback = function (a) {
+    (Olive.Utils.callWiiuBOSSFuncWithFallback = function (a) {
       var b = wiiuBOSS[a];
       return "registerDirectMessageTaskEx" == a
         ? "function" != typeof b
@@ -400,8 +400,8 @@ var Olv = Olv || {};
           : b.call(wiiuBOSS, 720, 2)
         : b.call(wiiuBOSS);
     }),
-    (b.Content = {}),
-    (b.Content.autopagerize = function (c, d) {
+    (Olive.Content = {}),
+    (Olive.Content.autopagerize = function (c, d) {
       function e() {
         if (
           !(
@@ -409,21 +409,21 @@ var Olv = Olv || {};
             h.scrollTop() + l + 200 < f.offset().top + f.outerHeight()
           )
         ) {
-          var b = a("<div/>")
+          var b = jQuery("<div/>")
             .attr("class", "post-list-loading")
             .append(
-              a("<img/>").attr({ src: "/img/loading-image-green.gif", alt: "" })
+              jQuery("<img/>").attr({ src: "/img/loading-image-green.gif", alt: "" })
             )
             .appendTo(f);
-          (i = a
+          (i = jQuery
             .ajax({ url: g, headers: { "X-AUTOPAGERIZE": !0 } })
             .done(function (d) {
-              var h = a("<div>" + d + "</div>").find(c);
+              var h = jQuery("<div>" + d + "</div>").find(c);
               (g = h.attr("data-next-page-url") || ""),
                 g || j.resolve(),
                 f.trigger("olv:autopagerize", [h, g, b]),
                 h.children().each(function () {
-                  this.id && a("#" + this.id).length && a(this).detach();
+                  this.id && jQuery("#" + this.id).length && jQuery(this).detach();
                 }),
                 f.attr("data-next-page-url", g),
                 f.append(h.children()),
@@ -435,13 +435,13 @@ var Olv = Olv || {};
             k.disable(i);
         }
       }
-      var f = a(c),
+      var f = jQuery(c),
         g = f.attr("data-next-page-url");
       if (g) {
-        var h = a(window),
+        var h = jQuery(window),
           i = null,
-          j = a.Deferred(),
-          k = b.Content.autopagerize,
+          j = jQuery.Deferred(),
+          k = Olive.Content.autopagerize,
           l = h.height();
         h.on("scroll", e),
           j.done(function () {
@@ -451,24 +451,24 @@ var Olv = Olv || {};
           d.done(j.resolve);
       }
     }),
-    (b.Content.autopagerize._disabledCount = 0),
-    (b.Content.autopagerize.disable = function (a) {
-      var c = b.Content.autopagerize;
+    (Olive.Content.autopagerize._disabledCount = 0),
+    (Olive.Content.autopagerize.disable = function (a) {
+      var c = Olive.Content.autopagerize;
       c._disabledCount++,
         a.always(function () {
           c._disabledCount--;
         });
     }),
-    (b.Content.preloadImages = function () {
+    (Olive.Content.preloadImages = function () {
       for (var a = arguments.length, b = a; b--; ) {
         var c = document.createElement("img");
         c.src = arguments[b];
       }
     }),
-    (b.Content.fixFixedPositionElement = function (b) {
-      var c = a(b).first(),
+    (Olive.Content.fixFixedPositionElement = function (b) {
+      var c = jQuery(b).first(),
         d = c.offset(),
-        e = a(window);
+        e = jQuery(window);
       d &&
         (e.width() < d.left || e.height() < d.top) &&
         (c.css("display", "none"),
@@ -476,13 +476,13 @@ var Olv = Olv || {};
           c.css("display", "");
         }, 0));
     }),
-    (b.Form = {
+    (Olive.Form = {
       toggleDisabled: function (c, d) {
         var e = void 0 === d;
         return (
           c.each(function () {
-            var c = a(this),
-              f = e ? !b.Form.hasBeenDisabled(c) : d;
+            var c = jQuery(this),
+              f = e ? !Olive.Form.hasBeenDisabled(c) : d;
             if ("undefined" != typeof this.form) c.prop("disabled", f);
             else {
               c.toggleClass("disabled", f);
@@ -499,8 +499,8 @@ var Olv = Olv || {};
       _beingDisabledObjects: [],
       isDisabled: function (a) {
         return (
-          b.Form.hasBeenDisabled(a) ||
-          b.Form._beingDisabledNodes.indexOf(a[0]) >= 0
+          Olive.Form.hasBeenDisabled(a) ||
+          Olive.Form._beingDisabledNodes.indexOf(a[0]) >= 0
         );
       },
       hasBeenDisabled: function (a) {
@@ -510,15 +510,15 @@ var Olv = Olv || {};
       },
       disable: function (a, c) {
         return (
-          b.Form.toggleDisabled(a, !0),
+          Olive.Form.toggleDisabled(a, !0),
           c.always(function () {
-            b.Form.toggleDisabled(a, !1);
+            Olive.Form.toggleDisabled(a, !1);
           }),
           a
         );
       },
       disableSoon: function (a, c) {
-        var d = b.Form;
+        var d = Olive.Form;
         c.always(function () {
           d.toggleDisabled(a, !1);
         });
@@ -538,20 +538,20 @@ var Olv = Olv || {};
       },
       setupDisabledMessage: function (c) {
         function d(c) {
-          var d = a(this);
-          if (b.Form.hasBeenDisabled(d)) {
+          var d = jQuery(this);
+          if (Olive.Form.hasBeenDisabled(d)) {
             c.preventDefault();
             var e = d.attr("data-disabled-message");
-            e && b.deferredAlert(e);
+            e && Olive.deferredAlert(e);
           }
         }
-        a(document).on("click", "[data-disabled-message]", d),
+        jQuery(document).on("click", "[data-disabled-message]", d),
           c.done(function () {
-            a(document).off("click", "[data-disabled-message]", d);
+            jQuery(document).off("click", "[data-disabled-message]", d);
           });
       },
       submit: function (b, c, d) {
-        b.trigger("olv:form:submit", [c || a()]);
+        b.trigger("olv:form:submit", [c || jQuery()]);
         var e = b.serializeArray(),
           f = c && c.is("input, button") && c.prop("name");
         f && e.push({ name: f, value: c.val() });
@@ -572,52 +572,52 @@ var Olv = Olv || {};
         return this.send(e, c);
       },
       send: function (c, d) {
-        var e = b.Net.ajax(c);
+        var e = Olive.Net.ajax(c);
         return (
-          a(document).trigger("olv:form:send", [e, c, d || a()]),
-          d && b.Form.disableSoon(d, e),
+          jQuery(document).trigger("olv:form:send", [e, c, d || jQuery()]),
+          d && Olive.Form.disableSoon(d, e),
           e
         );
       },
       updateParentClass: function (b) {
         switch (b.type) {
           case "radio":
-            var c = a(
+            var c = jQuery(
               b.form ? b.form.elements[b.name] : 'input[name="' + b.name + '"]'
             );
             c.each(function () {
-              a(this).parent().toggleClass("checked", this.checked);
+              jQuery(this).parent().toggleClass("checked", this.checked);
             });
             break;
           case "checkbox":
-            a(b).parent().toggleClass("checked", b.checked);
+            jQuery(b).parent().toggleClass("checked", b.checked);
         }
       },
       setup: function () {
-        a(document).on("click", "input", function (a) {
-          a.isDefaultPrevented() || b.Form.updateParentClass(this);
+        jQuery(document).on("click", "input", function (a) {
+          a.isDefaultPrevented() || Olive.Form.updateParentClass(this);
         });
         var c = { submit: !0, reset: !0, button: !0, image: !0, file: !0 };
-        a(document).on("keypress", "input", function (b) {
+        jQuery(document).on("keypress", "input", function (b) {
           13 !== b.which ||
             b.isDefaultPrevented() ||
             this.type in c ||
             !this.form ||
-            a(this.form).attr("data-allow-submission") ||
+            jQuery(this.form).attr("data-allow-submission") ||
             b.preventDefault();
         }),
-          a(document).on("submit", function (b) {
+          jQuery(document).on("submit", function (b) {
             b.isDefaultPrevented() ||
-              a(b.target).attr("data-allow-submission") ||
+              jQuery(b.target).attr("data-allow-submission") ||
               b.preventDefault();
           }),
-          a(document).on("olv:form:send", function (a, c, d) {
-            "POST" === (d.type || "").toUpperCase() && b.Browsing.clearCache();
+          jQuery(document).on("olv:form:send", function (a, c, d) {
+            "POST" === (d.type || "").toUpperCase() && Olive.Browsing.clearCache();
           });
       },
       setupForPage: function () {
-        a("input:checked").each(function () {
-          b.Form.updateParentClass(this);
+        jQuery("input:checked").each(function () {
+          Olive.Form.updateParentClass(this);
         });
       },
       syncSelectedText: function (a) {
@@ -626,9 +626,9 @@ var Olv = Olv || {};
         c.text(b.text());
       },
     }),
-    (b.Achievement = {
+    (Olive.Achievement = {
       requestAchieveWithoutRegard: function (b) {
-        var c = a.Deferred();
+        var c = jQuery.Deferred();
         return (
           this.requestAchieve(b).always(function () {
             c.resolveWith(this, arguments);
@@ -637,7 +637,7 @@ var Olv = Olv || {};
         );
       },
       requestAchieve: function (a) {
-        return b.Net.ajax({
+        return Olive.Net.ajax({
           type: "POST",
           url: "/my/achievements.json",
           contentType: "application/json",
@@ -647,39 +647,39 @@ var Olv = Olv || {};
         });
       },
     }),
-    b.init.done(b.Form.setup),
-    b.router.connect("", b.Form.setupForPage),
-    (b.DecreasingTimer = function (a, b, c) {
+    Olive.init.done(Olive.Form.setup),
+    Olive.router.connect("", Olive.Form.setupForPage),
+    (Olive.DecreasingTimer = function (a, b, c) {
       (this.callback_ = a),
         (this.initialInterval_ = b || 1e4),
         (this.maxInterval_ = c || 1 / 0),
         (this.interval_ = this.initialInterval_),
         (this.timeouts_ = []);
     }),
-    (b.DecreasingTimer.prototype.resetInterval = function () {
+    (Olive.DecreasingTimer.prototype.resetInterval = function () {
       (this.interval_ = this.initialInterval_),
         this.clearAllTimeouts(),
         this.invoke();
     }),
-    (b.DecreasingTimer.prototype.clearAllTimeouts = function () {
-      a(this.timeouts_).each(
-        a.proxy(function (a, b) {
+    (Olive.DecreasingTimer.prototype.clearAllTimeouts = function () {
+      jQuery(this.timeouts_).each(
+        jQuery.proxy(function (a, b) {
           this.clearTimeout(b);
         }, this)
       );
     }),
-    (b.DecreasingTimer.prototype.clearTimeout = function (a) {
+    (Olive.DecreasingTimer.prototype.clearTimeout = function (a) {
       for (var b = 0, c = this.timeouts_.length; c > b; ++b)
         if (this.timeouts_[b] == a) {
           clearTimeout(this.timeouts_[b]), this.timeouts_.splice(b, 1);
           break;
         }
     }),
-    (b.DecreasingTimer.prototype.invoke = function () {
+    (Olive.DecreasingTimer.prototype.invoke = function () {
       this.callback_();
       var b;
       (b = setTimeout(
-        a.proxy(function () {
+        jQuery.proxy(function () {
           this.invoke(), this.clearTimeout(b);
         }, this),
         this.interval_
@@ -690,53 +690,53 @@ var Olv = Olv || {};
           this.maxInterval_
         ));
     }),
-    (b.UpdateChecker = function (a, c) {
-      (this._settings = {}), b.DecreasingTimer.call(this, this.callback_, a, c);
+    (Olive.UpdateChecker = function (a, c) {
+      (this._settings = {}), Olive.DecreasingTimer.call(this, this.callback_, a, c);
     }),
-    (b.UpdateChecker.prototype = new b.DecreasingTimer()),
-    (b.UpdateChecker.getInstance = function () {
+    (Olive.UpdateChecker.prototype = new Olive.DecreasingTimer()),
+    (Olive.UpdateChecker.getInstance = function () {
       return (
-        void 0 == b.UpdateChecker.instance &&
-          (b.UpdateChecker.instance = new b.UpdateChecker(1e4, 6e5)),
-        b.UpdateChecker.instance
+        void 0 == Olive.UpdateChecker.instance &&
+          (Olive.UpdateChecker.instance = new Olive.UpdateChecker(1e4, 6e5)),
+        Olive.UpdateChecker.instance
       );
     }),
-    (b.UpdateChecker.prototype.callback_ = function () {
+    (Olive.UpdateChecker.prototype.callback_ = function () {
       var c = {};
-      a.each(
+      jQuery.each(
         this._settings,
-        a.proxy(function (b) {
+        jQuery.proxy(function (b) {
           void 0 != this._settings[b].pathname &&
           this._settings[b].pathname != location.pathname
             ? delete this._settings[b]
-            : a.each(this._settings[b].params, function (a, b) {
+            : jQuery.each(this._settings[b].params, function (a, b) {
                 c[a] = JSON.stringify(b);
               });
         }, this)
       ),
-        b.Net.ajax({ url: "/check_update.json", data: c, silent: !0 }).done(
-          a.proxy(function (b) {
-            a(this).triggerHandler("update", [b]);
+        Olive.Net.ajax({ url: "/check_update.json", data: c, silent: !0 }).done(
+          jQuery.proxy(function (b) {
+            jQuery(this).triggerHandler("update", [b]);
           }, this)
         );
     }),
-    (b.UpdateChecker.prototype.onUpdate = function (a, b, c, d) {
+    (Olive.UpdateChecker.prototype.onUpdate = function (a, b, c, d) {
       (this._settings[a] = { params: b, update: c }),
         d && (this._settings[a].pathname = location.pathname);
     }),
-    (b.UpdateChecker.prototype.deleteChecker = function (a) {
+    (Olive.UpdateChecker.prototype.deleteChecker = function (a) {
       delete this._settings[a];
     }),
-    (b.Toggler = function (a, b) {
+    (Olive.Toggler = function (a, b) {
       (this.actions = a), (this.index = b || 0), (this.loading = null);
     }),
-    a.extend(b.Toggler.prototype, {
+    jQuery.extend(Olive.Toggler.prototype, {
       toggle: function (c) {
         return this.loading ||
           (0 === arguments.length && (c = this.index + 1),
           (c %= this.actions.length) === this.index)
           ? void 0
-          : ((this.loading = b.Form.send({
+          : ((this.loading = Olive.Form.send({
               type: "POST",
               url: this.actions[c],
               data: this.params(c),
@@ -744,25 +744,25 @@ var Olv = Olv || {};
             })
               .done(function () {
                 (this.index = c),
-                  a(this).triggerHandler("toggledone", arguments);
+                  jQuery(this).triggerHandler("toggledone", arguments);
               })
               .fail(function () {
-                a(this).triggerHandler("togglefail", arguments);
+                jQuery(this).triggerHandler("togglefail", arguments);
               })
               .always(function () {
-                a(this).triggerHandler("toggleend"), (this.loading = null);
+                jQuery(this).triggerHandler("toggleend"), (this.loading = null);
               })),
-            a(this).triggerHandler("togglestart"),
+            jQuery(this).triggerHandler("togglestart"),
             this.loading);
       },
       params: function (a) {
         return [];
       },
     }),
-    (b.Storage = function (a, b) {
+    (Olive.Storage = function (a, b) {
       (this.storage = a), (this.prefix = b ? b + "." : "");
     }),
-    a.extend(b.Storage.prototype, {
+    jQuery.extend(Olive.Storage.prototype, {
       get: function (a, b) {
         var c = this.storage.getItem(this.prefix + a),
           d = c && JSON.parse(c);
@@ -812,19 +812,19 @@ var Olv = Olv || {};
         return new this.constructor(this.storage, this.prefix + a);
       },
     }),
-    a.extend(b.Storage, {
+    jQuery.extend(Olive.Storage, {
       _session: null,
       session: function () {
-        var a = b.Storage;
+        var a = Olive.Storage;
         return a._session || (a._session = new a(wiiuSessionStorage, "olv"));
       },
       _local: null,
       local: function () {
-        var a = b.Storage;
+        var a = Olive.Storage;
         return a._local || (a._local = new a(wiiuLocalStorage, "olv"));
       },
     }),
-    (b.KEY_LABEL_MAP = {
+    (Olive.KEY_LABEL_MAP = {
       13: "A",
       27: "B",
       88: "X",
@@ -834,7 +834,7 @@ var Olv = Olv || {};
       80: "plus",
       77: "minus",
     }),
-    (b.KeyLocker = {
+    (Olive.KeyLocker = {
       locks: null,
       isLocked: function (a) {
         return !!this.locks[a];
@@ -855,11 +855,11 @@ var Olv = Olv || {};
       setup: function () {
         var c = this,
           d = { 32: !1 };
-        a.each(b.KEY_LABEL_MAP, function (a) {
+        jQuery.each(Olive.KEY_LABEL_MAP, function (a) {
           d[a] = !1;
         }),
           (c.locks = d),
-          a(document).on({
+          jQuery(document).on({
             keydown: function (a) {
               c.onKeyDown(a);
             },
@@ -872,36 +872,36 @@ var Olv = Olv || {};
           });
       },
     }),
-    b.init.done(function () {
-      b.KeyLocker.setup();
+    Olive.init.done(function () {
+      Olive.KeyLocker.setup();
     }),
-    (b.TriggerHandler = {
+    (Olive.TriggerHandler = {
       onKeyPress: function (c) {
         13 !== c.which ||
           c.isDefaultPrevented() ||
-          b.KeyLocker.isLocked(13) ||
-          (c.preventDefault(), a(this).click());
+          Olive.KeyLocker.isLocked(13) ||
+          (c.preventDefault(), jQuery(this).click());
       },
       onMouseUp: function (a) {
         this.blur();
       },
       setup: function () {
-        a(document).on(
+        jQuery(document).on(
           { keypress: this.onKeyPress, mouseup: this.onMouseUp },
           ".trigger"
         );
       },
     }),
-    b.init.done(function () {
-      b.TriggerHandler.setup();
+    Olive.init.done(function () {
+      Olive.TriggerHandler.setup();
     }),
-    (b.AccessKey = {
+    (Olive.AccessKey = {
       triggerByKey: function (c) {
         var d = null;
         if (
-          (a(".accesskey-" + c).each(function () {
-            var c = a(this);
-            return b.Form.isDisabled(c) || c.closest(".none").length
+          (jQuery(".accesskey-" + c).each(function () {
+            var c = jQuery(this);
+            return Olive.Form.isDisabled(c) || c.closest(".none").length
               ? !0
               : ((d = c), !1);
           }),
@@ -921,7 +921,7 @@ var Olv = Olv || {};
       },
       onKeyPress: function (a) {
         if (13 !== a.which && !a.isDefaultPrevented()) {
-          var c = b.KEY_LABEL_MAP[a.which];
+          var c = Olive.KEY_LABEL_MAP[a.which];
           if (c) {
             var d = this.triggerByKey(c);
             d && a.preventDefault();
@@ -929,7 +929,7 @@ var Olv = Olv || {};
         }
       },
       bind: function (b, c, d) {
-        var e = a("<button/>")
+        var e = jQuery("<button/>")
           .attr("type", "button")
           .addClass("accesskey-" + b)
           .on("click", c)
@@ -943,20 +943,20 @@ var Olv = Olv || {};
         );
       },
       setup: function () {
-        a(document).on("keypress", a.proxy(this.onKeyPress, this));
+        jQuery(document).on("keypress", jQuery.proxy(this.onKeyPress, this));
       },
     }),
-    b.init.done(function () {
-      b.AccessKey.setup();
+    Olive.init.done(function () {
+      Olive.AccessKey.setup();
     }),
-    (b.Sound = {
+    (Olive.Sound = {
       attentionSelector:
         "a[href], [data-href], input, textarea, select, button, label, .trigger, [data-sound]",
       isAttentionTarget: function (a) {
         return !!a.closest(this.attentionSelector).length;
       },
       playAttentionSound: function (a) {
-        b.Form.hasBeenDisabled(a) ||
+        Olive.Form.hasBeenDisabled(a) ||
           wiiuSound.playSoundByName("SE_WAVE_DRC_TOUCH_TRG", 1);
       },
       activationSelector:
@@ -968,7 +968,7 @@ var Olv = Olv || {};
           : "SE_WAVE_OK";
       },
       playActivationSound: function (a) {
-        if (!b.Form.hasBeenDisabled(a)) {
+        if (!Olive.Form.hasBeenDisabled(a)) {
           var c = a.attr("data-sound");
           "" !== c &&
             wiiuSound.playSoundByName(c || this.defaultActivationSound, 1);
@@ -986,58 +986,58 @@ var Olv = Olv || {};
         this.playBGM(b);
       },
       setup: function () {
-        a(document).on("touchstart", this.attentionSelector, function () {
-          b.Sound.playAttentionSound(a(this));
+        jQuery(document).on("touchstart", this.attentionSelector, function () {
+          Olive.Sound.playAttentionSound(jQuery(this));
         }),
-          a(document).on("click", this.activationSelector, function () {
-            b.Sound.playActivationSound(a(this));
+          jQuery(document).on("click", this.activationSelector, function () {
+            Olive.Sound.playActivationSound(jQuery(this));
           });
       },
     }),
-    b.init.done(function () {
-      b.Sound.setup();
+    Olive.init.done(function () {
+      Olive.Sound.setup();
     }),
-    b.router.connect(/^/, function (a, c, d) {
-      b.Sound.setDefaultActivationSoundByPath(c.pathname),
-        b.Sound.playBGMByPath(c.pathname);
+    Olive.router.connect(/^/, function (a, c, d) {
+      Olive.Sound.setDefaultActivationSoundByPath(c.pathname),
+        Olive.Sound.playBGMByPath(c.pathname);
     }),
-    (b.Dropdown = function (b) {
-      (b = a(b)),
+    (Olive.Dropdown = function (b) {
+      (b = jQuery(b)),
         (this.container = b.parent()),
         (this.element = this.container.find(".dropdown-menu")),
         (this.triggerElement = b),
         (this.guard = null);
     }),
-    a.extend(b.Dropdown.prototype, {
+    jQuery.extend(Olive.Dropdown.prototype, {
       open: function () {
         function c(c) {
           g.guard &&
             (!g.element.attr("data-sticky") ||
               (g.element[0] !== c.target &&
-                !a.contains(g.element[0], c.target))) &&
-            (b.Sound.isAttentionTarget(a(c.target)) ||
-              b.Sound.playActivationSound(g.triggerElement),
+                !jQuery.contains(g.element[0], c.target))) &&
+            (Olive.Sound.isAttentionTarget(jQuery(c.target)) ||
+              Olive.Sound.playActivationSound(g.triggerElement),
             g.close());
         }
         function d() {
-          g.guard && (b.Sound.playActivationSound(g.triggerElement), g.close());
+          g.guard && (Olive.Sound.playActivationSound(g.triggerElement), g.close());
         }
         function e() {
           g.triggerElement.attr("data-sound", "SE_WAVE_BALLOON_CLOSE"),
-            a(document).on("click", c),
-            a(window).on("scroll", d);
+            jQuery(document).on("click", c),
+            jQuery(window).on("scroll", d);
         }
         function f() {
           g.triggerElement.attr("data-sound", "SE_WAVE_BALLOON_OPEN"),
-            a(document).off("click", c),
-            a(window).off("scroll", d);
+            jQuery(document).off("click", c),
+            jQuery(window).off("scroll", d);
         }
         if (!this.guard) {
-          b.Dropdown.register(this),
+          Olive.Dropdown.register(this),
             this.container.addClass("open"),
             this.triggerElement.addClass("dropdown-open");
           var g = this,
-            h = (this.guard = a.Deferred());
+            h = (this.guard = jQuery.Deferred());
           setTimeout(function () {
             e(), h.done(f);
           }, 0),
@@ -1048,12 +1048,12 @@ var Olv = Olv || {};
         this.guard &&
           (this.guard.resolve(),
           (this.guard = null),
-          b.Dropdown.unregister(this),
+          Olive.Dropdown.unregister(this),
           this.container.removeClass("open"),
           this.triggerElement.removeClass("dropdown-open"));
       },
     }),
-    a.extend(b.Dropdown, {
+    jQuery.extend(Olive.Dropdown, {
       current: null,
       register: function (a) {
         this.current && this.current.close(), (this.current = a);
@@ -1064,103 +1064,103 @@ var Olv = Olv || {};
         this.current = null;
       },
       setup: function () {
-        a(document).on("click", '[data-toggle="dropdown"]', function (c) {
+        jQuery(document).on("click", '[data-toggle="dropdown"]', function (c) {
           if (!c.isDefaultPrevented()) {
             c.preventDefault();
-            var d = a(this);
-            if (!b.Form.isDisabled(d) && !d.hasClass("dropdown-open")) {
-              var e = new b.Dropdown(d);
+            var d = jQuery(this);
+            if (!Olive.Form.isDisabled(d) && !d.hasClass("dropdown-open")) {
+              var e = new Olive.Dropdown(d);
               e.open();
             }
           }
         });
       },
     }),
-    b.init.done(function () {
-      b.Dropdown.setup();
+    Olive.init.done(function () {
+      Olive.Dropdown.setup();
     }),
-    (b.ModalWindowManager = {}),
-    (b.ModalWindowManager._windows = []),
-    (b.ModalWindowManager.currentWindow = null),
-    (b.ModalWindowManager.closeAll = function () {
+    (Olive.ModalWindowManager = {}),
+    (Olive.ModalWindowManager._windows = []),
+    (Olive.ModalWindowManager.currentWindow = null),
+    (Olive.ModalWindowManager.closeAll = function () {
       for (; this.currentWindow; ) this.currentWindow.close();
     }),
-    (b.ModalWindowManager.closeUntil = function (a) {
+    (Olive.ModalWindowManager.closeUntil = function (a) {
       if (a.guard)
         for (var b; (b = this.currentWindow) && (b.close(), b !== a); );
     }),
-    (b.ModalWindowManager.register = function (a) {
+    (Olive.ModalWindowManager.register = function (a) {
       this._windows.push(a), (this.currentWindow = a);
     }),
-    (b.ModalWindowManager.unregister = function (a) {
+    (Olive.ModalWindowManager.unregister = function (a) {
       if (this.currentWindow !== a)
         throw new Error("Failed to unregister modal window");
       this._windows.pop();
       var b = this._windows.length;
       this.currentWindow = b ? this._windows[b - 1] : null;
     }),
-    (b.ModalWindowManager.setup = function () {
-      a(document).on("click", "[data-modal-open]", function (c) {
-        var d = a(this);
-        if (!b.Form.isDisabled(d) && !c.isDefaultPrevented()) {
+    (Olive.ModalWindowManager.setup = function () {
+      jQuery(document).on("click", "[data-modal-open]", function (c) {
+        var d = jQuery(this);
+        if (!Olive.Form.isDisabled(d) && !c.isDefaultPrevented()) {
           c.preventDefault();
-          var e = a.Event("olv:modalopen");
+          var e = jQuery.Event("olv:modalopen");
           if ((d.trigger(e), !e.isDefaultPrevented())) {
-            var f = b.ModalWindowManager.createNewModal(this);
+            var f = Olive.ModalWindowManager.createNewModal(this);
             f.open();
           }
         }
       }),
-        a(document).on("click", ".olv-modal-close-button", function (a) {
+        jQuery(document).on("click", ".olv-modal-close-button", function (a) {
           if (!a.isDefaultPrevented()) {
             a.preventDefault();
-            var c = b.ModalWindowManager.currentWindow;
+            var c = Olive.ModalWindowManager.currentWindow;
             c && c.close();
           }
         }),
-        a(document).on("olv:modal", function (a, c, d) {
-          b.Content.autopagerize.disable(d);
+        jQuery(document).on("olv:modal", function (a, c, d) {
+          Olive.Content.autopagerize.disable(d);
         });
     }),
-    (b.ModalWindowManager.createNewModal = function (c) {
-      var d = a(c),
-        e = a(d.attr("data-modal-open"));
+    (Olive.ModalWindowManager.createNewModal = function (c) {
+      var d = jQuery(c),
+        e = jQuery(d.attr("data-modal-open"));
       e.attr("data-is-template") && (e = e.clone().removeAttr("id"));
-      var f = new b.ModalWindow(e, c);
+      var f = new Olive.ModalWindow(e, c);
       return f;
     }),
-    (b.ModalWindowManager.setupWindowPage = function (c) {
+    (Olive.ModalWindowManager.setupWindowPage = function (c) {
       if (!this.currentWindow) {
-        var d = a(".modal-window-open");
+        var d = jQuery(".modal-window-open");
         if (d.length) {
-          var e = new b.ModalWindow(d.first());
+          var e = new Olive.ModalWindow(d.first());
           e.triggerOpenHandlers(c);
         }
       }
     }),
-    b.init.done(function () {
-      b.ModalWindowManager.setup();
+    Olive.init.done(function () {
+      Olive.ModalWindowManager.setup();
     }),
-    b.router.connect(/^/, function (a, c, d) {
-      b.ModalWindowManager.setupWindowPage(d);
+    Olive.router.connect(/^/, function (a, c, d) {
+      Olive.ModalWindowManager.setupWindowPage(d);
     }),
-    a(document).on("olv:pagechange", function () {
-      b.ModalWindowManager.closeAll();
+    jQuery(document).on("olv:pagechange", function () {
+      Olive.ModalWindowManager.closeAll();
     }),
-    (b.ModalWindow = function (b, c) {
-      (this.element = a(b)),
-        (this.triggerElement = a(c)),
+    (Olive.ModalWindow = function (b, c) {
+      (this.element = jQuery(b)),
+        (this.triggerElement = jQuery(c)),
         (this.temporary = !this.element.parent().length),
         (this.prevScroll = 0),
-        (this.prevContent = a());
-      var d = a.trim(this.element.attr("data-modal-types"));
+        (this.prevContent = jQuery());
+      var d = jQuery.trim(this.element.attr("data-modal-types"));
       (this.types = d ? d.split(/\s+/) : []), (this.guard = null);
     }),
-    (b.ModalWindow.prototype.open = function () {
+    (Olive.ModalWindow.prototype.open = function () {
       return this.guard
         ? void 0
         : (document.activeElement.blur(),
-          b.ModalWindowManager.register(this),
+          Olive.ModalWindowManager.register(this),
           (this.prevScroll = window.scrollY),
           this.temporary && this.element.appendTo("#body"),
           this.element
@@ -1172,51 +1172,51 @@ var Olv = Olv || {};
             .andSelf()
             .siblings()
             .filter(function () {
-              return !a(this).hasClass("none");
+              return !jQuery(this).hasClass("none");
             })
             .addClass("none")),
           window.scrollTo(0, 0),
-          this.triggerOpenHandlers(a.Deferred()),
+          this.triggerOpenHandlers(jQuery.Deferred()),
           this);
     }),
-    (b.ModalWindow.prototype.triggerOpenHandlers = function (a) {
+    (Olive.ModalWindow.prototype.triggerOpenHandlers = function (a) {
       this.guard = a;
       for (var b, c = [this, a.promise()], d = 0; (b = this.types[d]); d++)
         this.element.trigger("olv:modal:" + b, c);
       this.element.trigger("olv:modal", c);
     }),
-    (b.ModalWindow.prototype.close = function () {
+    (Olive.ModalWindow.prototype.close = function () {
       return this.guard
         ? (this.guard.resolve(),
           (this.guard = null),
-          b.ModalWindowManager.unregister(this),
+          Olive.ModalWindowManager.unregister(this),
           this.element.trigger("olv:modalclose"),
           this.temporary && this.element.remove(),
           this.element.addClass("none").removeClass("modal-window-open"),
           this.prevContent.removeClass("none"),
           window.scrollTo(0, this.prevScroll),
-          (this.prevContent = a()),
+          (this.prevContent = jQuery()),
           (this.prevScroll = 0),
           this)
         : void 0;
     }),
-    (b.ConfirmDialog = function (c) {
+    (Olive.ConfirmDialog = function (c) {
       c = c || {};
-      var d = a(c.template || "#confirm-dialog-template")
+      var d = jQuery(c.template || "#confirm-dialog-template")
         .clone()
         .attr("id", "olvdialog" + new Date().getTime())
         .attr("data-modal-types", c.modalTypes || "confirm-dialog");
-      b.ModalWindow.call(this, d, c.triggerElement),
+      Olive.ModalWindow.call(this, d, c.triggerElement),
         d.find(".ok-button").on(
           "click",
-          a.proxy(function (b) {
-            a(this).triggerHandler("dialogok", b), b.preventDefault();
+          jQuery.proxy(function (b) {
+            jQuery(this).triggerHandler("dialogok", b), b.preventDefault();
           }, this)
         ),
         d.find(".cancel-button").on(
           "click",
-          a.proxy(function (b) {
-            a(this).triggerHandler("dialogcancel", b),
+          jQuery.proxy(function (b) {
+            jQuery(this).triggerHandler("dialogcancel", b),
               this.close(),
               b.preventDefault();
           }, this)
@@ -1225,7 +1225,7 @@ var Olv = Olv || {};
           .body(c.body)
           .setButtonLabels({ ok: c.okLabel, cancel: c.cancelLabel });
     }),
-    a.extend(b.ConfirmDialog.prototype, b.ModalWindow.prototype, {
+    jQuery.extend(Olive.ConfirmDialog.prototype, Olive.ModalWindow.prototype, {
       title: function (a) {
         var b = this.element.find(".window-title");
         return "undefined" == typeof a ? b.text() : (b.text(a), this);
@@ -1254,36 +1254,36 @@ var Olv = Olv || {};
         );
       },
       ok: function (b) {
-        return a(this).on("dialogok", b), this;
+        return jQuery(this).on("dialogok", b), this;
       },
       cancel: function (b) {
-        return a(this).on("dialogcancel", b), this;
+        return jQuery(this).on("dialogcancel", b), this;
       },
     }),
-    (b.showConfirm = function (c, d, e) {
-      return new b.ConfirmDialog(a.extend({ title: c, body: d }, e)).open();
+    (Olive.showConfirm = function (c, d, e) {
+      return new Olive.ConfirmDialog(jQuery.extend({ title: c, body: d }, e)).open();
     }),
-    (b.MessageDialog = function (c) {
-      b.ConfirmDialog.call(
+    (Olive.MessageDialog = function (c) {
+      Olive.ConfirmDialog.call(
         this,
-        a.extend(c, { template: "#message-dialog-template" })
+        jQuery.extend(c, { template: "#message-dialog-template" })
       ),
-        a(this.element).on(
+        jQuery(this.element).on(
           "click",
           ".single-button .button",
-          a.proxy(function (a) {
+          jQuery.proxy(function (a) {
             this.close();
           }, this)
         );
     }),
-    a.extend(b.MessageDialog.prototype, b.ConfirmDialog.prototype),
-    (b.showMessage = function (c, d, e) {
-      return new b.MessageDialog(a.extend({ title: c, body: d }, e)).open();
+    jQuery.extend(Olive.MessageDialog.prototype, Olive.ConfirmDialog.prototype),
+    (Olive.showMessage = function (c, d, e) {
+      return new Olive.MessageDialog(jQuery.extend({ title: c, body: d }, e)).open();
     }),
-    b.router.connect("", function () {
-      a("#global-menu li").removeClass("selected");
+    Olive.router.connect("", function () {
+      jQuery("#global-menu li").removeClass("selected");
     }),
-    a([
+    jQuery([
       [
         "^(/my_menu|/settings|/my_communities|/my_blacklist|/welcome/profile)",
         "#global-menu-mymenu",
@@ -1294,23 +1294,23 @@ var Olv = Olv || {};
       ["^/(?:friend_messages(?:/|$)|admin_messages$)", "#global-menu-message"],
       ["^/news/", "#global-menu-news"],
     ]).each(function (c, d) {
-      b.router.connect(d[0], function () {
-        a(d[1]).addClass("selected");
+      Olive.router.connect(d[0], function () {
+        jQuery(d[1]).addClass("selected");
       });
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/users/[0-9a-zA-Z\\-_.]+(?:/posts|/diary|/empathies|/friends|/followers|/following)?$",
       function () {
         var b = new RegExp(
           "^" +
-            a("body").attr("data-profile-url") +
+            jQuery("body").attr("data-profile-url") +
             "(?:/posts|/diary|/empathies|/friends|/followers|/following)?$"
         );
         b.test(location.pathname) &&
-          a("#global-menu-mymenu").addClass("selected");
+          jQuery("#global-menu-mymenu").addClass("selected");
       }
     ),
-    b.init.done(function (a) {
+    Olive.init.done(function (a) {
       function c() {
         var b = a("body").attr("data-profile-url"),
           c = new RegExp(
@@ -1332,15 +1332,15 @@ var Olv = Olv || {};
         e.on("click", function (a) {
           a.preventDefault(), history.back();
         }),
-        b.router.connect(/^/, c),
+        Olive.router.connect(/^/, c),
         c();
     }),
-    b.init.done(function (a) {
+    Olive.init.done(function (a) {
       if (a("#global-menu-news").length) {
         a("#global-menu-news").on("click", function (b) {
           a(b.currentTarget).find(".badge").hide();
         });
-        var c = b.UpdateChecker.getInstance();
+        var c = Olive.UpdateChecker.getInstance();
         a(c).on("update", function (b, d) {
           a.each(c._settings, function (b, c) {
             var e = !0;
@@ -1381,16 +1381,16 @@ var Olv = Olv || {};
           c.invoke();
       }
     }),
-    a(document).on("click", ".tab-button", function (c) {
-      var d = a(this);
-      b.Form.isDisabled(d) ||
+    jQuery(document).on("click", ".tab-button", function (c) {
+      var d = jQuery(this);
+      Olive.Form.isDisabled(d) ||
         d
           .addClass("selected")
           .removeClass("notify")
           .siblings()
           .removeClass("selected");
     }),
-    b.init.done(function (a) {
+    Olive.init.done(function (a) {
       var c;
       try {
         c = wiiuPDM.getTitlesFilteredByPlayTime("1").IDs;
@@ -1400,7 +1400,7 @@ var Olv = Olv || {};
         } catch (d) {}
       }
       c || (c = []),
-        b.Net.ajax({
+        Olive.Net.ajax({
           type: "POST",
           url: "/settings/played_title_ids",
           data: c.map(function (a) {
@@ -1409,19 +1409,19 @@ var Olv = Olv || {};
           silent: !0,
         });
     }),
-    b.router.connect("", function (c, d, e) {
+    Olive.router.connect("", function (c, d, e) {
       function f(a) {
         var c = j.scrollTop() > m;
         c !== l &&
           (k.stop().fadeToggle(a ? 0 : 300),
-          b.Form.toggleDisabled(k, !c),
+          Olive.Form.toggleDisabled(k, !c),
           (l = c));
       }
       function g(a) {
         n || f();
       }
       function h(a) {
-        b.Form.isDisabled(k) ||
+        Olive.Form.isDisabled(k) ||
           a.isDefaultPrevented() ||
           (a.preventDefault(), j.scrollTop(0));
       }
@@ -1431,8 +1431,8 @@ var Olv = Olv || {};
             n--;
           });
       }
-      var j = a(window),
-        k = a("#scroll-to-top");
+      var j = jQuery(window),
+        k = jQuery("#scroll-to-top");
       if (k.length) {
         var l = !1,
           m = 500,
@@ -1440,31 +1440,31 @@ var Olv = Olv || {};
         f(!0),
           j.on("scroll", g),
           k.on("click", h),
-          a(document).on("olv:modal", i),
+          jQuery(document).on("olv:modal", i),
           e.done(function () {
             k.stop(!0, !0).hide(),
               j.off("scroll", g),
               k.off("click", h),
-              a(document).off("olv:modal", i);
+              jQuery(document).off("olv:modal", i);
           });
       }
     }),
-    b.router.connect("", function (c, d, e) {
+    Olive.router.connect("", function (c, d, e) {
       var f = function (b) {
         var c,
-          d = a("#body .scroll").filter(":visible"),
-          e = a(document.activeElement),
+          d = jQuery("#body .scroll").filter(":visible"),
+          e = jQuery(document.activeElement),
           f = e.closest(".scroll").filter(":visible");
         if (f.length > 0) {
           var g = d.index(f),
             h = b ? g - 1 : g + 1;
-          h >= 0 && h < d.length && (c = a(d.get(h)));
+          h >= 0 && h < d.length && (c = jQuery(d.get(h)));
         } else {
-          var i = a(document).scrollTop();
-          i >= document.body.scrollHeight - a(window).height()
+          var i = jQuery(document).scrollTop();
+          i >= document.body.scrollHeight - jQuery(window).height()
             ? (c = b && d.length > 0 ? d.last() : null)
             : d.each(function () {
-                var d = a(this),
+                var d = jQuery(this),
                   e = d.offset().top,
                   f = e - i;
                 if (b) {
@@ -1484,16 +1484,16 @@ var Olv = Olv || {};
               ? c
               : c.find(".scroll-focus").first();
           k.focus(), c.trigger("olv:keyhandler:scroll:element");
-        } else e.blur(), a(document).trigger("olv:keyhandler:scroll:document");
+        } else e.blur(), jQuery(document).trigger("olv:keyhandler:scroll:document");
       };
-      b.AccessKey.bind(
+      Olive.AccessKey.bind(
         "L",
         function () {
           f(!0);
         },
         e
       ),
-        b.AccessKey.bind(
+        Olive.AccessKey.bind(
           "R",
           function () {
             f(!1);
@@ -1501,35 +1501,35 @@ var Olv = Olv || {};
           e
         );
     }),
-    (b.Content.setupReloadKey = function (a) {
-      b.AccessKey.bind(
+    (Olive.Content.setupReloadKey = function (a) {
+      Olive.AccessKey.bind(
         "Y",
         function () {
-          b.Browsing.reload();
+          Olive.Browsing.reload();
         },
         a
       );
     }),
-    (b.Tutorial = {}),
-    (b.Tutorial.setupCloseButtons = function (c) {
+    (Olive.Tutorial = {}),
+    (Olive.Tutorial.setupCloseButtons = function (c) {
       function d(c) {
-        var d = a(c.target);
+        var d = jQuery(c.target);
         if ((d.parent().hide(), d.attr("data-tutorial-name")))
-          a.post("/settings/tutorial_post", {
+          jQuery.post("/settings/tutorial_post", {
             tutorial_name: d.attr("data-tutorial-name"),
           }).success(function () {});
         else if (d.attr("data-achievement-name")) {
           var e = d.attr("data-achievement-name").split(/\s*,\s*/);
-          b.Achievement.requestAchieveWithoutRegard(e);
+          Olive.Achievement.requestAchieveWithoutRegard(e);
         }
         return c.preventDefault();
       }
-      a(document).on("click", ".tutorial-close-button", d),
+      jQuery(document).on("click", ".tutorial-close-button", d),
         c.done(function () {
-          a(document).off("click", ".tutorial-close-button", d);
+          jQuery(document).off("click", ".tutorial-close-button", d);
         });
     }),
-    (b.Tutorial.setupBalloon = function (b, c) {
+    (Olive.Tutorial.setupBalloon = function (b, c) {
       function d(a) {
         return function (b) {
           a.hide();
@@ -1537,33 +1537,33 @@ var Olv = Olv || {};
       }
       function e(c) {
         c.preventDefault();
-        var d = a(c.target).closest(b),
+        var d = jQuery(c.target).closest(b),
           e = d.attr("data-balloon-target");
         if (e) {
-          var f = a(e);
+          var f = jQuery(e);
           f.length && f.trigger(c.type);
         }
       }
-      for (var f = a(b), g = [], h = 0, i = f.length; i > h; h++) {
+      for (var f = jQuery(b), g = [], h = 0, i = f.length; i > h; h++) {
         var j = f.eq(h);
         if (j.attr("data-balloon-target")) {
           var k = j.attr("data-balloon-target");
           g.push([k, d(j)]);
         }
       }
-      for (a(document).on("click", b, e), h = 0, i = g.length; i > h; h++)
-        a(document).on("click", g[h][0], g[h][1]);
+      for (jQuery(document).on("click", b, e), h = 0, i = g.length; i > h; h++)
+        jQuery(document).on("click", g[h][0], g[h][1]);
       c.done(function () {
-        a(document).off("click", b, e);
+        jQuery(document).off("click", b, e);
         for (var c = 0, d = g.length; d > c; c++)
-          a(document).off("click", g[c][0], g[c][1]);
+          jQuery(document).off("click", g[c][0], g[c][1]);
       });
     }),
-    (b.Community = {}),
-    (b.Community.setupInfoTicker = function (c) {
+    (Olive.Community = {}),
+    (Olive.Community.setupInfoTicker = function (c) {
       function d(d) {
-        var h = a(this);
-        b.Form.isDisabled(h) ||
+        var h = jQuery(this);
+        Olive.Form.isDisabled(h) ||
           d.isDefaultPrevented() ||
           (h.attr("data-pjax")
             ? c.done(function () {
@@ -1573,11 +1573,11 @@ var Olv = Olv || {};
           f.set(g, Math.floor(+new Date() / 1e3)),
           f.save(),
           e.attr("data-is-of-miiverse") &&
-            a.post("/settings/miiverse_info_post"));
+            jQuery.post("/settings/miiverse_info_post"));
       }
-      var e = a(".info-ticker");
+      var e = jQuery(".info-ticker");
       if (e.length) {
-        var f = b.Storage.local().getBranch("community.info-ticker"),
+        var f = Olive.Storage.local().getBranch("community.info-ticker"),
           g = "last-seen." + e.attr("data-olive-title-id"),
           h = f.get(g) || 0,
           i = +e.attr("data-last-seen") || 0;
@@ -1591,22 +1591,22 @@ var Olv = Olv || {};
           });
       }
     }),
-    (b.Community.setupFavoriteButtons = function (c) {
+    (Olive.Community.setupFavoriteButtons = function (c) {
       function d(c) {
-        var d = a(this);
-        if (!b.Form.isDisabled(d) && !c.isDefaultPrevented()) {
+        var d = jQuery(this);
+        if (!Olive.Form.isDisabled(d) && !c.isDefaultPrevented()) {
           c.preventDefault();
           var e = d.hasClass("checked");
           d.toggleClass("checked"),
-            a(document.body).attr("data-is-first-favorite") &&
+            jQuery(document.body).attr("data-is-first-favorite") &&
               !e &&
-              b
-                .deferredAlert(b.loc("olv.portal.confirm_first_favorite"))
+              Olive
+                .deferredAlert(Olive.loc("olv.portal.confirm_first_favorite"))
                 .done(function () {
-                  a(document.body).removeAttr("data-is-first-favorite");
+                  jQuery(document.body).removeAttr("data-is-first-favorite");
                 });
           var f = d.attr(e ? "data-action-unfavorite" : "data-action-favorite");
-          b.Form.post(f, null, d)
+          Olive.Form.post(f, null, d)
             .done(function () {
               (e = !e),
                 d.attr(
@@ -1620,32 +1620,32 @@ var Olv = Olv || {};
             });
         }
       }
-      a(document).on("click", ".favorite-button", d),
+      jQuery(document).on("click", ".favorite-button", d),
         c.done(function () {
-          a(document).off("click", ".favorite-button", d);
+          jQuery(document).off("click", ".favorite-button", d);
         });
     }),
-    (b.Community.setupUnfavoriteButtons = function (c) {
+    (Olive.Community.setupUnfavoriteButtons = function (c) {
       function d(c) {
-        var d = a(this);
-        b.Form.isDisabled(d) ||
-          (b.Form.post(d.attr("data-action"), null, d).done(function () {
-            b.deferredAlert(b.loc("olv.portal.unfavorite_succeeded_to")),
+        var d = jQuery(this);
+        Olive.Form.isDisabled(d) ||
+          (Olive.Form.post(d.attr("data-action"), null, d).done(function () {
+            Olive.deferredAlert(Olive.loc("olv.portal.unfavorite_succeeded_to")),
               d.add(d.prev()).remove();
           }),
           c.preventDefault());
       }
-      a(document).on("click", ".unfavorite-button", d),
+      jQuery(document).on("click", ".unfavorite-button", d),
         c.done(function () {
-          a(document).off("click", ".unfavorite-button", d);
+          jQuery(document).off("click", ".unfavorite-button", d);
         });
     }),
-    (b.Community.setupAppJumpButtons = function (c) {
+    (Olive.Community.setupAppJumpButtons = function (c) {
       function d(c) {
         if (wiiuDevice.existsTitle) {
           for (
             var d,
-              e = a(this),
+              e = jQuery(this),
               f = e.attr("data-app-jump-title-ids").split(","),
               g = 0;
             g < f.length;
@@ -1656,8 +1656,8 @@ var Olv = Olv || {};
               break;
             }
           d
-            ? b
-                .deferredConfirm(b.loc("olv.portal.confirm_app_jump"))
+            ? Olive
+                .deferredConfirm(Olive.loc("olv.portal.confirm_app_jump"))
                 .done(function (a) {
                   if (a) {
                     var b = d,
@@ -1667,22 +1667,22 @@ var Olv = Olv || {};
                     wiiuBrowser.jumpToApplication(b, c, f || -1, g || "", "");
                   }
                 })
-            : b.deferredAlert(b.loc("olv.portal.confirm_you_have_no_soft"));
+            : Olive.deferredAlert(Olive.loc("olv.portal.confirm_you_have_no_soft"));
         }
       }
-      a(document).on("click", ".app-jump-button", d),
+      jQuery(document).on("click", ".app-jump-button", d),
         c.done(function () {
-          a(document).off("click", ".app-jump-button", d);
+          jQuery(document).off("click", ".app-jump-button", d);
         });
     }),
-    (b.Community.setupShopButtons = function (c) {
+    (Olive.Community.setupShopButtons = function (c) {
       function d(c) {
-        var d = a(this);
-        b.Form.isDisabled(d) ||
+        var d = jQuery(this);
+        Olive.Form.isDisabled(d) ||
           c.isDefaultPrevented() ||
           (c.preventDefault(),
-          b
-            .deferredConfirm(b.loc("olv.portal.confirm_open_eshop"))
+          Olive
+            .deferredConfirm(Olive.loc("olv.portal.confirm_open_eshop"))
             .done(function (b) {
               if (b) {
                 var c = {
@@ -1691,75 +1691,75 @@ var Olv = Olv || {};
                   dst_title_id: d.attr("data-dst-title-id"),
                   src_title_id: d.attr("data-src-title-id"),
                 };
-                a(document).trigger("olv:jump:eshop", [c]);
-                var e = a.param(c);
+                jQuery(document).trigger("olv:jump:eshop", [c]);
+                var e = jQuery.param(c);
                 wiiuBrowser.jumpToEshop(e);
               }
             }));
       }
-      a(document).on("click", ".eshop-button", d),
+      jQuery(document).on("click", ".eshop-button", d),
         c.done(function () {
-          a(document).off("click", ".eshop-button", d);
+          jQuery(document).off("click", ".eshop-button", d);
         });
     }),
-    (b.Community.setupPostButton = function (b) {
+    (Olive.Community.setupPostButton = function (b) {
       function c() {
         return (
-          "1" === a(".tab-button.selected").attr("data-show-post-button") ||
-          "1" === a(".post-headline").attr("data-show-post-button")
+          "1" === jQuery(".tab-button.selected").attr("data-show-post-button") ||
+          "1" === jQuery(".post-headline").attr("data-show-post-button")
         );
       }
       function d() {
         var b = c();
-        a("#header-post-button").toggleClass("none", !b);
+        jQuery("#header-post-button").toggleClass("none", !b);
       }
       d();
     }),
-    (b.Community.setupURLSelector = function (b, c) {
+    (Olive.Community.setupURLSelector = function (b, c) {
       function d(b) {
         var c = e.val();
-        c && a.pjax({ url: c, container: "#body" });
+        c && jQuery.pjax({ url: c, container: "#body" });
       }
-      var e = a(b);
+      var e = jQuery(b);
       e.on("change", d),
         c.done(function () {
           e.off("change", d);
         });
     }),
-    (b.Community.setupSelectButton = function (c, d) {
+    (Olive.Community.setupSelectButton = function (c, d) {
       function e(a) {
-        b.Form.syncSelectedText(f);
+        Olive.Form.syncSelectedText(f);
       }
-      var f = a(c);
+      var f = jQuery(c);
       f.on("change", e),
         d.done(function () {
           f.off("change", e);
         });
     }),
-    (b.Community.setupTopicPostButton = function (c) {
+    (Olive.Community.setupTopicPostButton = function (c) {
       function d(c) {
-        var d = a(this);
-        b.Form.isDisabled(d) ||
+        var d = jQuery(this);
+        Olive.Form.isDisabled(d) ||
           c.isDefaultPrevented() ||
           (c.preventDefault(),
-          a(".multi_timeline-topic-filter").addClass("open"));
+          jQuery(".multi_timeline-topic-filter").addClass("open"));
       }
-      a(document).on("click", ".js-topic_post-header-post-button", d),
+      jQuery(document).on("click", ".js-topic_post-header-post-button", d),
         c.done(function () {
-          a(document).off("click", ".js-topic_post-header-post-button", d);
+          jQuery(document).off("click", ".js-topic_post-header-post-button", d);
         });
     }),
-    (b.parentalConfirm = function (c) {
+    (Olive.parentalConfirm = function (c) {
       var d = 0,
-        e = new b.ConfirmDialog({
-          title: b.loc("olv.portal.parental_confirm.title"),
-          body: b.loc(
+        e = new Olive.ConfirmDialog({
+          title: Olive.loc("olv.portal.parental_confirm.title"),
+          body: Olive.loc(
             "olv.portal.parental_confirm.body",
-            b.loc("olv.portal.parental_control.function." + c)
+            Olive.loc("olv.portal.parental_control.function." + c)
           ),
           template: "#parental-confirm-dialog-template",
         }),
-        f = a(e.element).find("input.parental_code");
+        f = jQuery(e.element).find("input.parental_code");
       return (
         e
           .ok(function (a) {
@@ -1769,8 +1769,8 @@ var Olv = Olv || {};
                 ? this.close()
                 : (a.preventDefault(),
                   d++,
-                  b.deferredAlert(
-                    b.loc(
+                  Olive.deferredAlert(
+                    Olive.loc(
                       "olv.portal.parental_confirm." +
                         (3 > d ? "fail_message" : "fail_many_times_message")
                     )
@@ -1780,12 +1780,12 @@ var Olv = Olv || {};
         e
       );
     }),
-    b.init.done(function (a) {
+    Olive.init.done(function (a) {
       a(document.body).on("click", "[data-parental-confirm]", function (c) {
         if (!c.isDefaultPrevented()) {
           c.preventDefault();
           var d = a(this);
-          b.parentalConfirm(a(c.target).attr("data-parental-confirm")).ok(
+          Olive.parentalConfirm(a(c.target).attr("data-parental-confirm")).ok(
             function (a) {
               a.isDefaultPrevented() ||
                 (d.removeAttr("data-parental-confirm"),
@@ -1797,10 +1797,10 @@ var Olv = Olv || {};
         }
       });
     }),
-    a(document).on("olv:modal:select-settings", function (c, d, e) {
+    jQuery(document).on("olv:modal:select-settings", function (c, d, e) {
       d.element.on("click.olvSelectSettings", ".post-button", function (c) {
-        var e = a(this);
-        if (!b.Form.isDisabled(e) && !c.isDefaultPrevented()) {
+        var e = jQuery(this);
+        if (!Olive.Form.isDisabled(e) && !c.isDefaultPrevented()) {
           if ((c.preventDefault(), e.hasClass("selected")))
             return void d.close();
           var f = e.closest(".settings-page"),
@@ -1817,11 +1817,11 @@ var Olv = Olv || {};
                   0: "unregisterDirectMessageTask",
                 },
               },
-              j = +a(this).val(),
+              j = +jQuery(this).val(),
               k = i[g][j],
-              l = b.Utils.callWiiuBOSSFuncWithFallback(k);
+              l = Olive.Utils.callWiiuBOSSFuncWithFallback(k);
             return l.error
-              ? void b.ErrorViewer.open(l.error)
+              ? void Olive.ErrorViewer.open(l.error)
               : (e.addClass("selected"),
                 e.siblings().removeClass("selected"),
                 d.triggerElement.text(e.text()),
@@ -1829,7 +1829,7 @@ var Olv = Olv || {};
           }
           var m = {};
           (m[g] = e.val()),
-            b.Form.post(h, m, e, !0)
+            Olive.Form.post(h, m, e, !0)
               .done(function (a) {
                 d.triggerElement.text(e.text()),
                   e.addClass("selected"),
@@ -1844,38 +1844,38 @@ var Olv = Olv || {};
           d.element.off(".olvSelectSettings");
         });
     }),
-    a(document).on("olv:modal:title-settings", function (c, d, e) {
+    jQuery(document).on("olv:modal:title-settings", function (c, d, e) {
       var f = d.element.find(".settings-button"),
         g = f.get().map(function (b) {
-          return a(b).text();
+          return jQuery(b).text();
         }),
         h = d.element.find(".close-button");
       h.on("click", function (c) {
         var e = f.get().some(function (b, c) {
-          return a(b).text() !== g[c];
+          return jQuery(b).text() !== g[c];
         });
-        d.close(), e && b.Browsing.reload();
+        d.close(), e && Olive.Browsing.reload();
       }),
         e.done(function () {
           h.off("click");
         });
     }),
-    a(document).on("olv:modal:preview-body", function (b, c, d) {
+    jQuery(document).on("olv:modal:preview-body", function (b, c, d) {
       var e = [],
         f = c.element.find(
           'input[name="body"],textarea[name="body"],[data-overlaid-preview]'
         );
       f.each(function () {
         var b,
-          c = a(this);
+          c = jQuery(this);
         c.attr("data-preview-class", function (a, c) {
           return (b = c || "textarea-text-preview");
         });
-        var d = a("<div/>").addClass(b).insertAfter(c);
+        var d = jQuery("<div/>").addClass(b).insertAfter(c);
         e.push(d);
       });
       var g = function (b) {
-        var d = a(b.target),
+        var d = jQuery(b.target),
           e = d.val(),
           f = d.attr("data-preview-class"),
           g = c.element.find("." + f);
@@ -1884,21 +1884,21 @@ var Olv = Olv || {};
       f.on("input", g),
         f.trigger("input"),
         d.done(function () {
-          f.off("input", g), a(e).remove();
+          f.off("input", g), jQuery(e).remove();
         });
     }),
-    a(document).on("olv:modal:require-body", function (b, c, d) {
+    jQuery(document).on("olv:modal:require-body", function (b, c, d) {
       function e() {
         var b = /^\s*$/,
           c = h.length ? [h] : [g];
-        return a(c).is(function () {
-          return !b.test(a(this).val());
+        return jQuery(c).is(function () {
+          return !b.test(jQuery(this).val());
         });
       }
       function f() {
         return (
           l.filter(function () {
-            return !a(this).val();
+            return !jQuery(this).val();
           }).length > 0
         );
       }
@@ -1923,11 +1923,11 @@ var Olv = Olv || {};
           g.off("input", n), j.off("click", n);
         });
     }),
-    (b.UserSearchButton = function (b, c) {
+    (Olive.UserSearchButton = function (b, c) {
       (this.element = b),
         b.on(
           "input.userSearch",
-          a.proxy(function (a) {
+          jQuery.proxy(function (a) {
             "" !== b.val() &&
               (this.search(b.val()), b.val(""), a.preventDefault());
           }, this)
@@ -1936,20 +1936,20 @@ var Olv = Olv || {};
           b.off(".userSearch");
         });
     }),
-    a.extend(b.UserSearchButton.prototype, {
+    jQuery.extend(Olive.UserSearchButton.prototype, {
       search: function (b) {
-        a(document).trigger("olv:usersearch:search"),
-          a.pjax({
+        jQuery(document).trigger("olv:usersearch:search"),
+          jQuery.pjax({
             url: "/users?query=" + encodeURIComponent(b),
             container: this.element.attr("data-pjax"),
           });
       },
     }),
-    (b.TitleSearchButton = function (b, c) {
+    (Olive.TitleSearchButton = function (b, c) {
       (this.element = b),
         b.on(
           "input.titleSearch",
-          a.proxy(function (a) {
+          jQuery.proxy(function (a) {
             "" !== b.val() &&
               (this.search(b.val()), b.val(""), a.preventDefault());
           }, this)
@@ -1958,23 +1958,23 @@ var Olv = Olv || {};
           b.off(".titleSearch");
         });
     }),
-    a.extend(b.TitleSearchButton.prototype, {
+    jQuery.extend(Olive.TitleSearchButton.prototype, {
       search: function (b) {
-        a(document).trigger("olv:titlesearch:search"),
-          a.pjax({
+        jQuery(document).trigger("olv:titlesearch:search"),
+          jQuery.pjax({
             url: "/titles/search?query=" + encodeURIComponent(b),
             container: this.element.attr("data-pjax"),
           });
       },
     }),
-    (b.YouTubePlayer = {}),
-    (b.YouTubePlayer.isApiLoaded = !1),
-    (b.YouTubePlayer.setupQualityButton = function (c) {
+    (Olive.YouTubePlayer = {}),
+    (Olive.YouTubePlayer.isApiLoaded = !1),
+    (Olive.YouTubePlayer.setupQualityButton = function (c) {
       function d() {
         g = new YT.Player("post-video-player", {
           height: "504",
           width: "900",
-          videoId: a("#post-video-player").attr("data-video-id"),
+          videoId: jQuery("#post-video-player").attr("data-video-id"),
           playerVars: { rel: 0, modestbranding: 1, iv_load_policy: 3 },
           events: { onStateChange: e },
         });
@@ -1984,10 +1984,10 @@ var Olv = Olv || {};
           g.setPlaybackQuality(h.prop("checked") ? "hd720" : "medium");
       }
       function f(c) {
-        if (!b.Form.isDisabled(h) && !c.isDefaultPrevented()) {
+        if (!Olive.Form.isDisabled(h) && !c.isDefaultPrevented()) {
           var d = h.prop("checked");
           if (
-            (a
+            (jQuery
               .post("/settings/struct_video_quality", { is_hd: d ? 1 : 0 })
               .success(function () {}),
             g)
@@ -1998,35 +1998,35 @@ var Olv = Olv || {};
         }
       }
       var g,
-        h = a('#video-hd-button input[name="is_hd"]');
-      if (b.YouTubePlayer.isApiLoaded) YT && d();
+        h = jQuery('#video-hd-button input[name="is_hd"]');
+      if (Olive.YouTubePlayer.isApiLoaded) YT && d();
       else {
         var i = document.createElement("script");
         (i.src = "https://www.youtube.com/iframe_api"),
           document.getElementsByTagName("head")[0].appendChild(i),
           (window.onYouTubeIframeAPIReady = d),
-          (b.YouTubePlayer.isApiLoaded = !0);
+          (Olive.YouTubePlayer.isApiLoaded = !0);
       }
       h.on("click", f),
         c.done(function () {
           h.off("click", f);
         });
     }),
-    (b.User = {}),
-    (b.User.setupFollowButton = function (c, d) {
+    (Olive.User = {}),
+    (Olive.User.setupFollowButton = function (c, d) {
       function e(c) {
-        var d = a(this);
-        b.Form.isDisabled(d) ||
-          (b.Form.post(d.attr("data-action"), null, d).done(function (b) {
+        var d = jQuery(this);
+        Olive.Form.isDisabled(d) ||
+          (Olive.Form.post(d.attr("data-action"), null, d).done(function (b) {
             if (
               (d.addClass("none").siblings().removeClass("none"),
-              a(d).hasClass("relationship-button"))
+              jQuery(d).hasClass("relationship-button"))
             ) {
               var c = Array.prototype.slice.call(arguments);
-              c.unshift(null), a(d).trigger("olv:relationship:change:done", c);
+              c.unshift(null), jQuery(d).trigger("olv:relationship:change:done", c);
             }
             "following_count" in b &&
-              a(d).trigger("olv:visitor:following-count:change", [
+              jQuery(d).trigger("olv:visitor:following-count:change", [
                 b.following_count,
               ]);
           }),
@@ -2034,55 +2034,55 @@ var Olv = Olv || {};
       }
       function f(c, e, f, g, h, i) {
         (d.noReloadOnFollow &&
-          a(c.target).hasClass("follow-button") &&
+          jQuery(c.target).hasClass("follow-button") &&
           f.can_follow_more === !0) ||
-          b.Browsing.reload();
+          Olive.Browsing.reload();
       }
       function g(a, c, d, e, f, g) {
-        g && f.status && 503 !== f.status && b.Browsing.reload();
+        g && f.status && 503 !== f.status && Olive.Browsing.reload();
       }
-      (d = a.extend({ noReloadOnFollow: !1 }, d)),
-        a(document).on("click", ".toggle-button .follow-button", e),
-        a(document).on(
+      (d = jQuery.extend({ noReloadOnFollow: !1 }, d)),
+        jQuery(document).on("click", ".toggle-button .follow-button", e),
+        jQuery(document).on(
           "olv:relationship:change:done",
           ".relationship-button",
           f
         ),
-        a(document).on(
+        jQuery(document).on(
           "olv:relationship:change:fail",
           ".relationship-button",
           g
         ),
         c.done(function () {
-          a(document).off("click", ".toggle-button .follow-button", e),
-            a(document).off(
+          jQuery(document).off("click", ".toggle-button .follow-button", e),
+            jQuery(document).off(
               "olv:relationship:change:done",
               ".relationship-button",
               f
             ),
-            a(document).off(
+            jQuery(document).off(
               "olv:relationship:change:fail",
               ".relationship-button",
               g
             );
         });
     }),
-    (b.User.setupAchievement = function (c) {
+    (Olive.User.setupAchievement = function (c) {
       function d(c) {
-        var d = a(c.target),
+        var d = jQuery(c.target),
           e = d.attr("data-achievement-name");
         e &&
-          b.Achievement.requestAchieveWithoutRegard([e]).done(function (a) {
+          Olive.Achievement.requestAchieveWithoutRegard([e]).done(function (a) {
             d.trigger("olv:achievement:update:done", [a]);
           });
       }
-      a(document).on("olv:achievement:update", d),
+      jQuery(document).on("olv:achievement:update", d),
         c.done(function () {
-          a(document).off("olv:achievement:update", d);
+          jQuery(document).off("olv:achievement:update", d);
         });
     }),
-    (b.UserProfile = {}),
-    (b.UserProfile.setupFavoriteGameGenreSelectors = function (c, d) {
+    (Olive.UserProfile = {}),
+    (Olive.UserProfile.setupFavoriteGameGenreSelectors = function (c, d) {
       function e(a) {
         return a
           .map(function (a) {
@@ -2091,14 +2091,14 @@ var Olv = Olv || {};
           .join("");
       }
       function f(b) {
-        var c = a(b),
+        var c = jQuery(b),
           d = h.find("select[name=" + c.attr("name") + "]"),
           f = d.filter(e(["#" + c.attr("id")])),
           g = f.find("option[value=" + c.val() + "][data-is-configurable]"),
           i = d.find(":selected"),
           j = i
             .map(function () {
-              return a(this).val();
+              return jQuery(this).val();
             })
             .get(),
           k = j.map(function (a) {
@@ -2109,15 +2109,15 @@ var Olv = Olv || {};
         g.prop("disabled", !0), m.prop("disabled", !1);
       }
       function g() {
-        var c = a(this),
+        var c = jQuery(this),
           d = c.closest("form");
-        b.Form.syncSelectedText(c),
-          b.Form.submit(d).done(function () {
+        Olive.Form.syncSelectedText(c),
+          Olive.Form.submit(d).done(function () {
             c.trigger("olv:profile:favorite-game-genre:change");
           }),
           f(this);
       }
-      var h = a(c),
+      var h = jQuery(c),
         i = h.find("select[name=favorite_game_genre]");
       i.each(function () {
         f(this);
@@ -2127,8 +2127,8 @@ var Olv = Olv || {};
           i.off("change", g);
         });
     }),
-    (b.EntryFormAlbumImageSelector = {}),
-    (b.EntryFormAlbumImageSelector.setup = function (b) {
+    (Olive.EntryFormAlbumImageSelector = {}),
+    (Olive.EntryFormAlbumImageSelector.setup = function (b) {
       var c = function (a, b) {
           var c = a.element.find(".js-album-list-pager"),
             d = c.attr("data-max-page-number");
@@ -2147,7 +2147,7 @@ var Olv = Olv || {};
         d = function (b, d, e) {
           var f = function (b) {
               b.preventDefault();
-              var c = a(b.target);
+              var c = jQuery(b.target);
               c.trigger("olv:albumImageSelector:submit", [
                 c.attr("data-album-image-id"),
                 c.attr("data-album-image-preview-src"),
@@ -2179,21 +2179,21 @@ var Olv = Olv || {};
             g.off("click", f);
           });
         };
-      a(document).on("olv:modal:album-image-selector", d),
+      jQuery(document).on("olv:modal:album-image-selector", d),
         b.done(function () {
-          a(document).off("olv:modal:album-image-selector", d);
+          jQuery(document).off("olv:modal:album-image-selector", d);
         });
     }),
-    (b.Entry = {}),
-    (b.Entry.setupHiddenContents = function (b) {
+    (Olive.Entry = {}),
+    (Olive.Entry.setupHiddenContents = function (b) {
       function c(b) {
         if (!b.isDefaultPrevented()) {
           b.preventDefault();
-          var c = a(this),
+          var c = jQuery(this),
             d = c.closest(".hidden");
           d.removeClass("hidden"),
             d.find("[data-href-hidden]").each(function () {
-              var b = a(this);
+              var b = jQuery(this);
               b.attr(
                 b.is("a") ? "href" : "data-href",
                 b.attr("data-href-hidden")
@@ -2202,28 +2202,28 @@ var Olv = Olv || {};
             c.closest(".hidden-content").remove();
         }
       }
-      a(document).on("click", ".hidden-content-button", c),
+      jQuery(document).on("click", ".hidden-content-button", c),
         b.done(function () {
-          a(document).off("click", ".hidden-content-button", c);
+          jQuery(document).off("click", ".hidden-content-button", c);
         });
     }),
-    (b.Entry._loadingEmpathies = []),
-    (b.Entry.toggleEmpathy = function (c) {
-      var d = b.Entry._loadingEmpathies;
+    (Olive.Entry._loadingEmpathies = []),
+    (Olive.Entry.toggleEmpathy = function (c) {
+      var d = Olive.Entry._loadingEmpathies;
       if (
         d.some(function (a) {
           return a[0] === c[0];
         })
       )
-        return a.Deferred().reject(null, "duplicate", null, !0);
-      var e = b.Entry.isEmpathyAdded(c),
+        return jQuery.Deferred().reject(null, "duplicate", null, !0);
+      var e = Olive.Entry.isEmpathyAdded(c),
         f = c.attr("data-action");
       e && (f += ".delete");
-      var g = b.Form.post(f, null, c)
+      var g = Olive.Form.post(f, null, c)
         .done(function () {
           (e = !e), c.toggleClass("empathy-added", e);
           var a = c.attr("data-feeling") || "normal";
-          c.text(b.loc("olv.portal.miitoo." + a + (e ? ".delete" : ""))),
+          c.text(Olive.loc("olv.portal.miitoo." + a + (e ? ".delete" : ""))),
             c.attr("data-sound", e ? "SE_WAVE_MII_CANCEL" : "SE_WAVE_MII_ADD"),
             c.trigger("olv:entry:empathy:toggle", [e]);
         })
@@ -2234,40 +2234,40 @@ var Olv = Olv || {};
         });
       return d.push([c[0], g]), g;
     }),
-    (b.Entry.abortLoadingEmpathies = function () {
-      b.Entry._loadingEmpathies.concat().forEach(function (a) {
+    (Olive.Entry.abortLoadingEmpathies = function () {
+      Olive.Entry._loadingEmpathies.concat().forEach(function (a) {
         a[1].abort();
       });
     }),
-    a(document).on("olv:pagechange", b.Entry.abortLoadingEmpathies),
-    (b.Entry.isEmpathyAdded = function (a) {
+    jQuery(document).on("olv:pagechange", Olive.Entry.abortLoadingEmpathies),
+    (Olive.Entry.isEmpathyAdded = function (a) {
       return a.hasClass("empathy-added");
     }),
-    (b.Entry.setupEmpathyButtons = function (c, d) {
+    (Olive.Entry.setupEmpathyButtons = function (c, d) {
       function e(d) {
         if (!d.isDefaultPrevented()) {
           d.preventDefault();
-          var e = a(this);
-          b.Form.isDisabled(e) ||
-            b.Entry.toggleEmpathy(e).done(function () {
-              var a = b.Entry.isEmpathyAdded(e),
+          var e = jQuery(this);
+          Olive.Form.isDisabled(e) ||
+            Olive.Entry.toggleEmpathy(e).done(function () {
+              var a = Olive.Entry.isEmpathyAdded(e),
                 d = e.closest(c).find(".to-permalink-button .feeling");
               d.text(+d.text() + (a ? 1 : -1));
             });
         }
       }
-      a(document).on("click", ".miitoo-button", e),
+      jQuery(document).on("click", ".miitoo-button", e),
         d.done(function () {
-          a(document).off("click", ".miitoo-button", e);
+          jQuery(document).off("click", ".miitoo-button", e);
         });
     }),
-    (b.Entry.setupPostEmpathyButton = function (c, d) {
+    (Olive.Entry.setupPostEmpathyButton = function (c, d) {
       function e() {
-        var a = b.Entry.isEmpathyAdded(g),
+        var a = Olive.Entry.isEmpathyAdded(g),
           c = +g.attr("data-other-empathy-count"),
           d =
             c > 0
-              ? b.loc_n(
+              ? Olive.loc_n(
                   a
                     ? "olv.portal.empathy.you_and_n_added"
                     : "olv.portal.empathy.n_added",
@@ -2275,11 +2275,11 @@ var Olv = Olv || {};
                   c
                 )
               : a
-              ? b.loc("olv.portal.empathy.you_added")
+              ? Olive.loc("olv.portal.empathy.you_added")
               : "";
         h.text(d), f.toggleClass("no-empathy", !d);
       }
-      var f = a(c),
+      var f = jQuery(c),
         g = f.find(".miitoo-button"),
         h = f.find(".post-permalink-feeling-text"),
         i = f.find(".post-permalink-feeling-icon-container");
@@ -2287,10 +2287,10 @@ var Olv = Olv || {};
         g.on("click", function (c) {
           if (!c.isDefaultPrevented()) {
             c.preventDefault();
-            var d = a(this);
-            b.Form.isDisabled(d) ||
-              b.Entry.toggleEmpathy(d).done(function () {
-                var a = b.Entry.isEmpathyAdded(d);
+            var d = jQuery(this);
+            Olive.Form.isDisabled(d) ||
+              Olive.Entry.toggleEmpathy(d).done(function () {
+                var a = Olive.Entry.isEmpathyAdded(d);
                 i.find(".visitor").toggle(a), i.find(".extra").toggle(!a), e();
               });
           }
@@ -2299,58 +2299,58 @@ var Olv = Olv || {};
           g.off("click");
         });
     }),
-    (b.Entry.setupBodyLanguageSelector = function (b) {
+    (Olive.Entry.setupBodyLanguageSelector = function (b) {
       function c(b) {
-        var c = a(d[0].options[d[0].selectedIndex]);
+        var c = jQuery(d[0].options[d[0].selectedIndex]);
         e.text(c.text());
         var f = d.val();
-        a("#body-language-" + f)
+        jQuery("#body-language-" + f)
           .toggleClass("none", !1)
           .siblings(".multi-language-body")
           .toggleClass("none", !0);
       }
-      var d = a("#body-language-selector"),
+      var d = jQuery("#body-language-selector"),
         e = d.siblings("span.select-button-content");
       d.on("change", c),
         b.done(function () {
           d.off("change", c);
         });
     }),
-    (b.Entry.setupMoreContentButton = function (c) {
+    (Olive.Entry.setupMoreContentButton = function (c) {
       function d(b) {
         b.preventDefault();
-        var c = a(b.target);
+        var c = jQuery(b.target);
         c.prev().find(".wrapped").removeClass("none"), c.remove();
       }
-      var e = a(
+      var e = jQuery(
         ".post-subtype-default #post-permalink-body.official-user .post-content-text"
       );
       e &&
         0 != e.length &&
         (e.each(function () {
-          var d = a(this),
+          var d = jQuery(this),
             e = d.text().match(/([\s\S]+)(\n+---+\n[\s\S]+)/);
           if (e) {
             d.text(e[1]);
-            var f = a('<span class="wrapped none"></span>').text(e[2]);
+            var f = jQuery('<span class="wrapped none"></span>').text(e[2]);
             d.append(f);
-            var g = a('<a href="#" class="more-content-button"></a>');
-            g.text(b.loc("olv.portal.read_more_content")),
+            var g = jQuery('<a href="#" class="more-content-button"></a>');
+            g.text(Olive.loc("olv.portal.read_more_content")),
               d.after(g),
               c.done(function () {
                 g.remove();
               });
           }
         }),
-        a(document).on("click", ".more-content-button", d),
+        jQuery(document).on("click", ".more-content-button", d),
         c.done(function () {
-          a(document).off("click", ".more-content-button", d);
+          jQuery(document).off("click", ".more-content-button", d);
         }));
     }),
-    (b.Entry.setupAppJumpButton = function (c) {
+    (Olive.Entry.setupAppJumpButton = function (c) {
       function d(c) {
         if (wiiuDevice.existsTitle) {
-          var d = a(this),
+          var d = jQuery(this),
             e = d.attr("data-app-jump-title-ids").split(","),
             f = d.attr("data-title-id");
           f && e.unshift(f);
@@ -2360,8 +2360,8 @@ var Olv = Olv || {};
               break;
             }
           g
-            ? b
-                .deferredConfirm(b.loc("olv.portal.confirm_app_jump"))
+            ? Olive
+                .deferredConfirm(Olive.loc("olv.portal.confirm_app_jump"))
                 .done(function (a) {
                   if (a) {
                     var b = g,
@@ -2378,79 +2378,79 @@ var Olv = Olv || {};
                     );
                   }
                 })
-            : b.deferredAlert(b.loc("olv.portal.confirm_you_have_no_soft"));
+            : Olive.deferredAlert(Olive.loc("olv.portal.confirm_you_have_no_soft"));
         }
       }
-      a(document).on("click", ".app-jump-button", d),
+      jQuery(document).on("click", ".app-jump-button", d),
         c.done(function () {
-          a(document).off("click", ".app-jump-button", d);
+          jQuery(document).off("click", ".app-jump-button", d);
         });
     }),
-    (b.Entry.setupMoreRepliesButton = function (c) {
+    (Olive.Entry.setupMoreRepliesButton = function (c) {
       function d(c) {
         c.preventDefault();
-        var d = a(this);
+        var d = jQuery(this);
         f ||
-          b.Form.isDisabled(d) ||
+          Olive.Form.isDisabled(d) ||
           (d.addClass("loading"),
-          (f = b.Form.get(d.attr("href"), null, d, !0)
+          (f = Olive.Form.get(d.attr("href"), null, d, !0)
             .done(function (b) {
-              var c = a(b);
+              var c = jQuery(b);
               if (d.hasClass("all-replies-button")) {
                 d.remove();
                 var f = c
                   .filter(".post-permalink-reply")
                   .children()
                   .filter(function () {
-                    return !a("#" + this.id).length;
+                    return !jQuery("#" + this.id).length;
                   });
                 e.find(".post-permalink-reply").prepend(f);
               } else e.empty().append(c);
               d.hasClass("newer-replies-button")
-                ? g.scrollTop(a("#post-permalink-comments").offset().top)
+                ? g.scrollTop(jQuery("#post-permalink-comments").offset().top)
                 : d.hasClass("older-replies-button") &&
-                  g.scrollTop(a(document).height());
+                  g.scrollTop(jQuery(document).height());
             })
             .always(function () {
               d.removeClass("loading"), (f = null);
             })));
       }
-      var e = a("#post-permalink-comments"),
+      var e = jQuery("#post-permalink-comments"),
         f = null,
-        g = a(window);
-      a(document).on("click", ".more-button", d),
+        g = jQuery(window);
+      jQuery(document).on("click", ".more-button", d),
         c.done(function () {
-          a(document).off("click", ".more-button", d), f && f.abort();
+          jQuery(document).off("click", ".more-button", d), f && f.abort();
         });
     }),
-    (b.Entry.mayIncrementMoreRepliesButtonCount = function (c) {
-      var d = a(".oldest-replies-button, .all-replies-button");
+    (Olive.Entry.mayIncrementMoreRepliesButtonCount = function (c) {
+      var d = jQuery(".oldest-replies-button, .all-replies-button");
       if (0 !== d.length && void 0 != c && 0 != c) {
         var e = +d.attr("data-reply-count");
         (e += c),
-          d.text(b.loc_n("olv.portal.post.show_all_n_comments", e, e)),
+          d.text(Olive.loc_n("olv.portal.post.show_all_n_comments", e, e)),
           d.attr("data-reply-count", e);
       }
     }),
-    (b.Entry.setupFirstPostNotice = function (c, d) {
+    (Olive.Entry.setupFirstPostNotice = function (c, d) {
       function e(c) {
-        a(document.body).attr("data-is-first-post") &&
-          !b.Form.isDisabled(a(this)) &&
-          b
-            .deferredAlert(b.loc("olv.portal.confirm_display_played_mark"))
+        jQuery(document.body).attr("data-is-first-post") &&
+          !Olive.Form.isDisabled(jQuery(this)) &&
+          Olive
+            .deferredAlert(Olive.loc("olv.portal.confirm_display_played_mark"))
             .done(function () {
-              a(document.body).removeAttr("data-is-first-post"),
-                a.post("/settings/struct_post").fail(function () {
-                  a(document.body).attr("data-is-first-post", "1");
+              jQuery(document.body).removeAttr("data-is-first-post"),
+                jQuery.post("/settings/struct_post").fail(function () {
+                  jQuery(document.body).attr("data-is-first-post", "1");
                 });
             });
       }
-      a(document).on("click", c, e),
+      jQuery(document).on("click", c, e),
         d.done(function () {
-          a(document).off("click", c, e);
+          jQuery(document).off("click", c, e);
         });
     }),
-    (b.Entry.setupCreateDiaryOrSaveScreenshotWindow = function (c, d) {
+    (Olive.Entry.setupCreateDiaryOrSaveScreenshotWindow = function (c, d) {
       function e(c) {
         var d = !1,
           e = c.find(".js-diary-screenshot-window-image-container");
@@ -2458,7 +2458,7 @@ var Olv = Olv || {};
         var f = e.find(".js-screenshot-capture-button");
         if (
           (f.each(function (b, c) {
-            var e = a(c),
+            var e = jQuery(c),
               f = null;
             try {
               f = wiiuMainApplication.getScreenShot(e.hasClass("js-tv"));
@@ -2473,7 +2473,7 @@ var Olv = Olv || {};
           for (var g = 0, h = f.length; h > g; g++) {
             var i = f.eq(g).find("input[type=radio]");
             if (!i.prop("disabled")) {
-              i.prop("checked", !0), b.Form.updateParentClass(i.get(0));
+              i.prop("checked", !0), Olive.Form.updateParentClass(i.get(0));
               break;
             }
           }
@@ -2495,25 +2495,25 @@ var Olv = Olv || {};
         return d && (a = d.match(/data:image\/jpeg;base64,(.+)/)[1]), a;
       }
       function h(a, c, d) {
-        b.EntryForm.setupDiaryPostModal(c, g());
+        Olive.EntryForm.setupDiaryPostModal(c, g());
       }
       function i() {
         var c = j.find(".js-save-album"),
           d = c.find(".js-save-album-button");
-        b.Form.isDisabled(d) ||
+        Olive.Form.isDisabled(d) ||
           (c.find("input[name=screenshot]").val(g()),
           event.preventDefault(),
-          b.Form.submit(c, d, !0).done(function () {
-            b.showConfirm(
-              b.loc("olv.portal.album.save_album_image"),
-              b.loc("olv.portal.album.save_album_image.confirm"),
+          Olive.Form.submit(c, d, !0).done(function () {
+            Olive.showConfirm(
+              Olive.loc("olv.portal.album.save_album_image"),
+              Olive.loc("olv.portal.album.save_album_image.confirm"),
               {
-                okLabel: b.loc("olv.portal.continue_miiverse"),
-                cancelLabel: b.loc("olv.portal.return_to_game"),
+                okLabel: Olive.loc("olv.portal.continue_miiverse"),
+                cancelLabel: Olive.loc("olv.portal.return_to_game"),
               }
             )
               .ok(function () {
-                a.pjax({
+                jQuery.pjax({
                   url: c.attr("data-redirect-url"),
                   container: c.attr("data-redirect-pjax"),
                 });
@@ -2525,21 +2525,21 @@ var Olv = Olv || {};
               });
           }));
       }
-      var j = a(c).eq(0);
+      var j = jQuery(c).eq(0);
       f(),
-        a(document).on("olv:modal:add-diary-post", h),
+        jQuery(document).on("olv:modal:add-diary-post", h),
         j.find(".js-save-album-button").on("click", i),
         d.done(function () {
-          a(document).off("olv:modal:add-diary-post", h),
+          jQuery(document).off("olv:modal:add-diary-post", h),
             j.find(".js-save-album-button").off("click", i);
         });
     }),
-    a(document).on("olv:modal:capture", function (a, b, c) {
+    jQuery(document).on("olv:modal:capture", function (a, b, c) {
       b.element
         .find(".capture")
         .attr("src", b.triggerElement.attr("data-large-capture-url"));
     }),
-    a(document).on("olv:modal:confirm-app-jump", function (a, b, c) {
+    jQuery(document).on("olv:modal:confirm-app-jump", function (a, b, c) {
       var d = b.element.find(".post-button");
       d.on("click", function (a) {
         var c = b.element.attr("data-app-jump-title"),
@@ -2553,7 +2553,7 @@ var Olv = Olv || {};
           d.off("click");
         });
     }),
-    a(document).on("olv:modal:confirm-url", function (a, b, c) {
+    jQuery(document).on("olv:modal:confirm-url", function (a, b, c) {
       var d = b.element.find(".post-button");
       d.on("click", function (a) {
         var c = b.element.find(".link-url").text();
@@ -2563,32 +2563,32 @@ var Olv = Olv || {};
           d.off("click");
         });
     }),
-    a(document).on("olv:modal:report", function (a, c, d) {
+    jQuery(document).on("olv:modal:report", function (a, c, d) {
       var e = c.element.find("form"),
         f = e.find(".post-button");
       f.on("click", function (a) {
-        b.Form.isDisabled(f) ||
+        Olive.Form.isDisabled(f) ||
           a.isDefaultPrevented() ||
           (a.preventDefault(),
-          b.Form.submit(e, f, !0).done(function () {
-            c.close(), b.Browsing.reload();
+          Olive.Form.submit(e, f, !0).done(function () {
+            c.close(), Olive.Browsing.reload();
           }));
       }),
         d.done(function () {
           f.off("click");
         });
     }),
-    a(document).on(
+    jQuery(document).on(
       "olv:modal:report-violator olv:modal:reply-admin-message",
       function (b, c, d) {
         function e() {
-          var b = a(g[0].options[g[0].selectedIndex]);
+          var b = jQuery(g[0].options[g[0].selectedIndex]);
           j.text(b.text());
           var c = !!g.val();
           h.css("display", c ? "" : "none"), i.prop("disabled", !c);
         }
         function f() {
-          var b = a(g[0].options[g[0].selectedIndex]),
+          var b = jQuery(g[0].options[g[0].selectedIndex]),
             c = !!b.attr("data-body-required"),
             d = !!g.val(),
             e = (c && /^\s*$/.test(h.val())) || !d;
@@ -2608,15 +2608,15 @@ var Olv = Olv || {};
           });
       }
     ),
-    a(document).on("olv:modal:report-violation", function (c, d, e) {
+    jQuery(document).on("olv:modal:report-violation", function (c, d, e) {
       function f() {
-        var b = a(m[0].options[m[0].selectedIndex]);
+        var b = jQuery(m[0].options[m[0].selectedIndex]);
         p.text(b.text());
         var c = !!m.val();
         n.css("display", c ? "" : "none");
       }
       function g() {
-        var b = a(m[0].options[m[0].selectedIndex]),
+        var b = jQuery(m[0].options[m[0].selectedIndex]),
           c = !!b.attr("data-body-required"),
           d = !!m.val(),
           e = (c && /^\s*$/.test(n.val())) || !d;
@@ -2624,7 +2624,7 @@ var Olv = Olv || {};
       }
       var h = !!d.triggerElement.attr("data-is-post"),
         i = !!d.triggerElement.attr("data-is-message"),
-        j = b.loc(
+        j = Olive.loc(
           h
             ? "olv.portal.report.report_violation"
             : i
@@ -2632,7 +2632,7 @@ var Olv = Olv || {};
             : "olv.portal.report.report_violation_comment",
           d.triggerElement.attr("data-screen-name")
         ),
-        k = b.loc(
+        k = Olive.loc(
           h
             ? "olv.portal.report.report_post_id"
             : i
@@ -2663,24 +2663,24 @@ var Olv = Olv || {};
           n.off("input", g), m.off("change", f), m.off("change", g);
         });
     }),
-    (b.Entry.setupEditButtons = function (c) {
+    (Olive.Entry.setupEditButtons = function (c) {
       function d(c) {
-        var d = b.Form.post(c.action, { format: "html" }, c.button, !0).done(
+        var d = Olive.Form.post(c.action, { format: "html" }, c.button, !0).done(
           function (b) {
-            a("#body").html(b);
+            jQuery("#body").html(b);
           }
         );
         return c.modal.element.trigger("olv:entry:post:delete", c), d;
       }
       function e(c) {
-        var d = b.Form.post(c.action, null, c.button, !0).done(function () {
+        var d = Olive.Form.post(c.action, null, c.button, !0).done(function () {
           var b = c.modal.triggerElement.closest(
             "#post-permalink-content, #post-permalink-comments"
           );
           c.option.prop("disabled", !0);
           var d = function () {
             b.find(".spoiler-status").fadeIn(400, function () {
-              a(this).addClass("spoiler");
+              jQuery(this).addClass("spoiler");
             });
           };
           c.modal.guard.done(function () {
@@ -2691,28 +2691,28 @@ var Olv = Olv || {};
       }
       function f(a) {
         a.modal.close(),
-          b
+          Olive
             .showConfirm(
-              b.loc("olv.portal.profile_post"),
-              b.loc("olv.portal.profile_post.confirm_update"),
+              Olive.loc("olv.portal.profile_post"),
+              Olive.loc("olv.portal.profile_post.confirm_update"),
               {
-                okLabel: b.loc("olv.portal.profile_post.confirm_update.yes"),
-                cancelLabel: b.loc("olv.portal.cancel"),
+                okLabel: Olive.loc("olv.portal.profile_post.confirm_update.yes"),
+                cancelLabel: Olive.loc("olv.portal.cancel"),
               }
             )
             .ok(function () {
               var c = this;
               c.element.find(".button").prop("disabled", !0),
-                b.Form.post(a.action, null, a.button, !0).done(function () {
+                Olive.Form.post(a.action, null, a.button, !0).done(function () {
                   c.element.trigger("olv:entry:profile-post:set"),
                     c.close(),
-                    b
+                    Olive
                       .showConfirm(
-                        b.loc("olv.portal.profile_post"),
-                        b.loc("olv.portal.profile_post.done"),
+                        Olive.loc("olv.portal.profile_post"),
+                        Olive.loc("olv.portal.profile_post.done"),
                         {
-                          okLabel: b.loc("olv.portal.user.search.go"),
-                          cancelLabel: b.loc("olv.portal.close"),
+                          okLabel: Olive.loc("olv.portal.user.search.go"),
+                          cancelLabel: Olive.loc("olv.portal.close"),
                         }
                       )
                       .ok(function () {
@@ -2726,10 +2726,10 @@ var Olv = Olv || {};
           var a = k.find(":selected");
           l.text(a.text());
           var c = a.attr("data-action");
-          j.attr("action", c), b.Form.toggleDisabled(m, !c);
+          j.attr("action", c), Olive.Form.toggleDisabled(m, !c);
         }
         function i(a) {
-          if (!b.Form.isDisabled(m) && !a.isDefaultPrevented()) {
+          if (!Olive.Form.isDisabled(m) && !a.isDefaultPrevented()) {
             a.preventDefault();
             var g,
               h = {
@@ -2764,46 +2764,46 @@ var Olv = Olv || {};
             k.off("change", h), m.off("click", i);
           });
       }
-      a(document).on("olv:modal:edit-post", g),
+      jQuery(document).on("olv:modal:edit-post", g),
         c.done(function () {
-          a(document).off("olv:modal:edit-post", g);
+          jQuery(document).off("olv:modal:edit-post", g);
         });
     }),
-    a(document).on("olv:modal:album-detail", function (a, c, d) {
+    jQuery(document).on("olv:modal:album-detail", function (a, c, d) {
       var e = c.element.find("form"),
         f = e.find(".js-album-delete-button");
       f.on("click", function (a) {
-        b.Form.isDisabled(f) ||
+        Olive.Form.isDisabled(f) ||
           a.isDefaultPrevented() ||
           (a.preventDefault(),
-          b.confirm(b.loc("olv.portal.album.delete_confirm")) &&
-            b.Form.submit(e, f, !0).done(function () {
-              c.close(), b.Browsing.reload();
+          Olive.confirm(Olive.loc("olv.portal.album.delete_confirm")) &&
+            Olive.Form.submit(e, f, !0).done(function () {
+              c.close(), Olive.Browsing.reload();
             }));
       }),
         d.done(function () {
           f.off("click");
         });
     }),
-    (b.Entry.setupCloseTopicPostButton = function (c) {
-      var d = a(document).find(".js-close-topic-post-form"),
+    (Olive.Entry.setupCloseTopicPostButton = function (c) {
+      var d = jQuery(document).find(".js-close-topic-post-form"),
         e = d.find(".js-close-topic-post-button");
       e.on("click", function (c) {
-        b.Form.isDisabled(e) ||
+        Olive.Form.isDisabled(e) ||
           c.isDefaultPrevented() ||
           (c.preventDefault(),
-          b
+          Olive
             .showConfirm(
-              b.loc("olv.portal.edit.action.close_topic_post"),
-              b.loc("olv.portal.edit.action.close_topic_post.confirm"),
+              Olive.loc("olv.portal.edit.action.close_topic_post"),
+              Olive.loc("olv.portal.edit.action.close_topic_post.confirm"),
               {
-                okLabel: b.loc("olv.portal.yes"),
-                cancelLabel: b.loc("olv.portal.stop"),
+                okLabel: Olive.loc("olv.portal.yes"),
+                cancelLabel: Olive.loc("olv.portal.stop"),
               }
             )
             .ok(function () {
-              b.Form.post(d.attr("action"), null, e, !0).done(function () {
-                a(document)
+              Olive.Form.post(d.attr("action"), null, e, !0).done(function () {
+                jQuery(document)
                   .find(".js-topic-answer-accepting-status")
                   .removeClass("accepting")
                   .addClass("not-accepting"),
@@ -2816,8 +2816,8 @@ var Olv = Olv || {};
           e.off("click");
         });
     }),
-    (b.EntryForm = {}),
-    (b.EntryForm.setupFeelingSelector = function (a, b) {
+    (Olive.EntryForm = {}),
+    (Olive.EntryForm.setupFeelingSelector = function (a, b) {
       function c() {
         e.attr("src", d.find("input:checked").attr("data-mii-face-url"));
       }
@@ -2828,7 +2828,7 @@ var Olv = Olv || {};
           d.off("click", "input", c);
         });
     }),
-    (b.EntryForm.setupSpoilerCheck = function (a, b) {
+    (Olive.EntryForm.setupSpoilerCheck = function (a, b) {
       var c = a.find('input[name="is_spoiler"]');
       c.on("click", function () {
         c.attr(
@@ -2842,9 +2842,9 @@ var Olv = Olv || {};
           c.off("click");
         });
     }),
-    (b.EntryForm.setupTopicCategories = function (a, c) {
+    (Olive.EntryForm.setupTopicCategories = function (a, c) {
       function d() {
-        b.Form.syncSelectedText(f);
+        Olive.Form.syncSelectedText(f);
       }
       var e = a.find(".select-content-topic"),
         f = e.find(".topic-category-selector");
@@ -2857,15 +2857,15 @@ var Olv = Olv || {};
           });
       }
     }),
-    (b.EntryForm.openPaintingDialog = function (b) {
-      var c = a.Deferred();
+    (Olive.EntryForm.openPaintingDialog = function (b) {
+      var c = jQuery.Deferred();
       window.wiiuMemo.open(b);
       var d = setInterval(function () {
         wiiuMemo.isFinish() && (clearInterval(d), c.resolve());
       }, 40);
       return c.promise();
     }),
-    (b.EntryForm.setupPostTypeChanger = function (a, c) {
+    (Olive.EntryForm.setupPostTypeChanger = function (a, c) {
       function d() {
         var a = l.prop("checked");
         k.toggleClass("active-text", a),
@@ -2874,7 +2874,7 @@ var Olv = Olv || {};
           o.prop("disabled", a);
       }
       function e() {
-        b.EntryForm.openPaintingDialog(r).done(f),
+        Olive.EntryForm.openPaintingDialog(r).done(f),
           (r = !1),
           o.val("painting-started");
       }
@@ -2896,7 +2896,7 @@ var Olv = Olv || {};
         return wiiuDevice.isDrc()
           ? (d(), void e())
           : (l.prop("checked", !0),
-            void b.deferredAlert(b.loc("olv.portal.error.memo_needs_drc")));
+            void Olive.deferredAlert(Olive.loc("olv.portal.error.memo_needs_drc")));
       }
       function j(a) {
         m.trigger("click");
@@ -2921,24 +2921,24 @@ var Olv = Olv || {};
             p.off("click", j);
         });
     }),
-    (b.EntryForm.setupAlbumImageSelector = function (b, c) {
+    (Olive.EntryForm.setupAlbumImageSelector = function (b, c) {
       var d = function (a, c, d) {
           b.find('input[name="album_image_id"]').val(c);
           var e = b.find("input.js-album-screenshot-type");
           e.attr("data-src", d).attr("checked", !0).click();
         },
         e = function (c) {
-          a(c.target).hasClass("js-album-screenshot-type") ||
+          jQuery(c.target).hasClass("js-album-screenshot-type") ||
             b.find('input[name="album_image_id"]').val("");
         };
-      a(document).on("olv:albumImageSelector:submit", d),
+      jQuery(document).on("olv:albumImageSelector:submit", d),
         b.find('input[name="screenshot_type"]').on("click", e),
         c.done(function () {
-          a(document).off("olv:albumImageSelector:submit", d),
+          jQuery(document).off("olv:albumImageSelector:submit", d),
             b.find('input[name="screenshot_type"]').off("click", e);
         });
     }),
-    (b.EntryForm.setupImageSelector = function (c, d) {
+    (Olive.EntryForm.setupImageSelector = function (c, d) {
       function e(a, b) {
         g.prop("disabled", !a).val(a),
           h.attr("src", b || "data:image/jpeg;base64," + a);
@@ -2947,7 +2947,7 @@ var Olv = Olv || {};
       if (f.length) {
         if (f.hasClass("disabled"))
           return (
-            b.EntryForm.setupForbiddenImageSelector(c, d),
+            Olive.EntryForm.setupForbiddenImageSelector(c, d),
             void c
               .find('input[name="screenshot"]')
               .attr("data-is-capture-forbidden", "1")
@@ -2964,7 +2964,7 @@ var Olv = Olv || {};
           },
           j = !1;
         if (
-          (a.each(i, function (a, b) {
+          (jQuery.each(i, function (a, b) {
             var c = f.find('input[name="screenshot_type"][value="' + a + '"]');
             if (c.length) {
               var d = null;
@@ -2986,15 +2986,15 @@ var Olv = Olv || {};
             c
               .find('input[name="screenshot"]')
               .attr("data-is-capture-forbidden", "1")),
-          a(document.body).find("#album-image-selector").length > 0 &&
-            (b.EntryForm.setupAlbumImageSelector(c, d), (j = !0)),
+          jQuery(document.body).find("#album-image-selector").length > 0 &&
+            (Olive.EntryForm.setupAlbumImageSelector(c, d), (j = !0)),
           !j)
         )
-          return void b.EntryForm.setupForbiddenImageSelector(c, d);
+          return void Olive.EntryForm.setupForbiddenImageSelector(c, d);
         var k = f.find('input[name="screenshot_type"]');
         k.prop("disabled", !1),
           k.on("click", function (b) {
-            var c = a(this),
+            var c = jQuery(this),
               d = c.attr("data-value"),
               f = c.attr("data-src");
             e(d, f);
@@ -3004,10 +3004,10 @@ var Olv = Olv || {};
           });
       }
     }),
-    (b.EntryForm.setupForbiddenImageSelector = function (a, c) {
+    (Olive.EntryForm.setupForbiddenImageSelector = function (a, c) {
       function d(a) {
         a.preventDefault(),
-          b.deferredAlert(b.loc("olv.portal.post.screenshot_forbidden"));
+          Olive.deferredAlert(Olive.loc("olv.portal.post.screenshot_forbidden"));
       }
       var e = a.find(".image-selector"),
         f = e.find(".dropdown-toggle");
@@ -3020,18 +3020,18 @@ var Olv = Olv || {};
           f.off("click", d);
         });
     }),
-    (b.EntryForm.setupSubmission = function (a, c, d, e) {
+    (Olive.EntryForm.setupSubmission = function (a, c, d, e) {
       var f = c.find(".post-button");
       f.on("click", function (e) {
-        if (!b.Form.isDisabled(f) && !e.isDefaultPrevented()) {
+        if (!Olive.Form.isDisabled(f) && !e.isDefaultPrevented()) {
           e.preventDefault();
           var g = c.find('input[name="screenshot"]');
           return +g.attr("data-is-required-unless-forbidden") &&
             !+g.attr("data-is-capture-forbidden") &&
             g.attr("disabled") &&
             !c.find('input[name="album_image_id"]').val()
-            ? void b.deferredAlert(b.loc("olv.portal.post.screenshot_required"))
-            : void b.Form.submit(c, f, !0)
+            ? void Olive.deferredAlert(Olive.loc("olv.portal.post.screenshot_required"))
+            : void Olive.Form.submit(c, f, !0)
                 .done(function () {
                   var b = [a];
                   b.push.apply(b, arguments), d.apply(this, b);
@@ -3047,102 +3047,102 @@ var Olv = Olv || {};
           f.off("click");
         });
     }),
-    (b.EntryForm.onAddPostDone = function (b, c) {
+    (Olive.EntryForm.onAddPostDone = function (b, c) {
       var d = b.element.find("#topic_posts-form");
       if (d.length && !d.attr("data-is-identified")) {
-        var e = a(c).attr("data-post-permalink-url");
-        a("#add-topic-post-error-page .js-view-existing-post").attr("href", e),
-          a("#header-post-button").attr(
+        var e = jQuery(c).attr("data-post-permalink-url");
+        jQuery("#add-topic-post-error-page .js-view-existing-post").attr("href", e),
+          jQuery("#header-post-button").attr(
             "data-modal-open",
             "#add-topic-post-error-page"
           );
       }
       b.close(),
-        a(".js-no-content").remove(),
-        a(c)
-          .prependTo(a(".js-post-list"))
+        jQuery(".js-no-content").remove(),
+        jQuery(c)
+          .prependTo(jQuery(".js-post-list"))
           .trigger("olv:entry:add-to-list:done");
     }),
-    (b.EntryForm.onAddMessageDone = function (c, d) {
+    (Olive.EntryForm.onAddMessageDone = function (c, d) {
       c.close(),
-        a(".js-no-content").remove(),
-        a(".message-post-list").prepend(d);
-      var e = b.UpdateChecker.getInstance();
+        jQuery(".js-no-content").remove(),
+        jQuery(".message-post-list").prepend(d);
+      var e = Olive.UpdateChecker.getInstance();
       e.interval_ = e.initialInterval_;
     }),
-    (b.EntryForm.onAddReplyDone = function (c, d) {
-      b.UpdateChecker.getInstance();
+    (Olive.EntryForm.onAddReplyDone = function (c, d) {
+      Olive.UpdateChecker.getInstance();
       c.close();
       var e = 0;
       if (d) {
-        var f = a(d),
-          g = a(".post-permalink-reply li")
+        var f = jQuery(d),
+          g = jQuery(".post-permalink-reply li")
             .map(function () {
-              return "#" + a(this).attr("id");
+              return "#" + jQuery(this).attr("id");
             })
             .toArray()
             .join(","),
           h = "" == g ? f : f.filter(":not(" + g + ")");
-        h.length > 0 && (e += h.length), a(".post-permalink-reply").append(h);
+        h.length > 0 && (e += h.length), jQuery(".post-permalink-reply").append(h);
       }
-      b.Entry.mayIncrementMoreRepliesButtonCount(e),
-        a(window).scrollTop(a(document).height());
+      Olive.Entry.mayIncrementMoreRepliesButtonCount(e),
+        jQuery(window).scrollTop(jQuery(document).height());
     }),
-    a(document).on("olv:modal:add-entry", function (a, c, d) {
+    jQuery(document).on("olv:modal:add-entry", function (a, c, d) {
       var e = c.element.find("form");
-      b.EntryForm.setupFeelingSelector(e, d),
-        b.EntryForm.setupSpoilerCheck(e, d),
-        b.EntryForm.setupTopicCategories(e, d),
-        b.EntryForm.setupPostTypeChanger(e, d);
+      Olive.EntryForm.setupFeelingSelector(e, d),
+        Olive.EntryForm.setupSpoilerCheck(e, d),
+        Olive.EntryForm.setupTopicCategories(e, d),
+        Olive.EntryForm.setupPostTypeChanger(e, d);
     }),
-    a(document).on(
+    jQuery(document).on(
       "olv:modal:open-topic-post-existing-error",
       function (a, c, d) {
         var e = function (a) {
           c.close();
         };
-        b.EntryForm.getCheckCanPost(function () {}, e);
+        Olive.EntryForm.getCheckCanPost(function () {}, e);
       }
     ),
-    a(document).on("olv:modal:add-message", function (a, c, d) {
+    jQuery(document).on("olv:modal:add-message", function (a, c, d) {
       var e = c.triggerElement.attr("data-user-id");
       if (e) {
         var f = c.triggerElement.attr("data-screen-name"),
-          g = b.loc("olv.portal.friend_message_to", f, e);
+          g = Olive.loc("olv.portal.friend_message_to", f, e);
         c.element.find(".window-title").text(g),
           c.element.find('input[name="message_to_user_id"]').val(e);
       }
     }),
-    a(document).on(
+    jQuery(document).on(
       "olv:modal:add-post olv:modal:add-message",
       function (a, c, d) {
         var e = c.element.find("form"),
           f = "olv:modal:add-post" === a.type;
-        f && b.EntryForm.checkCanPost(c, e),
-          b.EntryForm.setupImageSelector(e, d);
-        var g = f ? b.EntryForm.onAddPostDone : b.EntryForm.onAddMessageDone;
-        b.EntryForm.setupSubmission(c, e, g, d);
+        f && Olive.EntryForm.checkCanPost(c, e),
+          Olive.EntryForm.setupImageSelector(e, d);
+        var g = f ? Olive.EntryForm.onAddPostDone : Olive.EntryForm.onAddMessageDone;
+        Olive.EntryForm.setupSubmission(c, e, g, d);
       }
     ),
-    a(document).on("olv:modal:add-reply", function (a, c, d) {
+    jQuery(document).on("olv:modal:add-reply", function (a, c, d) {
       var e = c.element.find("form");
-      b.EntryForm.checkCanPost(c, e),
-        b.EntryForm.setupImageSelector(e, d),
-        b.EntryForm.setupSubmission(c, e, b.EntryForm.onAddReplyDone, d);
+      Olive.EntryForm.checkCanPost(c, e),
+        Olive.EntryForm.setupImageSelector(e, d),
+        Olive.EntryForm.setupSubmission(c, e, Olive.EntryForm.onAddReplyDone, d);
     }),
-    (b.EntryForm.mayOpenModalInitially = function (c, d, e, f) {
+    (Olive.EntryForm.mayOpenModalInitially = function (c, d, e, f) {
       function g(a) {
         window.history.back();
       }
       function h(b) {
         var d = c.href.replace(/#.*/, "");
-        a.pjax.state && a.pjax.state.url && (a.pjax.state.url = d),
-          window.history.replaceState(a.pjax.state, "", d),
+        jQuery.pjax.state && jQuery.pjax.state.url && (jQuery.pjax.state.url = d),
+          window.history.replaceState(jQuery.pjax.state, "", d),
           i();
       }
       if (c.hash === d) {
-        b.init.done(function () {
-          var a = b.ModalWindowManager.createNewModal(e);
+        Olive.init.done(function () {
+          var a = Olive.ModalWindowManager.createNewModal(e);
           a.open(),
             a.element
               .find(".olv-modal-close-button")
@@ -3150,15 +3150,15 @@ var Olv = Olv || {};
               .addClass("js-entryform-back-button");
         });
         var i = function () {
-          a(document).off("click", ".js-entryform-back-button", g),
-            a(document).off("olv:modalclose", ".add-post-page", h);
+          jQuery(document).off("click", ".js-entryform-back-button", g),
+            jQuery(document).off("olv:modalclose", ".add-post-page", h);
         };
-        a(document).on("click", ".js-entryform-back-button", g),
-          a(document).on("olv:modalclose", ".add-post-page", h),
+        jQuery(document).on("click", ".js-entryform-back-button", g),
+          jQuery(document).on("olv:modalclose", ".add-post-page", h),
           f.done(i);
       }
     }),
-    (b.EntryForm.checkCanPost = function (a, c) {
+    (Olive.EntryForm.checkCanPost = function (a, c) {
       function d(a, b) {
         var c = b.remaining_today_posts;
         a.element.find(".remaining-today-post-count").text(c),
@@ -3170,14 +3170,14 @@ var Olv = Olv || {};
         f = function (b) {
           a.close();
         };
-      b.EntryForm.getCheckCanPost(e, f);
+      Olive.EntryForm.getCheckCanPost(e, f);
     }),
-    (b.EntryForm.getCheckCanPost = function (c, d) {
-      b.Net.ajax({
+    (Olive.EntryForm.getCheckCanPost = function (c, d) {
+      Olive.Net.ajax({
         type: "GET",
         url:
           "/users/" +
-          a(document.body).attr("data-user-id") +
+          jQuery(document.body).attr("data-user-id") +
           "/check_can_post.json",
       })
         .done(function (a) {
@@ -3187,7 +3187,7 @@ var Olv = Olv || {};
           d(a);
         });
     }),
-    (b.EntryForm.setupDiaryPostModal = function (a, b) {
+    (Olive.EntryForm.setupDiaryPostModal = function (a, b) {
       var c = a.element.find("form"),
         d = c.find(".image-selector"),
         e = d.find(".dropdown-toggle"),
@@ -3204,33 +3204,33 @@ var Olv = Olv || {};
           e.removeAttr("data-sound"),
           e.addClass("forbidden"));
     }),
-    (b.Relationship = {}),
-    (b.Relationship.isFirstFriend = function () {
-      return !!a(document.body).attr("data-is-first-friend");
+    (Olive.Relationship = {}),
+    (Olive.Relationship.isFirstFriend = function () {
+      return !!jQuery(document.body).attr("data-is-first-friend");
     }),
-    (b.Relationship.confirmFirstFriend = function () {
-      return b
-        .deferredConfirm(b.loc("olv.portal.friend.first_request_confirm"))
+    (Olive.Relationship.confirmFirstFriend = function () {
+      return Olive
+        .deferredConfirm(Olive.loc("olv.portal.friend.first_request_confirm"))
         .done(function (b) {
-          b && a(document.body).removeAttr("data-is-first-friend");
+          b && jQuery(document.body).removeAttr("data-is-first-friend");
         })
         .promise();
     }),
-    (b.Relationship.setupFirstFriendConfirm = function (c) {
+    (Olive.Relationship.setupFirstFriendConfirm = function (c) {
       function d(c) {
-        b.Relationship.isFirstFriend() &&
+        Olive.Relationship.isFirstFriend() &&
           (c.preventDefault(),
-          b.Relationship.confirmFirstFriend().done(function (b) {
-            b && a(c.target).trigger("click");
+          Olive.Relationship.confirmFirstFriend().done(function (b) {
+            b && jQuery(c.target).trigger("click");
           }));
       }
       var e = '[data-modal-open="#friend-request-post-page"]';
-      a(document).on("olv:modalopen", e, d),
+      jQuery(document).on("olv:modalopen", e, d),
         c.done(function () {
-          a(document).off("olv:modalopen", e, d);
+          jQuery(document).off("olv:modalopen", e, d);
         });
     }),
-    (b.Relationship.fillInConfirmDialog = function (a) {
+    (Olive.Relationship.fillInConfirmDialog = function (a) {
       var c = a.triggerElement,
         d = a.element;
       d.find(".screen-name").text(c.attr("data-screen-name")),
@@ -3242,20 +3242,20 @@ var Olv = Olv || {};
       if (void 0 !== e) {
         var f = d.find(".message-inner");
         e || f.addClass("no-message"),
-          f.text(e || b.loc("olv.portal.friend_request.no_message"));
+          f.text(e || Olive.loc("olv.portal.friend_request.no_message"));
       }
       var g = c.attr("data-timestamp");
       void 0 !== g && d.find(".timestamp").text(g);
     }),
-    (b.Relationship.setupForPage = function (a, c, d) {
-      b.Relationship.isFirstFriend() &&
-        b.Relationship.setupFirstFriendConfirm(d);
+    (Olive.Relationship.setupForPage = function (a, c, d) {
+      Olive.Relationship.isFirstFriend() &&
+        Olive.Relationship.setupFirstFriendConfirm(d);
     }),
-    b.router.connect(/^/, b.Relationship.setupForPage),
-    a(document).on("olv:modal:confirm-relationship", function (c, d, e) {
+    Olive.router.connect(/^/, Olive.Relationship.setupForPage),
+    jQuery(document).on("olv:modal:confirm-relationship", function (c, d, e) {
       function f(b, c, e) {
         var f = c.length ? { relatedTarget: c[0] } : null,
-          g = a.Event(b, f),
+          g = jQuery.Event(b, f),
           h = [d];
         return (
           e && h.push.apply(h, e), i.trigger(g, h), !g.isDefaultPrevented()
@@ -3263,39 +3263,39 @@ var Olv = Olv || {};
       }
       function g(a) {
         if (
-          !b.Form.isDisabled(k) &&
+          !Olive.Form.isDisabled(k) &&
           !a.isDefaultPrevented() &&
           (a.preventDefault(), f("olv:relationship:change", k))
         ) {
           var c = k.attr("data-action") || i.attr("data-action"),
             e = i.attr("data-pid"),
             g = e ? { pid: e } : null;
-          b.Form.post(c, g, k, !0)
+          Olive.Form.post(c, g, k, !0)
             .done(function () {
               var a = j.find(".window-title").text(),
                 c = i.attr("data-screen-name"),
-                e = b.loc(k.attr("data-done-msgid"), c),
+                e = Olive.loc(k.attr("data-done-msgid"), c),
                 g = arguments;
-              b.showMessage(a, e).ok(function () {
+              Olive.showMessage(a, e).ok(function () {
                 var a = this.element.find(".ok-button");
                 f("olv:relationship:change:done", a, g) &&
-                  b.ModalWindowManager.closeUntil(d);
+                  Olive.ModalWindowManager.closeUntil(d);
               });
             })
             .fail(function () {
               f("olv:relationship:change:fail", k, arguments) &&
-                b.ModalWindowManager.closeUntil(d);
+                Olive.ModalWindowManager.closeUntil(d);
             });
         }
       }
       function h(a) {
-        b.Form.isDisabled(l) ||
+        Olive.Form.isDisabled(l) ||
           a.isDefaultPrevented() ||
           (a.preventDefault(),
           f("olv:relationship:cancel", l) &&
-            b.ModalWindowManager.closeUntil(d));
+            Olive.ModalWindowManager.closeUntil(d));
       }
-      b.Relationship.fillInConfirmDialog(d);
+      Olive.Relationship.fillInConfirmDialog(d);
       var i = d.triggerElement,
         j = d.element,
         k = j.find(".post-button"),
@@ -3306,12 +3306,12 @@ var Olv = Olv || {};
           k.off("click", g), l.off("click", h);
         });
     }),
-    a(document).on("olv:modal:confirm-received-request", function (c, d, e) {
+    jQuery(document).on("olv:modal:confirm-received-request", function (c, d, e) {
       function f(c, d) {
-        b.Relationship.isFirstFriend() &&
+        Olive.Relationship.isFirstFriend() &&
           (c.preventDefault(),
-          b.Relationship.confirmFirstFriend().done(function (b) {
-            b ? a(c.relatedTarget).trigger("click") : d.close();
+          Olive.Relationship.confirmFirstFriend().done(function (b) {
+            b ? jQuery(c.relatedTarget).trigger("click") : d.close();
           }));
       }
       var g = d.triggerElement;
@@ -3320,21 +3320,21 @@ var Olv = Olv || {};
           g.off("olv:relationship:change", f);
         });
     }),
-    a(document).on("olv:modal:post-friend-request", function (a, c, d) {
+    jQuery(document).on("olv:modal:post-friend-request", function (a, c, d) {
       function e(a) {
-        if (!b.Form.isDisabled(g) && !a.isDefaultPrevented()) {
+        if (!Olive.Form.isDisabled(g) && !a.isDefaultPrevented()) {
           a.preventDefault();
           var d = g.closest("form"),
             e = d.find("input[name=body]").val();
-          return b.Utils.containsNGWords(e)
-            ? void b.ErrorViewer.deferredOpen(b.Utils.ERROR_CONTAINS_NG_WORDS)
-            : void b.Form.submit(d, g, !0)
+          return Olive.Utils.containsNGWords(e)
+            ? void Olive.ErrorViewer.deferredOpen(Olive.Utils.ERROR_CONTAINS_NG_WORDS)
+            : void Olive.Form.submit(d, g, !0)
                 .done(function () {
                   var a = f.find(".window-title").text(),
                     d = f.find(".screen-name").text(),
-                    e = b.loc("olv.portal.friend_request.send_succeeded_to", d);
-                  b.showMessage(a, e).ok(function () {
-                    b.ModalWindowManager.closeUntil(c), b.Browsing.reload();
+                    e = Olive.loc("olv.portal.friend_request.send_succeeded_to", d);
+                  Olive.showMessage(a, e).ok(function () {
+                    Olive.ModalWindowManager.closeUntil(c), Olive.Browsing.reload();
                   });
                 })
                 .fail(function (a, d, e, f) {
@@ -3347,7 +3347,7 @@ var Olv = Olv || {};
                       0;
                     g >= 1210110 &&
                       1210129 >= g &&
-                      (b.ModalWindowManager.closeUntil(c), b.Browsing.reload());
+                      (Olive.ModalWindowManager.closeUntil(c), Olive.Browsing.reload());
                   }
                 });
         }
@@ -3359,322 +3359,322 @@ var Olv = Olv || {};
           g.off("click", e);
         });
     }),
-    b.init.done(function () {
+    Olive.init.done(function () {
       "undefined" != typeof wiiuBrowser &&
         "undefined" != typeof wiiuBrowser.endStartUp &&
         wiiuBrowser.endStartUp();
     }),
-    b.router.connect("^/$", function (c, d, e) {
+    Olive.router.connect("^/$", function (c, d, e) {
       function f() {
-        b.Form.setupForPage(),
-          b.Content.autopagerize(".js-post-list", e),
-          a("#header-post-button").toggleClass("none", !1);
-        var c = a("input.user-search-query");
-        new b.UserSearchButton(c, e);
+        Olive.Form.setupForPage(),
+          Olive.Content.autopagerize(".js-post-list", e),
+          jQuery("#header-post-button").toggleClass("none", !1);
+        var c = jQuery("input.user-search-query");
+        new Olive.UserSearchButton(c, e);
       }
-      b.Entry.setupHiddenContents(e),
-        b.Entry.setupEmpathyButtons(".post-meta", e),
-        b.Content.setupReloadKey(e),
-        b.Tutorial.setupCloseButtons(e),
-        b.User.setupFollowButton(e);
+      Olive.Entry.setupHiddenContents(e),
+        Olive.Entry.setupEmpathyButtons(".post-meta", e),
+        Olive.Content.setupReloadKey(e),
+        Olive.Tutorial.setupCloseButtons(e),
+        Olive.User.setupFollowButton(e);
       var g,
         h,
-        i = a(".content-loading-window"),
-        j = "friend" !== b.Cookie.get("view_activity_filter");
+        i = jQuery(".content-loading-window"),
+        j = "friend" !== Olive.Cookie.get("view_activity_filter");
       (h = j
-        ? b.Net.ajax({
+        ? Olive.Net.ajax({
             type: "GET",
             url: "/my/latest_following_related_profile_posts",
             silent: !0,
           })
-        : a.Deferred().resolve().promise()),
+        : jQuery.Deferred().resolve().promise()),
         (g = i.length
-          ? b.Net.ajax({ type: "GET", url: d.pathname + d.search, silent: !0 })
+          ? Olive.Net.ajax({ type: "GET", url: d.pathname + d.search, silent: !0 })
               .done(function (b) {
-                var c = a(b);
-                c.find("title").remove(), a("#body").html(c);
+                var c = jQuery(b);
+                c.find("title").remove(), jQuery("#body").html(c);
               })
               .fail(function () {
-                i.remove(), a(".content-load-error-window").removeClass("none");
+                i.remove(), jQuery(".content-load-error-window").removeClass("none");
               })
-          : a.Deferred().resolve().promise()),
+          : jQuery.Deferred().resolve().promise()),
         g.then(function () {
           f();
         }),
-        a
+        jQuery
           .when(g, h)
           .done(function (b, c) {
-            var d = a(a.trim(c[0])),
+            var d = jQuery(jQuery.trim(c[0])),
               e = self.$(
                 "[data-latest-following-relation-profile-post-placeholder]"
               ),
               f = [];
             e.each(function (b, c) {
               var e = d.get(b);
-              e && (a(c).html(e), f.push(c));
+              e && (jQuery(c).html(e), f.push(c));
             }),
-              a(f).removeClass("none");
+              jQuery(f).removeClass("none");
           })
           .done(function () {
-            b.User.setupFollowButton(e);
+            Olive.User.setupFollowButton(e);
           }),
         e.done(function () {
           g.abort && g.abort();
         });
     }),
-    b.router.connect("^/titles/search$", function (c, d, e) {
-      var f = a(".body-content input.title-search-query");
-      new b.TitleSearchButton(f, e);
+    Olive.router.connect("^/titles/search$", function (c, d, e) {
+      var f = jQuery(".body-content input.title-search-query");
+      new Olive.TitleSearchButton(f, e);
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/communities(?:/favorites|/played)?$",
       function (c, d, e) {
-        b.Tutorial.setupCloseButtons(e),
-          b.Community.setupInfoTicker(e),
-          b.Content.autopagerize("#community-top-content", e);
-        var f = a(".body-content input.title-search-query");
-        new b.TitleSearchButton(f, e);
+        Olive.Tutorial.setupCloseButtons(e),
+          Olive.Community.setupInfoTicker(e),
+          Olive.Content.autopagerize("#community-top-content", e);
+        var f = jQuery(".body-content input.title-search-query");
+        new Olive.TitleSearchButton(f, e);
       }
     ),
-    b.router.connect("^/communities/categories/[a-z]+$", function (c, d, e) {
-      b.Tutorial.setupCloseButtons(e),
-        b.Content.autopagerize("#community-top-content", e);
-      var f = a(".category-top-of-more");
+    Olive.router.connect("^/communities/categories/[a-z]+$", function (c, d, e) {
+      Olive.Tutorial.setupCloseButtons(e),
+        Olive.Content.autopagerize("#community-top-content", e);
+      var f = jQuery(".category-top-of-more");
       f.length &&
         (window.scrollTo(0, f.offset().top),
         f.removeClass("category-top-of-more"));
     }),
-    b.router.connect("^/identified_user_posts$", function (a, c, d) {
-      b.User.setupFollowButton(d),
-        b.Content.autopagerize(".js-post-list", d),
-        b.Content.setupReloadKey(d);
+    Olive.router.connect("^/identified_user_posts$", function (a, c, d) {
+      Olive.User.setupFollowButton(d),
+        Olive.Content.autopagerize(".js-post-list", d),
+        Olive.Content.setupReloadKey(d);
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/titles/[0-9]+/[0-9]+(/diary|/artwork(/new|/hot)?|/topic(/new|/open)?|/new|/hot|/in_game|/old)?$",
       function (c, d, e) {
         function f(a) {
           window.scrollTo(0, 0);
         }
-        b.Community.setupInfoTicker(e),
-          b.Community.setupFavoriteButtons(e),
-          b.Community.setupUnfavoriteButtons(e),
-          b.Community.setupAppJumpButtons(e),
-          b.Community.setupShopButtons(e),
-          b.Community.setupPostButton(e),
-          b.Community.setupURLSelector("#post-filter select", e),
-          b.Community.setupSelectButton(".js-select-post-filter", e),
-          b.Community.setupURLSelector(".js-select-post-filter", e),
-          b.Community.setupTopicPostButton(e),
-          b.Tutorial.setupBalloon(".js-tutorial-balloon", e),
-          b.Entry.setupHiddenContents(e),
-          b.Entry.setupEmpathyButtons(".post-meta", e),
-          b.Entry.setupFirstPostNotice("#header-post-button", e),
-          b.Content.autopagerize(".js-post-list", e),
-          b.Content.setupReloadKey(e),
-          a(".toggle-button").length && b.User.setupFollowButton(e),
-          b.EntryForm.mayOpenModalInitially(
+        Olive.Community.setupInfoTicker(e),
+          Olive.Community.setupFavoriteButtons(e),
+          Olive.Community.setupUnfavoriteButtons(e),
+          Olive.Community.setupAppJumpButtons(e),
+          Olive.Community.setupShopButtons(e),
+          Olive.Community.setupPostButton(e),
+          Olive.Community.setupURLSelector("#post-filter select", e),
+          Olive.Community.setupSelectButton(".js-select-post-filter", e),
+          Olive.Community.setupURLSelector(".js-select-post-filter", e),
+          Olive.Community.setupTopicPostButton(e),
+          Olive.Tutorial.setupBalloon(".js-tutorial-balloon", e),
+          Olive.Entry.setupHiddenContents(e),
+          Olive.Entry.setupEmpathyButtons(".post-meta", e),
+          Olive.Entry.setupFirstPostNotice("#header-post-button", e),
+          Olive.Content.autopagerize(".js-post-list", e),
+          Olive.Content.setupReloadKey(e),
+          jQuery(".toggle-button").length && Olive.User.setupFollowButton(e),
+          Olive.EntryForm.mayOpenModalInitially(
             d,
             "#js_open_post_modal",
             "#header-post-button",
             e
           ),
-          b.EntryForm.mayOpenModalInitially(
+          Olive.EntryForm.mayOpenModalInitially(
             d,
             "#js_open_artwork_post_from_album_modal",
             ".js-open-artwork-post-from-album-modal",
             e
           ),
-          b.EntryFormAlbumImageSelector.setup(e),
-          a(document).on("olv:entry:add-to-list:done", f),
+          Olive.EntryFormAlbumImageSelector.setup(e),
+          jQuery(document).on("olv:entry:add-to-list:done", f),
           e.done(function () {
-            a(document).off("olv:entry:add-to-list:done", f);
+            jQuery(document).off("olv:entry:add-to-list:done", f);
           });
       }
     ),
-    b.router.connect(/^\/posts\/([0-9A-Za-z\-_]+)$/, function (c, d, e) {
-      b.Entry.setupPostEmpathyButton("#post-permalink-content", e),
-        b.Entry.setupEditButtons(e),
-        b.Entry.setupMoreRepliesButton(e),
-        b.Entry.setupAppJumpButton(e),
-        b.Entry.setupHiddenContents(e),
-        b.Entry.setupFirstPostNotice("#header-reply-button", e),
-        b.Entry.setupEmpathyButtons(".reply-meta", e),
-        b.Entry.setupCloseTopicPostButton(e),
-        b.Content.setupReloadKey(e),
-        b.Form.setupDisabledMessage(e),
-        b.YouTubePlayer.setupQualityButton(e),
-        b.Entry.setupMoreContentButton(e),
-        a("#body-language-selector").length &&
-          b.Entry.setupBodyLanguageSelector(e),
-        b.EntryFormAlbumImageSelector.setup(e);
+    Olive.router.connect(/^\/posts\/([0-9A-Za-z\-_]+)$/, function (c, d, e) {
+      Olive.Entry.setupPostEmpathyButton("#post-permalink-content", e),
+        Olive.Entry.setupEditButtons(e),
+        Olive.Entry.setupMoreRepliesButton(e),
+        Olive.Entry.setupAppJumpButton(e),
+        Olive.Entry.setupHiddenContents(e),
+        Olive.Entry.setupFirstPostNotice("#header-reply-button", e),
+        Olive.Entry.setupEmpathyButtons(".reply-meta", e),
+        Olive.Entry.setupCloseTopicPostButton(e),
+        Olive.Content.setupReloadKey(e),
+        Olive.Form.setupDisabledMessage(e),
+        Olive.YouTubePlayer.setupQualityButton(e),
+        Olive.Entry.setupMoreContentButton(e),
+        jQuery("#body-language-selector").length &&
+          Olive.Entry.setupBodyLanguageSelector(e),
+        Olive.EntryFormAlbumImageSelector.setup(e);
     }),
-    b.router.connect(/^\/replies\/([0-9A-Za-z\-_]+)$/, function (c, d, e) {
-      b.Entry.setupPostEmpathyButton("#post-permalink-comments", e),
-        b.Entry.setupEditButtons(e),
-        a("#body-language-selector").length &&
-          b.Entry.setupBodyLanguageSelector(e);
+    Olive.router.connect(/^\/replies\/([0-9A-Za-z\-_]+)$/, function (c, d, e) {
+      Olive.Entry.setupPostEmpathyButton("#post-permalink-comments", e),
+        Olive.Entry.setupEditButtons(e),
+        jQuery("#body-language-selector").length &&
+          Olive.Entry.setupBodyLanguageSelector(e);
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/users/[0-9a-zA-Z\\-_.]+(/empathies|/posts)$",
       function (a, c, d) {
-        b.Entry.setupHiddenContents(d),
-          b.Entry.setupEmpathyButtons(".post-meta", d),
-          b.Content.autopagerize(".js-post-list", d),
-          b.Content.setupReloadKey(d);
+        Olive.Entry.setupHiddenContents(d),
+          Olive.Entry.setupEmpathyButtons(".post-meta", d),
+          Olive.Content.autopagerize(".js-post-list", d),
+          Olive.Content.setupReloadKey(d);
       }
     ),
-    b.router.connect(
+    Olive.router.connect(
       "^/users/[0-9a-zA-Z\\-_.]+(/friends|/following|/followers)$",
       function (a, c, d) {
-        b.Content.autopagerize("#friend-list-content", d),
-          b.Content.setupReloadKey(d);
+        Olive.Content.autopagerize("#friend-list-content", d),
+          Olive.Content.setupReloadKey(d);
       }
     ),
-    b.router.connect(
+    Olive.router.connect(
       "^/users/[0-9a-zA-Z\\-_.]+(/friends|/following|/followers|/empathies|/posts)?$",
       function (c, d, e) {
         function f(b, c) {
-          a(".user-page.is-visitor .js-following-count").text(c);
+          jQuery(".user-page.is-visitor .js-following-count").text(c);
         }
-        b.Form.setupDisabledMessage(e),
-          b.User.setupFollowButton(e, { noReloadOnFollow: !0 }),
-          b.Tutorial.setupBalloon(".js-tutorial-balloon", e),
-          a(document).on("olv:visitor:following-count:change", f),
+        Olive.Form.setupDisabledMessage(e),
+          Olive.User.setupFollowButton(e, { noReloadOnFollow: !0 }),
+          Olive.Tutorial.setupBalloon(".js-tutorial-balloon", e),
+          jQuery(document).on("olv:visitor:following-count:change", f),
           e.done(function () {
-            a(document).off("olv:visitor:following-count:change", f);
+            jQuery(document).off("olv:visitor:following-count:change", f);
           }),
-          b.Entry.setupHiddenContents(e),
-          b.Entry.setupEmpathyButtons(".post-meta", e);
+          Olive.Entry.setupHiddenContents(e),
+          Olive.Entry.setupEmpathyButtons(".post-meta", e);
       }
     ),
-    b.router.connect("^/users/[0-9a-zA-Z\\-_.]+(/diary)$", function (c, d, e) {
+    Olive.router.connect("^/users/[0-9a-zA-Z\\-_.]+(/diary)$", function (c, d, e) {
       function f(b) {
-        var c = a(b.target),
+        var c = jQuery(b.target),
           d = 10;
         window.scrollTo(0, c.offset().top - d),
           c.attr("data-test-scrolled", "1");
       }
-      b.Entry.setupHiddenContents(e),
-        b.Entry.setupEmpathyButtons(".post-meta", e),
-        b.Content.autopagerize(".js-post-list", e),
-        b.Content.setupReloadKey(e),
-        b.Entry.setupCreateDiaryOrSaveScreenshotWindow(
+      Olive.Entry.setupHiddenContents(e),
+        Olive.Entry.setupEmpathyButtons(".post-meta", e),
+        Olive.Content.autopagerize(".js-post-list", e),
+        Olive.Content.setupReloadKey(e),
+        Olive.Entry.setupCreateDiaryOrSaveScreenshotWindow(
           ".js-diary-screenshot-window",
           e
         ),
-        b.Form.setupDisabledMessage(e),
-        b.EntryForm.mayOpenModalInitially(
+        Olive.Form.setupDisabledMessage(e),
+        Olive.EntryForm.mayOpenModalInitially(
           d,
           "#js_open_post_from_album_modal",
           ".js-open-post-from-album-modal",
           e
         ),
-        a(document).on("olv:entry:add-to-list:done", f),
+        jQuery(document).on("olv:entry:add-to-list:done", f),
         e.done(function () {
-          a(document).off("olv:entry:add-to-list:done", f);
+          jQuery(document).off("olv:entry:add-to-list:done", f);
         });
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/users/[0-9a-zA-Z\\-_.]+/favorites$",
       function (a, c, d) {
-        b.Content.autopagerize("#community-top-content", d);
+        Olive.Content.autopagerize("#community-top-content", d);
       }
     ),
-    b.router.connect("^/my_blacklist$", function (b, c, d) {
+    Olive.router.connect("^/my_blacklist$", function (b, c, d) {
       function e(b) {
-        a(b.target).addClass("none").siblings().removeClass("none");
+        jQuery(b.target).addClass("none").siblings().removeClass("none");
       }
-      a(document).on("olv:relationship:change:done", e),
+      jQuery(document).on("olv:relationship:change:done", e),
         d.done(function () {
-          a(document).off("olv:relationship:change:done", e);
+          jQuery(document).off("olv:relationship:change:done", e);
         });
     }),
-    b.router.connect("^/users$", function (c, d, e) {
-      var f = a(".body-content input.user-search-query");
-      new b.UserSearchButton(f, e), b.Content.autopagerize(".user-list", e);
+    Olive.router.connect("^/users$", function (c, d, e) {
+      var f = jQuery(".body-content input.user-search-query");
+      new Olive.UserSearchButton(f, e), Olive.Content.autopagerize(".user-list", e);
     }),
-    b.router.connect("^/settings/account", function (c, d, e) {
-      b.Form.setupDisabledMessage(e);
+    Olive.router.connect("^/settings/account", function (c, d, e) {
+      Olive.Form.setupDisabledMessage(e);
       var f = wiiuBOSS.isRegisteredBossTask(),
-        g = a('div[data-name="notice_opt_in"] button[value=1]'),
-        h = a('div[data-name="notice_opt_in"] button[value=0]');
+        g = jQuery('div[data-name="notice_opt_in"] button[value=1]'),
+        h = jQuery('div[data-name="notice_opt_in"] button[value=0]');
       g.toggleClass("selected", f.isRegistered),
         h.toggleClass("selected", !f.isRegistered);
-      var i = a('div[data-name="notice_opt_in"]')
+      var i = jQuery('div[data-name="notice_opt_in"]')
         .find("button.selected")
         .text();
-      a('li[data-name="notice_opt_in"] a.settings-button').text(i);
+      jQuery('li[data-name="notice_opt_in"] a.settings-button').text(i);
       var f = wiiuBOSS.isRegisteredDirectMessageTask(),
-        g = a('div[data-name="luminous_opt_in"] button[value=1]'),
-        h = a('div[data-name="luminous_opt_in"] button[value=0]');
+        g = jQuery('div[data-name="luminous_opt_in"] button[value=1]'),
+        h = jQuery('div[data-name="luminous_opt_in"] button[value=0]');
       g.toggleClass("selected", f.isRegistered),
         h.toggleClass("selected", !f.isRegistered);
-      var i = a('div[data-name="luminous_opt_in"]')
+      var i = jQuery('div[data-name="luminous_opt_in"]')
         .find("button.selected")
         .text();
-      a('li[data-name="luminous_opt_in"] a.settings-button').text(i);
+      jQuery('li[data-name="luminous_opt_in"] a.settings-button').text(i);
     }),
-    b.router.connect("^/settings/profile", function (c, d, e) {
-      b.Form.setupDisabledMessage(e),
-        a("#profile-text").on("input.olvMessageForm", function (c) {
-          var d = a(this).closest("form");
-          b.Form.submit(d);
+    Olive.router.connect("^/settings/profile", function (c, d, e) {
+      Olive.Form.setupDisabledMessage(e),
+        jQuery("#profile-text").on("input.olvMessageForm", function (c) {
+          var d = jQuery(this).closest("form");
+          Olive.Form.submit(d);
         }),
-        a("#profile-post").on("click", function (c) {
+        jQuery("#profile-post").on("click", function (c) {
           c.preventDefault();
-          var d = a(this);
-          b.showConfirm(
-            b.loc("olv.portal.profile_post"),
-            b.loc("olv.portal.profile_post.confirm_remove"),
+          var d = jQuery(this);
+          Olive.showConfirm(
+            Olive.loc("olv.portal.profile_post"),
+            Olive.loc("olv.portal.profile_post.confirm_remove"),
             {
-              okLabel: b.loc("olv.portal.button.remove"),
-              cancelLabel: b.loc("olv.portal.stop"),
+              okLabel: Olive.loc("olv.portal.button.remove"),
+              cancelLabel: Olive.loc("olv.portal.stop"),
             }
           ).ok(function () {
-            b.Form.post("/settings/profile_post.unset.json", null, d, !0).done(
+            Olive.Form.post("/settings/profile_post.unset.json", null, d, !0).done(
               function () {
                 d.trigger("olv:profile:profile-post:remove"),
-                  b.Browsing.reload();
+                  Olive.Browsing.reload();
               }
             );
           });
         }),
-        b.UserProfile.setupFavoriteGameGenreSelectors(
+        Olive.UserProfile.setupFavoriteGameGenreSelectors(
           "#favorite-game-genre",
           e
         ),
         e.done(function () {
-          a("#profile-text").off("input.olvMessageForm"),
-            a("#profile-post").off("click");
+          jQuery("#profile-text").off("input.olvMessageForm"),
+            jQuery("#profile-post").off("click");
         });
     }),
-    b.router.connect("^/friend_messages$", function (a, c, d) {
-      b.Tutorial.setupCloseButtons(d);
+    Olive.router.connect("^/friend_messages$", function (a, c, d) {
+      Olive.Tutorial.setupCloseButtons(d);
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/friend_messages/([0-9a-zA-Z\\-_.]+)$",
       function (c, d, e) {
-        b.Content.autopagerize(".message-post-list", e);
-        var f = b.UpdateChecker.getInstance();
+        Olive.Content.autopagerize(".message-post-list", e);
+        var f = Olive.UpdateChecker.getInstance();
         f.onUpdate(
           "message_feed",
           {
             user_id: c[1],
-            view_id: a("input[name=view_id]").val(),
-            page_param: JSON.parse(a("input[name=page_param]").val()),
+            view_id: jQuery("input[name=view_id]").val(),
+            page_param: JSON.parse(jQuery("input[name=page_param]").val()),
           },
           function (b) {
             if ((b.page_param && (this.page_param = b.page_param), b.html)) {
-              var c = a(b.html),
-                d = a(".post")
+              var c = jQuery(b.html),
+                d = jQuery(".post")
                   .map(function () {
-                    return "#" + a(this).attr("id");
+                    return "#" + jQuery(this).attr("id");
                   })
                   .toArray()
                   .join(","),
                 e = "" == d ? c : c.filter(":not(" + d + ")");
               e.length > 0 &&
-                (a(".message-post-list").prepend(e),
+                (jQuery(".message-post-list").prepend(e),
                 (f.interval_ = f.initialInterval_));
             }
           },
@@ -3682,53 +3682,53 @@ var Olv = Olv || {};
         );
       }
     ),
-    b.router.connect("^/news/my_news$", function (a, c, d) {
-      b.Tutorial.setupCloseButtons(d), b.User.setupFollowButton(d);
+    Olive.router.connect("^/news/my_news$", function (a, c, d) {
+      Olive.Tutorial.setupCloseButtons(d), Olive.User.setupFollowButton(d);
     }),
-    b.router.connect("^/news/friend_requests$", function (c, d, e) {
+    Olive.router.connect("^/news/friend_requests$", function (c, d, e) {
       function f(b) {
-        a(b.target).closest("li").find(".notify").removeClass("notify");
+        jQuery(b.target).closest("li").find(".notify").removeClass("notify");
       }
       function g(a, b) {
         var c = a.siblings(".ok-message");
         c.text(b).removeClass("none"), a.remove();
       }
       function h(a, c) {
-        g(c.triggerElement, b.loc("olv.portal.friend_request.successed"));
+        g(c.triggerElement, Olive.loc("olv.portal.friend_request.successed"));
       }
       function i(a, c, d, e, f, g) {
-        g && f.status && 503 !== f.status && b.Browsing.reload();
+        g && f.status && 503 !== f.status && Olive.Browsing.reload();
       }
       function j(a, c) {
         var d = a.element.find(".cancel-button"),
           e = c.element.find(".ok-button"),
           f = d.attr("data-action"),
           h = { pid: a.triggerElement.attr("data-pid") };
-        b.Form.post(f, h, e, !0)
+        Olive.Form.post(f, h, e, !0)
           .done(function () {
             var c = a.element.find(".screen-name").text();
-            b.showMessage(
-              b.loc("olv.portal.friend_request.delete"),
-              b.loc("olv.portal.friend_request.deleted_from", c)
+            Olive.showMessage(
+              Olive.loc("olv.portal.friend_request.delete"),
+              Olive.loc("olv.portal.friend_request.deleted_from", c)
             ).ok(function () {
-              g(a.triggerElement, b.loc("olv.portal.friend_request.deleted")),
-                b.ModalWindowManager.closeUntil(a);
+              g(a.triggerElement, Olive.loc("olv.portal.friend_request.deleted")),
+                Olive.ModalWindowManager.closeUntil(a);
             });
           })
           .fail(function (c, d, e, f) {
-            b.ModalWindowManager.closeUntil(a),
-              f && e.status && 503 !== e.status && b.Browsing.reload();
+            Olive.ModalWindowManager.closeUntil(a),
+              f && e.status && 503 !== e.status && Olive.Browsing.reload();
           });
       }
       function k(a, c) {
         a.preventDefault();
         var d = c.element.find(".screen-name").text();
-        b.showConfirm(
-          b.loc("olv.portal.friend_request.delete"),
-          b.loc("olv.portal.friend_request.confirm_delete", d),
+        Olive.showConfirm(
+          Olive.loc("olv.portal.friend_request.delete"),
+          Olive.loc("olv.portal.friend_request.confirm_delete", d),
           {
-            okLabel: b.loc("olv.portal.erase"),
-            cancelLabel: b.loc("olv.portal.stop"),
+            okLabel: Olive.loc("olv.portal.erase"),
+            cancelLabel: Olive.loc("olv.portal.stop"),
             modalTypes: "delete-friend-request",
           }
         )
@@ -3736,39 +3736,39 @@ var Olv = Olv || {};
             j(c, this);
           })
           .cancel(function () {
-            b.ModalWindowManager.closeUntil(c);
+            Olive.ModalWindowManager.closeUntil(c);
           });
       }
-      b.Tutorial.setupCloseButtons(e), b.Form.setupDisabledMessage(e);
+      Olive.Tutorial.setupCloseButtons(e), Olive.Form.setupDisabledMessage(e);
       var l = {
         "olv:modalopen": f,
         "olv:relationship:change:done": h,
         "olv:relationship:change:fail": i,
         "olv:relationship:cancel": k,
       };
-      a(document).on(l, ".received-request-button"),
+      jQuery(document).on(l, ".received-request-button"),
         e.done(function () {
-          a(document).off(l, ".received-request-button");
+          jQuery(document).off(l, ".received-request-button");
         });
     }),
-    b.router.connect("^/welcome/(?:wiiu)?$", function (c, d, e) {
+    Olive.router.connect("^/welcome/(?:wiiu)?$", function (c, d, e) {
       function f(c) {
         document.activeElement.blur();
         var d = c.closest(".slide-page");
         d.attr(
           "data-scroll",
-          c.attr("data-save-scroll") ? a(window).scrollTop() : null
+          c.attr("data-save-scroll") ? jQuery(window).scrollTop() : null
         ),
           d.addClass("none");
-        var e = a(c.attr("data-slide"));
-        a(document.body).attr("id", e.attr("data-body-id") || null);
+        var e = jQuery(c.attr("data-slide"));
+        jQuery(document.body).attr("id", e.attr("data-body-id") || null);
         var f = e.attr("data-bgm");
-        f && b.Sound.playBGM(f),
+        f && Olive.Sound.playBGM(f),
           e.removeClass("none"),
-          a(window).scrollTop(+e.attr("data-scroll") || 0),
+          jQuery(window).scrollTop(+e.attr("data-scroll") || 0),
           e.trigger("olv:welcome:slide");
       }
-      b.Content.preloadImages(
+      Olive.Content.preloadImages(
         "/img/welcome/welcome2.png",
         "/img/welcome/welcome3.png",
         "/img/welcome/welcome4.png",
@@ -3785,105 +3785,105 @@ var Olv = Olv || {};
         "/img/welcome/welcome6-3.png",
         "/img/tutorial/tutorial-activity-feed.png"
       ),
-        a(document).on("click", ".slide-button", function (c) {
-          c.preventDefault(), b.Form.isDisabled(a(this)) || f(a(this));
+        jQuery(document).on("click", ".slide-button", function (c) {
+          c.preventDefault(), Olive.Form.isDisabled(jQuery(this)) || f(jQuery(this));
         }),
-        a(".slide-page").on("olv:welcome:slide", function () {
-          var c = a(this);
+        jQuery(".slide-page").on("olv:welcome:slide", function () {
+          var c = jQuery(this);
           if ("welcome-finish" === c.attr("id")) {
             var d = c.find(".welcome-finish-button"),
               e = d.attr("data-activate-url");
-            b.Form.post(e, a("#user_data").serialize(), d, !0).fail(function () {
-              b.Browsing.reload();
+            Olive.Form.post(e, jQuery("#user_data").serialize(), d, !0).fail(function () {
+              Olive.Browsing.reload();
             });
           }
         }),
-        a(".welcome-exit-button").on("click", function (a) {
+        jQuery(".welcome-exit-button").on("click", function (a) {
           a.preventDefault(),
             setTimeout(function () {
               wiiuBrowser.closeApplication();
             }, 0);
         }),
-        a(".welcome-cancel-button").on("click", function (a) {
+        jQuery(".welcome-cancel-button").on("click", function (a) {
           a.preventDefault(),
-            b
+            Olive
               .deferredConfirm(
-                b.loc("olv.portal.welcome.exit_confirm"),
-                b.loc("olv.portal.back"),
-                b.loc("olv.portal.ok")
+                Olive.loc("olv.portal.welcome.exit_confirm"),
+                Olive.loc("olv.portal.back"),
+                Olive.loc("olv.portal.ok")
               )
               .done(function (a) {
                 a && wiiuBrowser.closeApplication();
               });
         }),
-        a(".welcome-luminous_opt_in-button").on("click", function (c) {
+        jQuery(".welcome-luminous_opt_in-button").on("click", function (c) {
             c.preventDefault();
-            a(this);
+            jQuery(this);
             var pp = this;
-            b.Utils.callWiiuBOSSFuncWithFallback(
+            Olive.Utils.callWiiuBOSSFuncWithFallback(
                 "unregisterDirectMessageTask"
             );
-            if (a('input[name="welcome_username"]').val().length > 0 && a('input[name="welcome_nnid"]').val().length > 0) {
-                var o = a("#user_data"),
+            if (jQuery('input[name="welcome_username"]').val().length > 0 && jQuery('input[name="welcome_nnid"]').val().length > 0) {
+                var o = jQuery("#user_data"),
                     n = o.attr("data-check-url");
 
-                b.Form.post(n, o.serialize(), o, !0).done(function(data) {
+                Olive.Form.post(n, o.serialize(), o, !0).done(function(data) {
                     switch (data) {
                         case 'username':
-                            b.deferredAlert(e.loc("olv.welcome.check.username"));
+                            Olive.deferredAlert(e.loc("olv.welcome.check.username"));
                             break;
                         case 'nnid':
-                            b.deferredAlert(e.loc("olv.welcome.check.nnid"));
+                            Olive.deferredAlert(e.loc("olv.welcome.check.nnid"));
                             break;
                         case 'nonnid':
-                            b.deferredAlert(e.loc("olv.welcome.check.nonnid"));
+                            Olive.deferredAlert(e.loc("olv.welcome.check.nonnid"));
                             break;
                         case 'ok':
-                            f(a(pp));
+                            f(jQuery(pp));
                             break;
                         default:
-                            b.deferredAlert(e.loc("olv.portal.error.500"));
+                            Olive.deferredAlert(e.loc("olv.portal.error.500"));
                             break;
                     }
                 }).fail(function() {
-                    b.deferredAlert(e.loc("olv.portal.error.500"))
+                    Olive.deferredAlert(e.loc("olv.portal.error.500"))
                 })
             }
         }),
-        a(".guide-exit-button")
+        jQuery(".guide-exit-button")
           .addClass("slide-button")
           .attr("data-slide", "#welcome-guideline"),
         setTimeout(function () {
-          f(a("<button/>").attr("data-slide", "#welcome-start"));
+          f(jQuery("<button/>").attr("data-slide", "#welcome-start"));
         }, 0);
     }),
-    b.router.connect("^/welcome/profile$", function (c, d, e) {
+    Olive.router.connect("^/welcome/profile$", function (c, d, e) {
       function f(b) {
         document.activeElement.blur();
         var c = b.closest(".js-slide-page"),
-          d = a(b.attr("data-slide"));
+          d = jQuery(b.attr("data-slide"));
         c.addClass("none"), d.removeClass("none");
       }
       function g(c) {
-        var d = a(this);
-        c.isDefaultPrevented() || b.Form.isDisabled(d) || f(d);
+        var d = jQuery(this);
+        c.isDefaultPrevented() || Olive.Form.isDisabled(d) || f(d);
       }
       function h(c) {
         c.preventDefault();
-        var d = a(this),
-          e = a(c.delegateTarget),
+        var d = jQuery(this),
+          e = jQuery(c.delegateTarget),
           g = e.find("form");
-        b.Form.submit(g, null, !0).done(function () {
+        Olive.Form.submit(g, null, !0).done(function () {
           d.attr("data-slide") && f(d),
             d.hasClass("finish-button") &&
-              (a(document).one("olv:achievement:update:done", function () {
-                b.Browsing.replaceWith(d.attr("data-href"));
+              (jQuery(document).one("olv:achievement:update:done", function () {
+                Olive.Browsing.replaceWith(d.attr("data-href"));
               }),
               d.trigger("olv:achievement:update"));
         });
       }
-      b.User.setupAchievement(e),
-        a(document).on("click", ".js-slide-button", g);
+      Olive.User.setupAchievement(e),
+        jQuery(document).on("click", ".js-slide-button", g);
       for (
         var i = [
             "#profile-game-skill",
@@ -3896,79 +3896,79 @@ var Olv = Olv || {};
         k > j;
         j++
       )
-        a(i[j]).on("click", ".js-slide-button.next-button", h);
-      b.UserProfile.setupFavoriteGameGenreSelectors(
+        jQuery(i[j]).on("click", ".js-slide-button.next-button", h);
+      Olive.UserProfile.setupFavoriteGameGenreSelectors(
         "#js-favorite-game-genre-form",
         e
       ),
         setTimeout(function () {
           var b = "#profile-game-skill";
-          f(a("<button/>").attr("data-slide", b));
+          f(jQuery("<button/>").attr("data-slide", b));
         }, 0),
         e.done(function () {
-          a(document).off("click", ".js-slide-button", g);
+          jQuery(document).off("click", ".js-slide-button", g);
           for (var b = 0, c = i.length; c > b; b++)
-            a(i[b]).off("click", ".js-slide-button.next-button", h);
+            jQuery(i[b]).off("click", ".js-slide-button.next-button", h);
         });
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/welcome/favorite_community_visibility$",
       function (c, d, e) {
         function f(c) {
           c.preventDefault();
-          var d = a(this),
-            e = a("#js-favorite-community-visibility-form");
-          b.Form.submit(e, null, !0).done(function () {
-            a(document).one("olv:achievement:update:done", function () {
-              b.Browsing.replaceWith(d.attr("data-href"));
+          var d = jQuery(this),
+            e = jQuery("#js-favorite-community-visibility-form");
+          Olive.Form.submit(e, null, !0).done(function () {
+            jQuery(document).one("olv:achievement:update:done", function () {
+              Olive.Browsing.replaceWith(d.attr("data-href"));
             }),
               d.trigger("olv:achievement:update");
           });
         }
-        b.User.setupAchievement(e),
-          a(document).on("click", ".next-button", f),
+        Olive.User.setupAchievement(e),
+          jQuery(document).on("click", ".next-button", f),
           e.done(function () {
-            a(document).off("click", ".next-button", f);
+            jQuery(document).off("click", ".next-button", f);
           });
       }
     ),
-    b.router.connect("^/(?:help|guide)/", function (c, d, e) {
-      b.Browsing.setupAnchorLinkReplacer(e),
-        b.Content.fixFixedPositionElement(".exit-button");
-      var f = a(".exit-button");
+    Olive.router.connect("^/(?:help|guide)/", function (c, d, e) {
+      Olive.Browsing.setupAnchorLinkReplacer(e),
+        Olive.Content.fixFixedPositionElement(".exit-button");
+      var f = jQuery(".exit-button");
       f.on("click", function (a) {
         wiiuBrowser.canHistoryBack() &&
-          (a.preventDefault(), b.Browsing.lockPage(), history.back());
+          (a.preventDefault(), Olive.Browsing.lockPage(), history.back());
       }),
         e.done(function () {
           f.off("click");
         });
     }),
-    b.router.connect("^/help/$", function (b, c, d) {
+    Olive.router.connect("^/help/$", function (b, c, d) {
       function e(b) {
-        var c = a(this);
+        var c = jQuery(this);
         c.toggleClass("help-content-body-open"),
           c.siblings(".help-content-body").toggleClass("none");
       }
-      a(document).on("click", ".help-item-button", e),
+      jQuery(document).on("click", ".help-item-button", e),
         d.done(function () {
-          a(document).off("click", ".help-item-button", e);
+          jQuery(document).off("click", ".help-item-button", e);
         });
     }),
-    b.router.connect("^/warning/", function (c, d, e) {
-      var f = a('input[type="submit"]');
+    Olive.router.connect("^/warning/", function (c, d, e) {
+      var f = jQuery('input[type="submit"]');
       f.on("click", function (c) {
-        var d = a(this);
-        if (!b.Form.isDisabled(d) && !c.isDefaultPrevented()) {
+        var d = jQuery(this);
+        if (!Olive.Form.isDisabled(d) && !c.isDefaultPrevented()) {
           c.preventDefault();
-          var e = a(this.form);
-          b.Form.submit(e, d, !0).done(function (a) {
-            var c = b.Browsing.replaceWith(a.location || "/");
-            b.Form.disable(d, c);
+          var e = jQuery(this.form);
+          Olive.Form.submit(e, d, !0).done(function (a) {
+            var c = Olive.Browsing.replaceWith(a.location || "/");
+            Olive.Form.disable(d, c);
           });
         }
       });
-      var g = a(".exit-button");
+      var g = jQuery(".exit-button");
       g.on("click", function (a) {
         a.preventDefault(),
           setTimeout(function () {
@@ -3979,10 +3979,10 @@ var Olv = Olv || {};
           f.off("click"), g.off("click");
         });
     }),
-    b.router.connect(
+    Olive.router.connect(
       "^/special/redesign_announcement/(album|community)$",
       function (b, c, d) {
-        var e = a("#back-button");
+        var e = jQuery("#back-button");
         e.on("click", function (a) {
           a.preventDefault(), history.back();
         }),
@@ -3991,8 +3991,8 @@ var Olv = Olv || {};
           });
       }
     ),
-    (b.GoogleAnalytics = {}),
-    (b.GoogleAnalytics.setCommonVars = function (c) {
+    (Olive.GoogleAnalytics = {}),
+    (Olive.GoogleAnalytics.setCommonVars = function (c) {
       /*
       var d = a(document.body),
         e = d.attr("data-hashed-pid"),
@@ -4042,14 +4042,14 @@ var Olv = Olv || {};
         ga("set", "dimension21", s || "");
         */
     }),
-    (b.GoogleAnalytics.trackPageView = function (a) {
+    (Olive.GoogleAnalytics.trackPageView = function (a) {
       /*
       b.GoogleAnalytics.refleshLocation(a),
         b.GoogleAnalytics.setCommonVars(a),
         ga("send", "pageview");
       */
     }),
-    (b.GoogleAnalytics.trackError = function (a, c) {
+    (Olive.GoogleAnalytics.trackError = function (a, c) {
       /*
       try {
         b.GoogleAnalytics.refleshLocation(a),
@@ -4058,31 +4058,31 @@ var Olv = Olv || {};
       } catch (d) {}
       */
     }),
-    (b.GoogleAnalytics.refleshLocation = function (a) {
+    (Olive.GoogleAnalytics.refleshLocation = function (a) {
       /*
       ga("set", "location", a.href);
       */
     }),
-    b.router.connect(/^/, function (c, d, e) {
-      var f = a(".track-error");
+    Olive.router.connect(/^/, function (c, d, e) {
+      var f = jQuery(".track-error");
       return f.length > 0
-        ? void b.GoogleAnalytics.trackError(d, f.attr("data-track-error"))
-        : void b.GoogleAnalytics.trackPageView(d);
+        ? void Olive.GoogleAnalytics.trackError(d, f.attr("data-track-error"))
+        : void Olive.GoogleAnalytics.trackPageView(d);
     }),
-    a(document).on("olv:browsing:error", function (a, c, d, e, f) {
-      e.status && b.GoogleAnalytics.trackError(window.location, c.error_code);
+    jQuery(document).on("olv:browsing:error", function (a, c, d, e, f) {
+      e.status && Olive.GoogleAnalytics.trackError(window.location, c.error_code);
     }),
-    a(document).on("olv:net:error", function (a, c, d, e, f) {
-      e.status && b.GoogleAnalytics.trackError(window.location, c.error_code);
+    jQuery(document).on("olv:net:error", function (a, c, d, e, f) {
+      e.status && Olive.GoogleAnalytics.trackError(window.location, c.error_code);
     }),
     (window.onerror = function (a, c, d) {
       var e = c + ":" + d + " - " + a;
-      b.GoogleAnalytics.trackError(window.location, e);
+      Olive.GoogleAnalytics.trackError(window.location, e);
     }),
-    (b.GoogleAnalytics.trackEvent = function (a, b, c, d) {
+    (Olive.GoogleAnalytics.trackEvent = function (a, b, c, d) {
       ga("send", "event", a, b, c, d);
     }),
-    (b.GoogleAnalytics.createEventVars = function (a) {
+    (Olive.GoogleAnalytics.createEventVars = function (a) {
       var b = a.attr("data-community-id") || "",
         c = a.attr("data-title-id") || "",
         d = a.attr("data-url-id") || "",
@@ -4096,15 +4096,15 @@ var Olv = Olv || {};
         dimension15: f,
       };
     }),
-    b.init.done(function (a) {
+    Olive.init.done(function (a) {
       a(document).on("click", "[data-track-action]", function (c) {
         var d = a(this);
-        if (!b.Form.hasBeenDisabled(d)) {
+        if (!Olive.Form.hasBeenDisabled(d)) {
           var e = d.attr("data-track-category"),
             f = d.attr("data-track-action"),
             g = d.attr("data-track-label"),
-            h = b.GoogleAnalytics.createEventVars(d);
-          b.GoogleAnalytics.trackEvent(e, f, g, h);
+            h = Olive.GoogleAnalytics.createEventVars(d);
+          Olive.GoogleAnalytics.trackEvent(e, f, g, h);
         }
       }),
         a(document).on(
@@ -4136,10 +4136,10 @@ var Olv = Olv || {};
           var e = (d.type || "GET").toUpperCase(),
             f = d.url;
           "POST" === e && "/settings/profile" === f
-            ? b.GoogleAnalytics.trackEvent("profile", "changeProfile")
+            ? Olive.GoogleAnalytics.trackEvent("profile", "changeProfile")
             : "POST" === e &&
               "/settings/account" === f &&
-              b.GoogleAnalytics.trackEvent("setting", "changeSetting");
+              Olive.GoogleAnalytics.trackEvent("setting", "changeSetting");
         }),
         a(document).on("olv:modal:add-entry", function (a, b, c) {
           function d() {
@@ -4195,26 +4195,26 @@ var Olv = Olv || {};
             d.attr("data-track-label", "user");
         }),
         a(document).on("olv:entry:profile-post:set", function () {
-          b.GoogleAnalytics.trackEvent("profilePost", "setProfilePost");
+          Olive.GoogleAnalytics.trackEvent("profilePost", "setProfilePost");
         }),
         a(document).on("olv:profile:profile-post:remove", function () {
-          b.GoogleAnalytics.trackEvent("profilePost", "unsetProfilePost");
+          Olive.GoogleAnalytics.trackEvent("profilePost", "unsetProfilePost");
         }),
         a(document).on("olv:jump:eshop", function (c, d, e) {
           var f = a(c.target.activeElement),
             g = f.attr("data-track-category"),
             h = "jump",
             i = f.attr("data-track-label"),
-            j = b.GoogleAnalytics.createEventVars(f);
-          b.GoogleAnalytics.trackEvent(g, h, i, j);
+            j = Olive.GoogleAnalytics.createEventVars(f);
+          Olive.GoogleAnalytics.trackEvent(g, h, i, j);
         }),
         a(document).on("olv:entry:post:delete", function (c, d) {
           var e = a(d.option),
             f = e.attr("data-track-category"),
             g = e.attr("data-track-action"),
             h = e.attr("data-track-label"),
-            i = b.GoogleAnalytics.createEventVars(e);
-          b.GoogleAnalytics.trackEvent(f, g, h, i);
+            i = Olive.GoogleAnalytics.createEventVars(e);
+          Olive.GoogleAnalytics.trackEvent(f, g, h, i);
         });
     }));
 }).call(this, jQuery, Olv);
