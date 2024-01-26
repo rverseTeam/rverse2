@@ -19,7 +19,7 @@
     <menu id="global-menu">
         <li id="global-menu-mymenu"><a href="{{ route('user.profile', [ user.username ]) }}" data-pjax="#body" data-sound="SE_WAVE_MENU"><span class="mii-icon"><img src="{{ user.mii.normal }}" alt="User Page"></span><span>User Page</span></a></li>
         <li id="global-menu-feed"><a href="{{ route('index.index') }}" data-pjax="#body" data-sound="SE_WAVE_MENU">Activity Feed</a></li>
-        <li id="global-menu-community"><a href="/communities" data-pjax="#body" data-sound="SE_WAVE_MENU">Communities</a></li>
+        <li id="global-menu-community"><a href="{{ route('community.index') }}" data-pjax="#body" data-sound="SE_WAVE_MENU">Communities</a></li>
         <li id="global-menu-message"><a href="/friend_messages" data-pjax="#body" data-sound="SE_WAVE_MENU">Messages</a></li>
         <li id="global-menu-news"><a href="/news/my_news" data-pjax="#body" data-sound="SE_WAVE_MENU">Notifications</a></li>
         <li id="global-menu-exit"><a href="#" role="button" data-sound="SE_WAVE_EXIT">Close</a></li>
