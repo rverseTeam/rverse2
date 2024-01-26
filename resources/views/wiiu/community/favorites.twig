@@ -1,0 +1,18 @@
+{% extends '@wiiu/_master.twig' %}
+{% from '@wiiu/_macros.twig' import header %}
+
+{% block content %}
+    {{ header(__('community.favorites.favorites_label'), false, '') }}
+    <div class="body-content" id="community-top">
+        <div class="community-list">
+        {% for favorites in favorites %}
+        {% else %}
+        <div class="no-content-window">
+            <div class="window">
+                <p>{{ __('community.listing.communities.empty') }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
