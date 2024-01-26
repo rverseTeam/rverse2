@@ -20,9 +20,9 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
     // 3DS required to load these pages
     Router::group(['before' => ['3ds_check', 'auth']], function () {
         // Index page
-        Router::get('/', 'CTR.Index@index', 'index.index');
+        Router::get('/', 'Index@index', 'index.index');
 
-        Router::get('/local_list.json', 'CTR.Dummy@dummy', 'local.list');
+        Router::get('/local_list.json', 'Dummy@dummy', 'local.list');
         Router::get('/check_update.json', 'CTR.Updates@news', 'news.checkupdate');
 
         // My Menu
@@ -61,17 +61,17 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
         // Users
         Router::group(['prefix' => 'users'], function () {
             Router::get('/{id}', 'CTR.User@profile', 'user.profile');
-            Router::get('/{id}/violators.create', 'CTR.Dummy@dummy', 'user.report');
-            Router::get('/{id}/blacklist.confirm', 'CTR.Dummy@dummy', 'user.block');
+            Router::get('/{id}/violators.create', 'Dummy@dummy', 'user.report');
+            Router::get('/{id}/blacklist.confirm', 'Dummy@dummy', 'user.block');
             Router::post('/{id}/follow.json', 'CTR.User@follow', 'user.follow');
             Router::post('/{id}/unfollow.json', 'CTR.User@unfollow', 'user.unfollow');
             Router::get('/{id}/favorites', 'CTR.User@favorites', 'user.favorites');
             Router::get('/{id}/posts', 'CTR.User@postListing', 'user.posts');
-            Router::get('/{id}/empathies', 'CTR.Dummy@dummy', 'user.empathies');
+            Router::get('/{id}/empathies', 'Dummy@dummy', 'user.empathies');
             Router::get('/{id}/following', 'CTR.User@following', 'user.following');
             Router::get('/{id}/followers', 'CTR.User@followers', 'user.followers');
-            Router::get('/{id}/diary', 'CTR.Dummy@dummy', 'user.diary');
-            Router::get('/{id}/diary/post', 'CTR.Dummy@dummy', 'user.diarypost');
+            Router::get('/{id}/diary', 'Dummy@dummy', 'user.diary');
+            Router::get('/{id}/diary/post', 'Dummy@dummy', 'user.diarypost');
         });
 
         // Titles
@@ -122,11 +122,11 @@ Router::group(['before' => ['translation', 'maintenance']], function () {
 
         // Settings
         Router::group(['prefix' => 'settings'], function () {
-            Router::post('/struct_post', 'CTR.Dummy@dummy', 'struct.post');
+            Router::post('/struct_post', 'Dummy@dummy', 'struct.post');
             Router::get('/profile', 'CTR.Settings@profileView', 'settings.profile');
             Router::post('/profile', 'CTR.Settings@profileSave', 'settings.profile');
             Router::post('/tutorial_post', 'CTR.Settings@tutorial_post', 'settings.tutorialpost');
-            Router::post('/played_title_ids', 'CTR.Dummy@dummy', 'settings.playedtitles');
+            Router::post('/played_title_ids', 'Dummy@dummy', 'settings.playedtitles');
 
             // Account settings
             Router::get('/account', 'CTR.Settings@account', 'settings.account');

@@ -36,9 +36,19 @@ if (php_sapi_name() !== "cli") {
             header('X-PJAX-PATH: '.$pjaxurl);
             header('X-PJAX-OK: 1');
         }
+
         require_once path('routes/3ds.php');
     } else if (in_array($siteUrl, config('sites.wiiu'))) {
         $template = 'wiiu';
+
+        // Wii U pjax stuff
+        if (array_key_exists('_pjax', $_GET) && array_key_exists('HTTP_X_PJAX', $_SERVER)) {
+            // pjax doesn't like queries on the header, for some reason
+            $pjaxurl = preg_replace('/\?.+/', '', $_SERVER['REQUEST_URI']);
+            header('X-PJAX-PATH: '.$pjaxurl);
+            header('X-PJAX-OK: 1');
+        }
+
         require_once path('routes/wiiu.php');
     } else if (in_array($siteUrl, config('sites.web'))) {
         $template = 'web';
@@ -46,6 +56,9 @@ if (php_sapi_name() !== "cli") {
     } else if (in_array($siteUrl, config('sites.admin'))) {
         $template = 'admin';
         require_once path('routes/admin.php');
+    } else if (in_array($siteUrl, config('sites.api'))) {
+        $template = "web";
+        require_once path('routes/api.php');
     } else {
         require_once path('routes/default.php');
     }

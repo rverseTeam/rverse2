@@ -1,4 +1,72 @@
 {% extends '@wiiu/_master.twig' %}
+{% from '@wiiu/_macros.twig' import header %}
 
 {% block content %}
+    {% set favorites_button = '<a id="header-favorites-button" href="' ~ route('community.favorites') ~ '" data-pjax="#body">' ~ __('community.index.favorites') ~ '</a>' %}
+    {{ header('Communities', false, 'left', favorites_button) }}
+    <div class="body-content" id="community-top" data-region="USA">
+    
+        <div class="community-list community-list-wiiu">
+            <div class="banner-container">
+                <a href="/identified_user_posts?view_region_id=2" data-pjax="#body" class="button identified-user-button">
+                    <span class="title">Get the latest news here!</span>
+                    <span class="text">Posts from Verified Users</span>
+                </a>
+            </div>
+            {% for category in categories %}
+                <div class="headline {% if category.has_filter %} with-filter{% endif %} {{ category.class }}">
+                    <h2>{{ category.name }}</h2>
+                    {% if category.has_filter %}
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-sound="SE_WAVE_BALLOON_OPEN" href="#">{{ __('community.index.communities.filter.name') }}</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ route('console.all', [ console.id ]) }}" class="button" data-pjax="#body" data-sound="SE_WAVE_TOGGLE_CHECK">{{ __('community.index.communities.filter.options.all') }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('console.games', [ console.id ]) }}" class="button" data-pjax="#body" data-sound="SE_WAVE_TOGGLE_CHECK">{{ __('community.index.communities.filter.options.games', { console: console.name }) }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('console.vc', [ console.id ]) }}" class="button" data-pjax="#body" data-sound="SE_WAVE_TOGGLE_CHECK">{{ __('community.index.communities.filter.options.vc') }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('console.other', [ console.id ]) }}" class="button" data-pjax="#body" data-sound="SE_WAVE_TOGGLE_CHECK">{{ __('community.index.communities.filter.options.other') }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if category.titles is not empty %}
+                <ul class="list-content-with-icon-column" id="community-top-content">
+                    {% for title in category.titles %}
+                        {% set id,title_id = hashid(title.id), hashid(title.title_id) %}
+                        <li id="community-{{ id }}" class="">
+                            <span class="icon-container">
+                                <img src="{{ title.icon }}" class="icon">
+                            </span>
+                            <a href="{{ route('title.community', [ title_id, id ]) }}" data-pjax="#body" class="scroll to-community-button"></a>
+                            <div class="body">
+                                <div class="body-content">
+                                    <span class="community-name title">{{ title.name }}</span>
+                                    {% if title.plarform_tag is not empty %}
+                                    <span class="platform-tag platform-tag-{{ title.plarform_tag }}"></span>
+                                    {% endif %}
+                                    {% if title.platform_text is not empty %}
+                                    <span class="text">{{ title.platform_text }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="no-content-window">
+                    <div class="window">
+                        <p>{{ __('community.index.communities.empty') }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

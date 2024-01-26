@@ -7,6 +7,7 @@ namespace Miiverse\Pages\CTR\Title;
 
 use Carbon\Carbon;
 
+use Miiverse\Community\Community as CommunityMeta;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\User;
@@ -42,9 +43,7 @@ class Community extends Page
             return view('errors/404');
         }
 
-        $meta = DB::table('communities')
-                    ->where('id', $community)
-                    ->first();
+        $meta = new CommunityMeta($community[0]);
 
         $is_favorited = DB::table('favorites')
                             ->where('community_id', $community)
@@ -58,164 +57,82 @@ class Community extends Page
             return view('errors/404');
         }
 
-        if ($meta->is_redesign) {
-            $topicCategories = DB::table('topic_categories')
-                                ->where('bundle_id', $meta->topic_bundle)
-                                ->get();
+        $posts_pre = DB::table('posts')
+                    ->where([
+                        ['community', $community],
+                        ['is_redesign', 0],
+                        ['created', '<', $since]
+                    ])
+                    ->orderBy('created', 'desc')
+                    ->limit(20)
+                    ->offset($page * 20)
+                    ->get();
 
-            if (!$topicCategories) {
-                return view('errors/404');
-            }
-
-            $drawings_pre = DB::table('posts')
-                        ->where([
-                            ['community', $community],
-                            ['content', null],
-                            ['is_redesign', 1],
-                        ])
-                        ->orderBy('created', 'desc')
-                        ->limit(6)
-                        ->get();
-
-            foreach ($drawings_pre as $drawing) {
-                $user = User::construct($drawing->user_id);
-
-                $drawings[] = [
-                    'id'       => hashid($drawing->id),
-                    'user'     => $user,
-                    'created'  => $drawing->created,
-                    'image'    => $drawing->image,
-                    'feeling'  => intval($drawing->feeling),
-                    'spoiler'  => $drawing->spoiler,
-                ];
-            }
-
-            $discussions_pre = DB::table('posts')
-                                ->where([
-                                    ['community', $community],
-                                    ['image', null],
-                                    ['is_redesign', 1],
-                                ])
-                                ->orderBy('created', 'desc')
-                                ->limit(5)
-                                ->get();
-
-            foreach ($discussions_pre as $discussion) {
-                $user = User::construct($discussion->user_id);
-
-                $discussions[] = [
-                    'id'           => hashid($discussion->id),
-                    'user'         => $user,
-                    'title'        => $discussion->title,
-                    'created'      => $discussion->created,
-                    'content'      => $discussion->content,
-                    'feeling'      => intval($discussion->feeling),
-                    'spoiler'      => $discussion->spoiler,
-                    'comments'     => intval($discussion->comments),
-                    'categoryName' => DB::table('topic_categories')
-                                    ->where('id', $discussion->category_id)
-                                    ->value('name'),
-                    'open'         => intval($discussion->is_open),
-                    'likes'        => intval($discussion->empathies),
-                    'liked'        => (bool) DB::table('empathies')
-                                            ->where([
-                                                ['type', 0], // Posts are type 0
-                                                ['id', $discussion->id],
-                                                ['user', CurrentSession::$user->id],
-                                            ])
-                                            ->count(),
-                ];
-            }
-
-            // WTF LARAVEL?
-            if ($discussions == null) {
-                $discussions = null;
-            }
-            if ($drawings == null) {
-                $drawings = null;
-            }
-
-            $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
-
-            return view('titles/view_redesign', compact('meta', 'topicCategories', 'drawings', 'discussions', 'feeling', 'is_favorited'));
-        } else {
-            $posts_pre = DB::table('posts')
-                        ->where([
-                            ['community', $community],
-                            ['is_redesign', 0],
-                            ['created', '<', $since]
-                        ])
-                        ->orderBy('created', 'desc')
-                        ->limit(20)
-                        ->offset($page * 20)
-                        ->get();
-
-            foreach ($posts_pre as $post) {
+        foreach ($posts_pre as $post) {
             $user = User::constructFromId($post->user_id);
-                $latest_comment = [];
+            $latest_comment = [];
 
-                if (intval($post->comments) > 0) {
-                    // Get latest comment if there's at least one of them
-                    $commenter = DB::table('comments')
-                                ->where('post', $post->id)
-                                ->where('spoiler', 0)
-                                ->whereNull('deleted')
-                                ->orderBy('created', 'desc')
-                                ->first();
+            if (intval($post->comments) > 0) {
+                // Get latest comment if there's at least one of them
+                $commenter = DB::table('comments')
+                            ->where('post', $post->id)
+                            ->where('spoiler', 0)
+                            ->whereNull('deleted')
+                            ->orderBy('created', 'desc')
+                            ->first();
 
-                    if ($commenter) {
+                if ($commenter) {
                     $commenter_user = User::constructFromId($commenter->user);
 
-                        $latest_comment = [
-                            'user'          => $commenter_user,
-                            'feeling'       => intval($commenter->feeling),
-                            'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
-                            'content'       => $commenter->content,
-                            'spoiler'       => $commenter->spoiler,
-                            'image'         => $commenter->image,
-                            'verified'      => $commenter_user->hasRanks($verified_ranks),
-                            'screenshot'    => $commenter->screenshot,
-                        ];
-                    }
+                    $latest_comment = [
+                        'user'          => $commenter_user,
+                        'feeling'       => intval($commenter->feeling),
+                        'created'       => Carbon::createFromTimeString($commenter->created)->diffForHumans(),
+                        'content'       => $commenter->content,
+                        'spoiler'       => $commenter->spoiler,
+                        'image'         => $commenter->image,
+                        'verified'      => $commenter_user->hasRanks($verified_ranks),
+                        'screenshot'    => $commenter->screenshot,
+                    ];
                 }
-
-                $posts[] = [
-                    'id'                => 0,
-                    'post_id'           => $post->id,
-                    'has_community'     => false,
-                    'op'                => $user,
-                    'can_yeah'          => $user->id !== CurrentSession::$user->id,
-                    'created'           => Carbon::createFromTimeString($post->created)->diffForHumans(),
-                    'content'           => $post->content,
-                    'image'             => $post->image,
-                    'feeling'           => intval($post->feeling),
-                    'spoiler'           => $post->spoiler,
-                    'comments'          => intval($post->comments),
-                    'empathies'         => intval($post->empathies),
-                    'liked'             => DB::table('empathies')
-                                                ->where([
-                                                    ['type', 0], // Posts are type 0
-                                                    ['id', $post->id],
-                                                    ['user', CurrentSession::$user->id],
-                                                ])
-                                                ->exists(),
-                    'verified'          => $user->hasRanks($verified_ranks),
-                    'screenshot'        => $post->screenshot,
-                    'latest_comment'    => $latest_comment,
-                ];
             }
 
-            $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
-            $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
-
-            // Pagination data
-            $page_params = json_encode([
-                'since' => $since,
-                'page' => ++$page
-            ]);
-
-            return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited', 'page_params'));
+            $posts[] = [
+                'id'                => 0,
+                'post_id'           => $post->id,
+                'has_community'     => false,
+                'op'                => $user,
+                'can_yeah'          => $user->id !== CurrentSession::$user->id,
+                'created'           => Carbon::createFromTimeString($post->created)->diffForHumans(),
+                'content'           => $post->content,
+                'image'             => $post->image,
+                'feeling'           => intval($post->feeling),
+                'spoiler'           => $post->spoiler,
+                'comments'          => intval($post->comments),
+                'empathies'         => intval($post->empathies),
+                'liked'             => DB::table('empathies')
+                                            ->where([
+                                                ['type', 0], // Posts are type 0
+                                                ['id', $post->id],
+                                                ['user', CurrentSession::$user->id],
+                                            ])
+                                            ->exists(),
+                'verified'          => $user->hasRanks($verified_ranks),
+                'screenshot'        => $post->screenshot,
+                'latest_comment'    => $latest_comment,
+            ];
         }
+
+        $feeling = ['normal', 'happy', 'like', 'surprised', 'frustrated', 'puzzled'];
+        $feelingText = ['Yeah!', 'Yeah!', 'Yeah♥', 'Yeah!?', 'Yeah...', 'Yeah...'];
+
+        // Pagination data
+        $page_params = json_encode([
+            'since' => $since,
+            'page' => ++$page
+        ]);
+
+        return view('titles/view', compact('meta', 'posts', 'feeling', 'feelingText', 'is_favorited', 'page_params'));
     }
 
     /**

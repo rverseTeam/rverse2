@@ -28,117 +28,58 @@
 				<div class="news-label-content">
 				</div>
 				<div class="community-list">
-					<div class="headline with-filter headline-{{ console.id }}">
-						<h2>{{ __('community.index.communities.new') }}</h2>
-						<div class="with-filter-right">
-							<div class="select-button">
-								<label id="community-filter" class="">
-									<span class="select-button-content">{{ __('community.index.communities.filter.name') }}</span>
-									<select name="filter">
-										<option value="" selected="">{{ __('community.index.communities.filter.select') }}</option>
-										<option value="{{ route('console.all', [ console.id ]) }}">{{ __('community.index.communities.filter.options.all') }}</option>
-										<option value="{{ route('console.games', [ console.id ]) }}">{{ __('community.index.communities.filter.options.games', { console: console.name }) }}</option>
-										<option value="{{ route('console.vc', [ console.id ]) }}">{{ __('community.index.communities.filter.options.vc') }}</option>
-										<option value="{{ route('console.other', [ console.id ]) }}">{{ __('community.index.communities.filter.options.other') }}</option>
-									</select>
-								</label>
+					{% for category in categories %}
+						<div class="headline {% if category.has_filter %} with-filter{% endif %} {{ category.class }}">
+							<h2>{{ category.name }}</h2>
+							{% if category.has_filter %}
+							<div class="with-filter-right">
+								<div class="select-button">
+									<label id="community-filter" class="">
+										<span class="select-button-content">{{ __('community.index.communities.filter.name') }}</span>
+										<select name="filter">
+											<option value="" selected="">{{ __('community.index.communities.filter.select') }}</option>
+											<option value="{{ route('console.all', [ console.id ]) }}">{{ __('community.index.communities.filter.options.all') }}</option>
+											<option value="{{ route('console.games', [ console.id ]) }}">{{ __('community.index.communities.filter.options.games', { console: console.name }) }}</option>
+											<option value="{{ route('console.vc', [ console.id ]) }}">{{ __('community.index.communities.filter.options.vc') }}</option>
+											<option value="{{ route('console.other', [ console.id ]) }}">{{ __('community.index.communities.filter.options.other') }}</option>
+										</select>
+									</label>
+								</div>
 							</div>
+							{% endif %}
 						</div>
-					</div>
-					{% if communities.newest is not empty %}
+						{% if category.titles is not empty %}
 						<ul class="list-content-with-icon-and-text arrow-list" id="community-top-content">
-							{% for community in communities.newest.titles %}
-								{% set id,title_id = hashid(community.id), hashid(community.title_id) %}
-								<li id="community-{{ id }}" class="">
-									<span class="icon-container">
-										<img src="/img/icons/{{ community.icon }}" class="icon" width="48" height="48">
-									</span>
-									<a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
-									<div class="body">
-										<span class="community-name title">{{ community.name }}</span>
-									{% if community.platform == 1 %}
-										<span class="platform-tag platform-tag-3ds"></span>
-										<span class="text">{{ __('community.index.communities.platforms.3ds') }}</span>
-									{% elseif community.platform == 2 %}
-										<span class="platform-tag platform-tag-wiiu"></span>
-										<span class="text">{{ __('community.index.communities.platforms.wiiu') }}</span>
-									{% elseif community.platform == 3 %}
-										<span class="platform-tag platform-tag-wiiu-3ds"></span>
-										<span class="text">{{ __('community.index.communities.platforms.wiiu-3ds') }}</span>
-									{% elseif community.platform == 4 %}
-										<span class="platform-tag platform-tag-switch"></span>
-										<span class="text">{{ __('community.index.communities.platforms.switch') }}</span>
-									{% elseif community.platform == 5 %}
-										<span class="platform-tag platform-tag-switch-wiiu"></span>
-										<span class="text">{{ __('community.index.communities.platforms.switch-wiiu') }}</span>
-									{% elseif community.platform == 6 %}
-										<span class="platform-tag platform-tag-wii"></span>
-										<span class="text">{{ __('community.index.communities.platforms.wii') }}</span>
-									{% elseif community.platform == 7 %}
-										<span class="platform-tag platform-tag-ds"></span>
-										<span class="text">{{ __('community.index.communities.platforms.ds') }}</span>
-									{% elseif community.platform == 8 %}
-										<span class="platform-tag platform-tag-wii-ds"></span>
-										<span class="text">{{ __('community.index.communities.platforms.wii-ds') }}</span>
+							{% for title in category.titles %}
+							{% set id,title_id = hashid(title.id), hashid(title.title_id) %}
+							<li id="community-{{ id }}" class="">
+								<span class="icon-container">
+									<img src="{{ title.icon }}" class="icon" width="48" height="48">
+								</span>
+								<a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
+								<div class="body">
+									<span class="community-name title">{{ title.name }}</span>
+									{% if title.plarform_tag is not empty %}
+									<span class="platform-tag platform-tag-{{ title.plarform_tag }}"></span>
 									{% endif %}
-									</div>
-								</li>
+									{% if title.platform_text is not empty %}
+									<span class="text">{{ title.platform_text }}</span>
+									{% endif %}
+								</div>
+							</li>
 							{% endfor %}
-							</ul>
-					{% else %}
+						</ul>
+						{% if category.has_more %}
+						<a href="{{ route('console.all', [ category.more_slug ]) }}" class="more-button scroll" data-pjax="1">{{ __('community.index.communities.more') }}</a>
+						{% endif %}
+						{% else %}
 						<div class="no-content-window">
 							<div class="window">
 								<p>{{ __('community.index.communities.empty') }}</p>
 							</div>
 						</div>
-					{% endif %}
-					{% if communities.newest.more %}
-						<a href="{{ route('console.all', [ console.id ]) }}" class="more-button scroll" data-pjax="1">{{ __('community.index.communities.more') }}</a>
-					{% endif %}
-					<h2 class="headline headline-special">{{ __('community.index.communities.special') }}</h2>
-					{% if communities.special is not empty %}
-						<ul class="list-content-with-icon-and-text arrow-list" id="community-top-content">
-							{% for community in communities.special.titles %}
-								{% set id,title_id = hashid(community.id), hashid(community.title_id) %}
-								<li id="community-{{ id }}" class="">
-									<span class="icon-container">
-										<img src="/img/icons/{{ community.icon }}" class="icon" width="48" height="48">
-									</span>
-									<a href="{{ route('title.community', [ title_id, id ]) }}" class="arrow-button scroll" data-pjax="1"></a>
-									<div class="body">
-										<span class="community-name title">{{ community.name }}</span>
-									{% if community.platform == 1 %}
-										<span class="platform-tag platform-tag-3ds"></span>
-									{% elseif community.platform == 2 %}
-										<span class="platform-tag platform-tag-wiiu"></span>
-									{% elseif community.platform == 3 %}
-										<span class="platform-tag platform-tag-wiiu-3ds"></span>
-									{% elseif community.platform == 4 %}
-										<span class="platform-tag platform-tag-switch"></span>
-									{% elseif community.platform == 5 %}
-										<span class="platform-tag platform-tag-switch-wiiu"></span>
-									{% elseif community.platform == 6 %}
-										<span class="platform-tag platform-tag-wii"></span>
-									{% elseif community.platform == 7 %}
-										<span class="platform-tag platform-tag-ds"></span>
-									{% elseif community.platform == 8 %}
-										<span class="platform-tag platform-tag-wii-ds"></span>
-									{% endif %}
-										<span class="text">{{ __('community.index.communities.special') }}</span>
-									</div>
-								</li>
-							{% endfor %}
-							</ul>
-					{% else %}
-						<div class="no-content-window">
-							<div class="window">
-								<p>{{ __('community.index.communities.empty') }}</p>
-							</div>
-						</div>
-					{% endif %}
-					{% if communities.special.more %}
-						<a href="{{ route('console.all', [ 'special' ]) }}" class="more-button scroll" data-pjax="1">{{ __('community.index.communities.more') }}</a>
-					{% endif %}
+						{% endif %}
+					{% endfor %}
 				</div>
 			</div>
 			<div class="community-list-footer">

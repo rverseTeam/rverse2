@@ -5,6 +5,7 @@
 
 namespace Miiverse\Pages\CTR;
 
+use Miiverse\Community\Community as CommunityMeta;
 use Miiverse\CurrentSession;
 use Miiverse\DB;
 use Miiverse\Helpers\ConsoleAuth;
@@ -46,95 +47,75 @@ class Community extends Page
      */
     public function consoleIndex(string $page) : string
     {
-        $mappings = [];
-        $console = [];
-        $communities = [];
 
-        switch ($page) {
-            case 'switch':
-                $console = [
-                    'id'   => $page,
-                    'name' => 'Switch',
-                ];
-                $mappings = [4, 5];
-                break;
-            case '3ds':
-                $console = [
-                    'id'   => $page,
-                    'name' => '3DS',
-                ];
-                $mappings = [1, 3];
-                break;
-            case 'wiiu':
-                $console = [
-                    'id'   => $page,
-                    'name' => 'Wii U',
-                ];
-                $mappings = [2, 3, 5];
-                break;
-            case 'wii':
-                $console = [
-                    'id'   => $page,
-                    'name' => 'Wii',
-                ];
-                $mappings = [6, 8];
-                break;
-            case 'ds':
-                $console = [
-                    'id'   => $page,
-                    'name' => 'DS',
-                ];
-                $mappings = [7, 8];
-                break;
-            default:
-                return view('errors/404');
-                break;
-        }
-
-        $communities['newest'] = [
-            'titles' => DB::table('communities')
-                            ->whereIn('type', [0, 1, 2])
-                            ->whereIn('platform', $mappings)
-                            ->latest('created')
-                            ->limit(10)
-                            ->get(['id', 'title_id', 'name', 'icon', 'platform']),
-            'more'   => false,
+        // Far simplier than a massice switch/case.
+        $console = [
+            'id' => $page,
+            'name' => match ($page) {
+                '3ds' => '3DS',
+                'wiiu' => 'Wii U',
+                'switch' => 'Switch',
+                'wii' => 'Wii',
+                'ds' => 'DS',
+                default => 'Unknown',
+            }
         ];
 
-        $more = DB::table('communities')
-                    ->where('type', [0, 1, 2])
-                    ->whereIn('platform', $mappings)
-                    ->latest('created')
-                    ->count();
+        $categories_meta = DB::table('community_categories')
+            ->orderBy('order')
+            ->get();
 
-        if ($more > 10) {
-            $communities['newest']['more'] = true;
+        $categories = [];
+
+        foreach ($categories_meta as $category) {
+            // Name handler
+            $name = match ($category->name) {
+                '#new' => __('community.index.communities.new'),
+                '#special' => __('community.index.communities.special'),
+                '#supporter' => __('community.index.communities.supporter'),
+                default => $category->name,
+            };
+
+            // CSS class handler
+            $class = match ($category->class) {
+                '#console' => $page,
+                default => $category->class,
+            };
+
+            $titles_temp = DB::table('communities')
+                ->whereRaw("FIND_IN_SET(?, `platforms`) > 0", $class)
+                ->latest('created')
+                ->limit(15)
+                ->get(['id']);
+
+            $titles = [];
+
+            foreach ($titles_temp as $title) {
+                $meta = new CommunityMeta(intval($title->id));
+
+                $titles[] = [
+                    'id' => $meta->id,
+                    'icon' => $meta->icon,
+                    'title_id' => $meta->getLocalTitleId(true),
+                    'name' => $meta->name,
+                    'plarform_tag' => $meta->getPlatformTag(),
+                    'platform_text' => $meta->getPlatformText(),
+                ];
+
+                if (count($titles) > 10) break;
+            }
+
+            $categories[] = [
+                'name' => $name,
+                'class' => "headline-$class",
+                'has_filter' => boolval($category->has_filter),
+                'has_more' => count($titles_temp) > 10,
+                'more_slug' => $class,
+                'titles' => $titles,
+            ];
         }
 
-        // This creates the case of global communities for special types
-        $mappings = array_merge($mappings, [0]);
-
-        $communities['special'] = [
-            'titles' => DB::table('communities')
-                            ->where('type', 3)
-                            ->whereIn('platform', $mappings)
-                            ->latest('created')
-                            ->limit(10)
-                            ->get(['id', 'title_id', 'name', 'icon', 'platform']),
-            'more'   => false,
-        ];
-
-        $more = DB::table('communities')
-                    ->where('type', 3)
-                    ->whereIn('platform', $mappings)
-                    ->latest('created')
-                    ->count();
-
-        if ($more > 10) {
-            $communities['special']['more'] = true;
-        }
-
-        return view('community/index', compact('console', 'communities'));
+        return view('community/index', compact('console', 'categories'));
     }
 
     /**

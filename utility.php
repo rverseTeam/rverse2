@@ -245,6 +245,15 @@ function checkMaintenance()
     }
 }
 
+function checkMaintenanceApi()
+{
+    if (config('general.maintenance')) {
+        http_response_code(503);
+
+        exit();
+    }
+}
+
 function auth3DS()
 {
     ConsoleAuth::check3DS();
@@ -279,4 +288,14 @@ function dehashid($hash)
 function __(string $key, array $replace = [])
 {
     return Translation::get($key, $replace);
+}
+
+function snake_to_camel(string $snake) : string
+{
+    return str_replace('_', '', ucwords($snake, '_'));
+}
+
+function getBit(int $num) : int
+{
+    return intval(log($num, 2) + 1);
 }

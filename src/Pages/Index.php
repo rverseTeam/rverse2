@@ -3,7 +3,7 @@
  * Holds the home page.
  */
 
-namespace Miiverse\Pages\CTR;
+namespace Miiverse\Pages;
 
 use Miiverse\DB;
 use Miiverse\User;
@@ -15,7 +15,7 @@ use Miiverse\CurrentSession;
 /**
  * Home page.
  *
- * @author Repflez
+ * @author RverseTeam
  */
 class Index extends Page
 {
@@ -113,9 +113,5 @@ class Index extends Page
 
             return view('index/index', compact('posts'));
         }
-    }
-
-    public function activityFeed() : string {
-        return "a";
     }
 }

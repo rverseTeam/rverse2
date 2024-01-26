@@ -21,6 +21,8 @@ class JavascriptBuilderCommand extends Command
 {
     private const JS_FILES_3DS = 'public/js/src/n3ds/';
     private const JS_DEST_3DS = 'public/js/n3ds/';
+    private const JS_FILES_WIIU = 'public/js/src/wiiu/';
+    private const JS_DEST_WIIU = 'public/js/portal/';
 
     /**
      * Set up the command metadata.
@@ -61,6 +63,20 @@ class JavascriptBuilderCommand extends Command
             $js->minify(self::JS_DEST_3DS . "complete-$language.js");
 
             $output->writeln("<info>Built JS for 3DS language $language</info>");
+        }
+
+        
+
+        foreach ($languages as $language) {
+            $js = new Minify\JS();
+
+            $js->add(self::JS_FILES_WIIU . 'libs.js');
+            $js->add(self::JS_FILES_WIIU . 'olv.js');
+            $js->add(self::JS_FILES_WIIU . "olv.locale-$language.js");
+
+            $js->minify(self::JS_DEST_WIIU . "complete-$language.js");
+
+            $output->writeln("<info>Built JS for Wii U language $language</info>");
         }
 
         return Command::SUCCESS;

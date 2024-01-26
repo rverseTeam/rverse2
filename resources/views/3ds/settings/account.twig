@@ -19,7 +19,8 @@
           <p class="settings-label">
             <label for="select_language">{{ __('settings.account.display_language.title', { name: name }) }}</label>
           </p>
-          <p class="note">{{ __('settings.account.display_language.note', { name: name }) }}</p>
+          <p class="note">{{ __('settings.account.display_language.note', { name: name }) }}<br>
+          {{ __('settings.account.display_language.restart', { name: name }) }}</p>
           <div class="select-content">
             <div class="select-button">
               <span class="select-button-content">{{ selected_display_language }}</span>

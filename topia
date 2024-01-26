@@ -7,7 +7,7 @@
 
 namespace Miiverse;
 
-use Symfony\Component\Console\Application;;
+use Symfony\Component\Console\Application;
 
 require_once 'core.php';
 
@@ -19,6 +19,7 @@ $application->add(new Console\Command\DatabaseMigrateCommand);
 $application->add(new Console\Command\DatabaseResetCommand);
 $application->add(new Console\Command\DatabaseRollbackCommand);
 $application->add(new Console\Command\DatabaseStatusCommand);
+$application->add(new Console\Command\CreateNewMigrationCommand);
 
 $application->add(new Console\Command\ChangeDisplayNameCommand);
 

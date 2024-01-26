@@ -107,7 +107,7 @@ class Mii
             CURLOPT_HTTPHEADER     => [
                 'X-Nintendo-Client-ID: '.config('nintendo.client_id'),
                 'X-Nintendo-Client-Secret: '.config('nintendo.client_secret'),
-                'User-Agent: curl/7.58.0' // This is needed to make it actually return data and not stall
+                'User-Agent: curl/7.58.1' // This is needed to make it actually return data and not stall
             ],
         ]);
 

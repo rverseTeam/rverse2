@@ -5,6 +5,8 @@
 
 namespace Miiverse\Pages;
 
+use Spatie\ArrayToXml\ArrayToXml;
+
 /**
  * Base page (which other pages should extend on).
  *
@@ -57,5 +59,22 @@ class Page
         header('Content-Type: application/json; charset=utf-8');
 
         return $json;
+    }
+
+    /**
+     * Encodes XML.
+     * 
+     * @param array $object
+     * 
+     * @return string
+     */
+    public function xml(array $object): string
+    {
+        $result = ArrayToXml::convert($object, 'result', true, 'UTF-8');
+
+        header('Content-Type: application/xml; charset=UTF-8');
+        header("Content-Length: " . strlen($result));
+
+        return $result;
     }
 }

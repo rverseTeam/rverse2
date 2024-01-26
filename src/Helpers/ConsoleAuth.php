@@ -32,6 +32,7 @@ class ConsoleAuth
 	// Console ID
 	public const AUTH_CONSOLE_3DS = 0;
 	public const AUTH_CONSOLE_WIIU = 1;
+	public const AUTH_CONSOLE_BOTH = -1;
 
 	// Auth failure reasons
 	public const AUTH_FAILURE_NO_TOKEN = 0;
@@ -74,52 +75,52 @@ class ConsoleAuth
 		if (empty($sessionId))
 			return self::AUTH_FAILURE_INVALID_TOKEN;
 
-		// Get the session data from Redis, otherwise, create it from scratch
-		$session = Cache::get(self::SESSION_CACHE_NAME . $sessionId, 600);
+		// Read and parse ParamPack
+		$paramPack = base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']);
 
-		if (!$session) {
-			$session = [];
-			$paramPack = base64_decode($_SERVER['HTTP_X_NINTENDO_PARAMPACK']);
+		// Remove the last separator if there's one trailing
+		if (substr($paramPack, -1) === '\\')
+			$paramPack = substr($paramPack, 0, -1);
 
-			// Remove the last separator if there's one trailing
-			if (substr($paramPack, -1) === '\\')
-				$paramPack = substr($paramPack, 0, -1);
+		// Unpack the ParamPack from the headers sent by the console
+		// This only deals with Nintendo style ParamPack
+		// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
+		$data = explode('\\', $paramPack);
 
-			// Unpack the ParamPack from the headers sent by the console
-			// This only deals with Nintendo style ParamPack
-			// https://github.com/foxverse/3ds/blob/5e1797cdbaa33103754c4b63e87b4eded38606bf/web/titlesShow.php#L37-L40
-			$data = explode('\\', $paramPack);
+		$paramCount = count($data);
 
-			$paramCount = count($data);
-
-			for ($i = 1; $i < $paramCount; $i += 2) {
-				$session[$data[$i]] = $data[$i + 1];
-			}
-
-			// At this point we can check the console from the token
-			if (intval($session['platform_id']) !== $expectedConsole)
-				return self::AUTH_FAILURE_WRONG_CONSOLE;
-
-			// Set title id and transferable id to hex, just in case we need it
-			$session['title_id'] = base_convert($session['title_id'], 10, 16);
-			$session['title_id_string'] = str_pad($session['title_id'], 16, "0", STR_PAD_LEFT);
-			$session['transferable_id'] = base_convert($session['transferable_id'], 10, 16);
-
-			// Other kinds of session, just in case
-			$session['in_activity_feed'] = false;
-
-			Cache::store(self::SESSION_CACHE_NAME . $sessionId, $session);
+		for ($i = 1; $i < $paramCount; $i += 2) {
+			$session[$data[$i]] = $data[$i + 1];
 		}
 
-		// Set the default timezone based on the session
-		date_default_timezone_set($session['tz_name']);
+		// Set some misc data we need
+		$session['platform_id'] = intval($session['platform_id']);
+		$session['region_id'] = intval($session['region_id']);
+		$session['language_id'] = intval($session['language_id']);
 
-		// We have to check here as well
-		if (intval($session['platform_id']) !== $expectedConsole)
+		// At this point we can check the console from the token
+		if ($expectedConsole != self::AUTH_CONSOLE_BOTH && $session['platform_id'] !== $expectedConsole)
 			return self::AUTH_FAILURE_WRONG_CONSOLE;
 
+		// Set title id and transferable id to hex, just in case we need it
+		$session['title_id'] = base_convert($session['title_id'], 10, 16);
+		$session['title_id_string'] = str_pad($session['title_id'], 16, "0", STR_PAD_LEFT);
+		$session['transferable_id'] = base_convert($session['transferable_id'], 10, 16);
+
+		// Get the session data from Redis, otherwise, create it from scratch
+		$persistentSessionData = Cache::get(self::SESSION_CACHE_NAME . $sessionId, 600);
+
+		if (!$persistentSessionData) {
+			$persistentSessionData = [];
+
+			// Set activity feed status
+			$persistentSessionData['in_activity_feed'] = false;
+
+			Cache::store(self::SESSION_CACHE_NAME . $sessionId, $persistentSessionData);
+		}
+
 		// Set the session session for later use
-		self::$paramPack = $session;
+		self::$paramPack = array_merge($session, $persistentSessionData);
 		
 		// Set the console ID variable
 		self::$consoleId = new stdClass();
@@ -166,5 +167,16 @@ class ConsoleAuth
 
 		if ($session !== self::AUTH_SUCCESS)
 			redirect(route('welcome.guest'));
+	}
+
+	/**
+	 * Checks the Console Auth for both 3DS and WiiU.
+	 */
+	public static function checkBothAuth()
+	{
+		$session = self::authServiceToken(self::AUTH_CONSOLE_BOTH);
+		
+		if ($session !== self::AUTH_SUCCESS)
+			die('auth failure');
 	}
 }
