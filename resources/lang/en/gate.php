@@ -33,7 +33,7 @@ return [
     ],
 
     'welcome_guest' => [
-        'title' => ':name is a cgaming community that connects people from all over the world.<br>Use :name to share your gaming experiences and meet people from around the world.',
+        'title' => ':name is a gaming community that connects people from all over the world.<br>Use :name to share your gaming experiences and meet people from around the world.',
         'message' => 'You need a Network ID in order to use :name. Select Link ID to link a new or existing ID.',
         'link' => 'Link ID',
         'exit' => 'Exit',
