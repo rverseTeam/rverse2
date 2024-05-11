@@ -10,5 +10,5 @@ namespace Miiverse;
 
 Router::group([], function() {
 	// Homepage
-	Router::get('/', 'Unknown@index', 'main.index');
+	Router::get('/wiilink', 'Pub.WiiLink@index', 'wiilink.promo');
 });

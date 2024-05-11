@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>rverse on WiiLink</title>
+    <style type="text/css">
+    body {
+        background-color: #06038d;
+        color: #dedede;
+    }
+    </style>
+  </head>
+  <body>
+    <img src="/img/promo/rverse_logo.jpg">
+    <br />
+    rverse is a recreation of Miiverse on your 3DS,<br />and soon on your Wii U!
+    <br />
+    <br />
+    Connect with other people in a familiar yet<br />nostalgic envrionment.
+    <br />
+    <br />
+    Or do you want to show the world the artist<br />you are? You can!
+    <br />
+    <br />
+    <br />
+    Here is a sampler of art posts that people<br />have made on rverse!<br /><small>(Taken at random from our art community)</small>
+    <br />
+    <br />
+    <br />
+    {% for post in posts %}
+    <img src="/img/drawings/{{ post.image }}">
+    <br />
+    {% endfor %}
+    <br />
+    <br />
+    Visit our Discord server at https://discord.gg/rverse
+  </body>
+</html>
