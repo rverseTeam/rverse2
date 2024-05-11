@@ -46,6 +46,9 @@ if (php_sapi_name() !== "cli") {
     } else if (in_array($siteUrl, config('sites.admin'))) {
         $template = 'admin';
         require_once path('routes/admin.php');
+    } else if (in_array($siteUrl, config('sites.pub'))) {
+        $template = 'pub';
+        require_once path('routes/pub.php');
     } else {
         require_once path('routes/default.php');
     }

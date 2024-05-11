@@ -179,6 +179,7 @@ return [
         '3ds'               => ['3ds.example.com', '3ds.example2.com'],
         'wiiu'              => [],
         'web'               => [],
+        'pub'               => [],
         'admin'             => [],
     ],
 
