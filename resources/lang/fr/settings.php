@@ -6,40 +6,40 @@
  return [
      // Account settings
      'account' => [
-        'title' => ':name Paramètres',
+        'title' => 'Paramètres :name',
 
         'display_language' => [
-            'title' => 'En quel langue voulez-vous que :name s'affiche ?',
-            'note' => 'Note: Ce paramètre ne change pas l'affichage des publications.',
+            'title' => 'Dans quelle langue souhaitez-vous que :name soit affiché?',
+            'note' => 'Note : Ce paramètre n\'affecte pas la langue dans laquelle les publications sont affichées.',
         ],
 
         'post_language' => [
-            'title' => 'En quelle langue voulez-vous voir les publications sur :name ?',
-            'note' => 'Note: Ce paramètre ne change pas le langage sur :name',
+            'title' => 'Dans quelle langue souhaitez-vous voir les publications de :name?',
+            'note' => 'Note : Ce paramètre n\'affecte pas la langue dans laquelle :name est affiché.',
 
-            'all_languages' => 'Toutes les Langues',
+            'all_languages' => 'Tout les languages',
         ],
 
-        'submit' => 'Sauvegarder',
+        'submit' => 'Sauvegarder les paramètres',
      ],
 
      // Profile Settings
      'profile' => [
-         'title' => 'Paramètres du Profil',
+         'title' => 'Paramètres du profile',
 
          // Profile Comment
          'comment' => [
-             'section_name' => 'Description du Profil',
-             'placeholder' => 'Décrivez-vous ici.',
+             'section_name' => 'Commentaire du profile',
+             'placeholder' => 'Écrivez votre biographie ici.',
              'note' => 'Attention',
-             'note_content' => 'S'il vous plaît ne rendez pas publique ces informations :<br>
-- Votre adresse, numéro de téléphone, addresse e-mail, le nom de votre école, ou toute autre information qui pourrait vous identifier. <br>
-- Des liens à des sites web extérieurs qui pourraient être utilisés pour vous contacter. <br>
-- D'autres informations qui pourraient enfreindre le Code de Conduite de :name.<br>
-Publier ces informations est interdit par le Code de Conduite de :name et votre profil pourrait se faire cacher des autres utilisateurs.',
+             'note_content' => 'Veuillez vous abstenir d\'inclure ces informations suivantes :<br>
+- Votre adresse, numéro de téléphone, adresse e-mail, le nom de votre école ou toute autre information permettant de vous identifier personnellement. <br>
+- Liens vers des sites Web externes qui pourraient être utilisés pour vous contacter directement.<br>
+- Tout autre contenu interdit par le Code de conduite :name.<br>
+La publication de telles informations est contraire au code de conduite :name et peut entraîner la dissimulation de votre profil au public.',
          ],
 
          // Submit button
-         'submit' => 'Sauvegarder',
+         'submit' => 'Sauvegarder les paramètres',
      ],
  ];
