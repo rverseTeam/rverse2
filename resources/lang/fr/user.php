@@ -12,7 +12,7 @@ return [
         'meta' => [
             // Reports
             'violation' => [
-                'select' => 'Sélectionnez une option.',
+                'select' => 'Veuillez sélectionnez une option.',
                 'create' => 'Signaler',
                 'blacklist' => 'Bloquer',
             ],
@@ -57,9 +57,9 @@ return [
         ],
 
         'buttons' => [
-            'settings' => ':service Paramètres',
+            'settings' => 'Paramètres :service',
             'blacklist' => 'Utilisateurs Bloqués',
-            'announcements' => ':service Annonces',
+            'announcements' => 'Annoncements :service',
             'help' => 'Manuel/:service Code de Conduite',
         ],
     ],
