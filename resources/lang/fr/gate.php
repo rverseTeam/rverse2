@@ -17,7 +17,7 @@ return [
         'about' => [
             'title' => 'À propos de :name',
             'message1' => ':name est une reconstitution de Miiverse faite par les fans, pour les fans.',
-            'message2' => 'Comme il s’agit d’une reconstitution, il n'y aura peut-être pas les mêmes caractéristiques que sur le défunt Miiverse et nous travaillons à les rendre disponibles le plus rapidement possible.',
+            'message2' => 'Comme il s’agit d’une reconstitution, il n\'y aura peut-être pas les mêmes caractéristiques que sur le défunt Miiverse et nous travaillons à les rendre disponibles le plus rapidement possible.',
         ],
         'config' => [
             'title' => 'Configurer votre compte :name',

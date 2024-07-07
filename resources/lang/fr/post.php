@@ -5,12 +5,12 @@
 
 return [
     'status' => [
-        'spoiler' => 'Révélations',
+        'spoiler' => 'Spoilers',
     ],
 
     'content' => [
         'spoiler' => [
-            'desc' => 'Cette publication contient des révélations..',
+            'desc' => 'Cette publication contient des spoils..',
             'button' => 'Voir la Publication',
         ],
     ],

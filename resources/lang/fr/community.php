@@ -17,7 +17,7 @@ return [
         'communities' => [
             'filter' => [
                 'name' => 'Filtre',
-                'select' => 'Choisissez un filtre.',
+                'select' => 'Veuillez faire une séléction.',
                 'options' => [
                     'all' => 'Tous les logiciels',
                     'games' => 'Jeux (Console)',
@@ -49,7 +49,7 @@ return [
     'listing' => [
         'filter' => [
             'name' => 'Filtre',
-            'select' => 'Choisissez un filtre.',
+            'select' => 'Veuillez faire une séléction.',
             'options' => [
                 'all' => 'Tous les logiciels',
                 'games' => 'Jeux (Console)',
@@ -71,5 +71,24 @@ return [
             ],
             'empty' => 'Il n\'y a pas de communautés dans cette catégorie.',
         ],
+    ],
+
+    'view' => [
+        'kind' => [
+            'new' => 'Tout',
+            'hot' => 'Populaire',
+        ],
+
+        'actions' => [
+            'post' => 'Post',
+            'memo' => 'Posts enregistrés',
+            'next' => 'Suivant',
+        ],
+    ],
+
+    'favorites' => [
+        'favorites_label' => 'Favoris',
+        'software_used' => 'Logiciel utilisé',
+        
     ],
 ];
